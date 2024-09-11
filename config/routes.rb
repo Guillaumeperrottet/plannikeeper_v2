@@ -7,5 +7,9 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "posts#index"
-  resources :objets
+  # Autres routes
+  root 'pages#home'
+  resources :objets do
+    resources :secteurs, only: [:edit, :update]
+  end
 end

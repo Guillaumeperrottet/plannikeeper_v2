@@ -1,0 +1,17 @@
+<!-- app/views/secteurs/new.html.erb -->
+<h1>Ajouter un nouveau secteur</h1>
+
+<%= form_with(model: @secteur, url: objets_path, local: true) do |form| %>
+  <div class="field">
+    <%= form.label :nom, "Nom du secteur" %>
+    <%= form.text_field :nom %>
+  </div>
+
+  <%= form.hidden_field :objet_id, value: params[:objet_id] %>
+
+  <div class="actions">
+    <%= form.submit "Ajouter le secteur" %>
+  </div>
+<% end %>
+
+<%= link_to 'Retour', edit_objet_path(params[:objet_id]), class: 'btn btn-secondary' %>

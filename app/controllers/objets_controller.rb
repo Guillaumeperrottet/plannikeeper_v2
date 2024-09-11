@@ -34,7 +34,7 @@ class ObjetsController < ApplicationController
 
   def destroy
     @objet.destroy
-    redirect_to objets_url, notice: 'Objet was successfully destroyed.'
+    redirect_to root_path, notice: 'Objet was successfully destroyed.'
   end
 
   private
@@ -44,6 +44,6 @@ class ObjetsController < ApplicationController
   end
 
   def objet_params
-    params.require(:objet).permit(:nom, :adresse, :secteur, :image)
+    params.require(:objet).permit(:nom, :adresse, :secteur, secteurs_attributes: [:id, :nom, :_destroy])
   end
 end

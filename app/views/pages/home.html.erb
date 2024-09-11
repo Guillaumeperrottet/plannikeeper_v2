@@ -1,0 +1,13 @@
+<h1>Bienvenue sur notre application de gestion immobilière !</h1>
+<p>Vous pouvez commencer à ajouter vos objets ici.</p>
+
+<h1>Liste des objets</h1>
+
+<% @objets.each do |objet| %>
+  <div>
+    <%= link_to objet.nom, objet_path(objet) %> -
+    <%= link_to 'Modifier', edit_objet_path(objet), class: 'btn btn-primary' %> -
+  </div>
+<% end %>
+
+<%= link_to 'Créer un objet', new_objet_path, class: 'btn btn-primary' %>
