@@ -1,0 +1,33 @@
+<h1>Bienvenue sur notre page d'affiche d'un objet</h1>
+
+<h1>Détails de l'objet</h1>
+
+<p>
+  <strong>Nom :</strong>
+  <%= @objet.nom %>
+</p>
+
+<p>
+  <strong>Adresse :</strong>
+  <%= @objet.adresse %>
+</p>
+
+<h3>Secteurs</h3>
+<ul>
+  <% @objet.secteurs.each do |secteur| %>
+    <li>
+      <%= secteur.nom %>
+    </li>
+  <% end %>
+</ul>
+
+<% if @objet.image.attached? %>
+  <p>
+    <strong>Image :</strong>
+    <%= image_tag @objet.image %>
+  </p>
+<% end %>
+
+<%= link_to 'Modifier l\'objet', edit_objet_path(@objet), class: 'btn btn-primary' %>
+
+<%= link_to 'Retour à la page d\'accueil', root_path, class: 'btn btn-primary' %>
