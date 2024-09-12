@@ -6,6 +6,8 @@ class ObjetsController < ApplicationController
   end
 
   def show
+    @objet = Objet.find(params[:id])
+    puts @objet.image.attached? # Assurez-vous que c'est vrai
   end
 
   def new
@@ -45,6 +47,6 @@ class ObjetsController < ApplicationController
   end
 
   def objet_params
-    params.require(:objet).permit(:nom, :adresse, secteurs_attributes: [:id, :nom, :_destroy])
+    params.require(:objet).permit(:nom, :adresse, secteurs_attributes: [:id, :nom, :image, :_destroy])
   end
 end

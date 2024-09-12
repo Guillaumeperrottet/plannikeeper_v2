@@ -1,7 +1,6 @@
-<!-- app/views/objets/new.html.erb -->
 <h1>Créer un nouvel objet</h1>
 
-<%= form_with(model: @objet, local: true, data: { controller: "sector" }) do |form| %>
+<%= form_with(model: @objet, local: true, html: { multipart: true }) do |form| %>
   <% if @objet.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(@objet.errors.count, "error") %> prohibited this objet from being saved:</h2>
@@ -25,22 +24,29 @@
 
   <h3>Secteurs</h3>
   <div data-controller="sector">
-    <div data-target="sector.fields" id="secteurs-fields">
+    <div data-sector-target="fields" id="secteurs-fields">
       <%= form.fields_for :secteurs do |secteur_form| %>
         <div class="field">
           <%= secteur_form.label :nom, "Nom du secteur" %>
           <%= secteur_form.text_field :nom %>
           <%= secteur_form.hidden_field :_destroy %>
+
+          <%= secteur_form.label :image, "Image du secteur" %>
+          <%= secteur_form.file_field :image %>
+
+          <%= link_to "Supprimer", '#', data: { action: "sector#removeSector" }, class: 'remove_fields' %>
         </div>
       <% end %>
     </div>
 
-    <template data-target="sector.template">
+    <template data-sector-target="template">
       <div class="field">
         <%= form.fields_for :secteurs, Secteur.new, child_index: "NEW_RECORD" do |secteur_form| %>
           <%= secteur_form.label :nom, "Nom du secteur" %>
           <%= secteur_form.text_field :nom %>
           <%= secteur_form.hidden_field :_destroy %>
+          <%= secteur_form.file_field :image %>
+          <%= link_to "Supprimer", '#', data: { action: "sector#removeSector" }, class: 'remove_fields' %>
         </div>
       <% end %>
     </template>
