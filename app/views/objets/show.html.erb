@@ -17,6 +17,9 @@
   <% @objet.secteurs.each do |secteur| %>
     <li>
       <%= secteur.nom %>
+      <% if secteur.image.attached? %>
+        <%= image_tag secteur.image, alt: "Image du secteur", class: "sector-image" %>
+      <% end %>
     </li>
   <% end %>
 </ul>
@@ -24,10 +27,9 @@
 <% if @objet.image.attached? %>
   <p>
     <strong>Image :</strong>
-    <%= image_tag @objet.image %>
+    <%= image_tag @objet.image, style: "width: 100%; max-width: 600px; height: auto;", alt: "Image de l'objet" %>
   </p>
 <% end %>
 
-<%= link_to 'Modifier l\'objet', edit_objet_path(@objet), class: 'btn btn-primary' %>
-
-<%= link_to 'Retour à la page d\'accueil', root_path, class: 'btn btn-primary' %>
+<%= link_to 'Modifier cet objet', edit_objet_path(@objet), class: 'btn btn-primary' %>
+<%= link_to 'Retour', objets_path, class: 'btn btn-secondary' %>
