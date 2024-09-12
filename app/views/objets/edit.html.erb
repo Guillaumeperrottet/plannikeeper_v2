@@ -1,5 +1,3 @@
-<!-- app/views/objets/edit.html.erb -->
-
 <h1>Modifier l'objet</h1>
 
 <%= form_with(model: @objet, local: true) do |form| %>
@@ -23,6 +21,22 @@
     <%= form.label :adresse %>
     <%= form.text_field :adresse %>
   </div>
+
+  <h3>Secteurs</h3>
+<div data-controller="sector">
+  <div data-target="sector.fields" id="secteurs-fields">
+    <%= form.fields_for :secteurs do |secteur_form| %>
+      <div class="field">
+        <%= secteur_form.label :nom, "Nom du secteur" %>
+        <%= secteur_form.text_field :nom %>
+        <%= secteur_form.hidden_field :_destroy, value: secteur_form.object.marked_for_destruction? ? "1" : "0" %>
+        <%= link_to "Supprimer", '#', data: { action: "sector#removeSector" }, class: 'remove_fields' %>
+      </div>
+    <% end %>
+  </div>
+
+  <%= link_to "Ajouter un secteur", "#", data: { action: "sector#addSector" } %>
+</div>
 
   <div class="actions">
     <%= form.submit %>

@@ -25,8 +25,9 @@ class ObjetsController < ApplicationController
   end
 
   def update
+    @objet = Objet.find(params[:id])
     if @objet.update(objet_params)
-      redirect_to @objet, notice: 'Objet was successfully updated.'
+      redirect_to @objet, notice: 'Objet mis à jour avec succès.'
     else
       render :edit
     end
@@ -44,6 +45,6 @@ class ObjetsController < ApplicationController
   end
 
   def objet_params
-    params.require(:objet).permit(:nom, :adresse, :secteur, secteurs_attributes: [:id, :nom, :_destroy])
+    params.require(:objet).permit(:nom, :adresse, secteurs_attributes: [:id, :nom, :_destroy])
   end
 end

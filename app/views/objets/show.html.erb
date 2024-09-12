@@ -17,7 +17,6 @@
   <% @objet.secteurs.each do |secteur| %>
     <li>
       <%= secteur.nom %>
-      <%= link_to 'Modifier', edit_objet_secteur_path(@objet, secteur), class: 'btn btn-secondary' %>
     </li>
   <% end %>
 </ul>
@@ -28,5 +27,7 @@
     <%= image_tag @objet.image %>
   </p>
 <% end %>
+
+<%= link_to 'Modifier l\'objet', edit_objet_path(@objet), class: 'btn btn-primary' %>
 
 <%= link_to 'Retour à la page d\'accueil', root_path, class: 'btn btn-primary' %>
