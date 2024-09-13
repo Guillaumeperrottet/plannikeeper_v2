@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_09_12_191210) do
+ActiveRecord::Schema[7.1].define(version: 2024_09_13_172811) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -39,6 +39,15 @@ ActiveRecord::Schema[7.1].define(version: 2024_09_12_191210) do
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
+  create_table "articles", force: :cascade do |t|
+    t.integer "objet_id", null: false
+    t.string "title"
+    t.text "description"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["objet_id"], name: "index_articles_on_objet_id"
+  end
+
   create_table "objets", force: :cascade do |t|
     t.string "nom"
     t.string "adresse"
@@ -55,7 +64,18 @@ ActiveRecord::Schema[7.1].define(version: 2024_09_12_191210) do
     t.index ["objet_id"], name: "index_secteurs_on_objet_id"
   end
 
+  create_table "tasks", force: :cascade do |t|
+    t.integer "article_id", null: false
+    t.string "name"
+    t.boolean "done"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["article_id"], name: "index_tasks_on_article_id"
+  end
+
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "articles", "objets"
   add_foreign_key "secteurs", "objets"
+  add_foreign_key "tasks", "articles"
 end
