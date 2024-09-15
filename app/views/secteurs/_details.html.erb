@@ -1,0 +1,18 @@
+<div>
+  <h4><%= secteur.nom %></h4>
+
+  <!-- Affiche les tâches liées au secteur -->
+  <ul>
+    <% secteur.taches.each do |tache| %>
+      <li><%= tache.title %> - <%= tache.completed ? 'Complété' : 'Non complété' %></li>
+    <% end %>
+  </ul>
+
+  <!-- Affiche les articles liés au secteur -->
+  <h5>Articles :</h5>
+  <ul>
+    <% secteur.articles.each do |article| %>
+      <li><%= article.title %> - <%= article.description %></li>
+    <% end %>
+  </ul>
+</div>
