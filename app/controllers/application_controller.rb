@@ -7,10 +7,20 @@ class ApplicationController < ActionController::Base
     @current_path = case request.path
                     when root_path then "Home"
                     when new_objet_path then "Créer un objet"
-                    when edit_objet_path then "Modifier un objet"
-                    when objet_path(params[:id]) then "Objet : #{@objet.nom}"
+                    when edit_objet_path
+                      "Modifier un objet"
+                    when objet_path
+                      if params[:id]
+                        begin
+                          @objet = Objet.find(params[:id])
+                          "Objet : #{@objet.nom}"
+                        rescue ActiveRecord::RecordNotFound
+                          "Objet : Inconnu"
+                        end
+                      else
+                        "Objet"
+                      end
                     when objets_path then "Objets"
-                    # Ajoute d'autres chemins si nécessaire
                     else "Page"
                     end
   end
