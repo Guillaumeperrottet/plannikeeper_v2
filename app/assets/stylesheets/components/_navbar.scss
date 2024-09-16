@@ -2,7 +2,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: light-gray;
+  // background: lightgray;
   border-bottom: 1px solid darkgray;
   position: relative;
 }
@@ -19,7 +19,12 @@
 
 .navbar-center {
   display: flex;
-  justify-content: center;
   align-items: center;
-  flex-grow: 1;
+  flex-grow: 1; /* Prendre toute la largeur disponible */
+  justify-content: center; /* Centrer le contenu */
+  margin: 0 1rem; /* Ajuster les marges si nécessaire */
+}
+
+.navbar-center span {
+  margin-right: 1rem; /* Espace entre @current_path et le sélecteur */
 }

@@ -1,66 +1,75 @@
-import { Controller } from "@hotwired/stimulus"
+// sector_select_controller.js
+import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
-  static targets = ["sectorSelect", "sectorImage"]
-
   connect() {
-    this.loadImage()
-    // Ajouter un écouteur d'événements pour le changement de sélection
-    this.sectorSelectTarget.addEventListener('change', () => this.loadImage())
+    console.log('Controller connected');
 
-    // Réinitialiser la sélection au chargement
-    this.restoreSelection()
+    this.sectorSelectTarget = document.querySelector('[data-sector-select-target="sectorSelect"]');
+    this.sectorImageTarget = document.querySelector('[data-sector-select-target="sectorImage"]');
+
+    console.log('Sector Select Target:', this.sectorSelectTarget);
+    console.log('Sector Image Target:', this.sectorImageTarget);
+
+    if (this.sectorSelectTarget) {
+      this.sectorSelectTarget.addEventListener('change', () => this.loadImage());
+      this.restoreSelection();
+    }
   }
 
   restoreSelection() {
-    const selectedSectorId = this.data.get('selectedSectorId')
+    const selectedSectorId = this.data.get('selectedSectorId');
+    console.log('Restoring selection for Sector ID:', selectedSectorId);
     if (selectedSectorId) {
-      this.sectorSelectTarget.value = selectedSectorId
-      this.loadImage()
+      this.sectorSelectTarget.value = selectedSectorId;
+      this.loadImage();
     }
   }
 
   loadImage() {
-    const sectorId = this.sectorSelectTarget.value
-    const objetId = this.data.get('objetId')
+    const sectorId = this.sectorSelectTarget?.value;
+    const objetId = this.data.get('objetId');
+
+    console.log('Loading image for Sector ID:', sectorId);
+    console.log('Objet ID:', objetId);
 
     if (sectorId && objetId) {
-      const url = `/objets/${objetId}/secteurs/${sectorId}/image`
+      const url = `/objets/${objetId}/secteurs/${sectorId}/image`;
       fetch(url)
         .then(response => {
           if (!response.ok) {
-            throw new Error(`Network response was not ok: ${response.statusText}`)
+            throw new Error(`Network response was not ok: ${response.statusText}`);
           }
-          return response.json()
+          return response.json();
         })
         .then(data => {
-          console.log('Data received:', data)
+          console.log('Data received:', data);
           if (data.image_url) {
-            this.showImage(data.image_url)
+            this.showImage(data.image_url);
           } else {
-            this.hideImage()
+            this.hideImage();
           }
         })
         .catch(error => {
-          console.error('There was a problem with the fetch operation:', error)
-          this.hideImage()
-        })
+          console.error('Fetch operation problem:', error);
+          this.hideImage();
+        });
     } else {
-      this.hideImage()
+      this.hideImage();
     }
   }
 
   showImage(imageUrl) {
-    const image = this.sectorImageTarget
+    const image = this.sectorImageTarget;
     if (imageUrl) {
-      image.src = imageUrl
-      image.style.display = 'block'
+      image.src = imageUrl;
+      image.style.display = 'block';
     } else {
-      this.hideImage()
+      this.hideImage();
     }
   }
 
   hideImage() {
-    this.sectorImageTarget.style.display = 'none'
+    this.sectorImageTarget.style.display = 'none';
   }
 }

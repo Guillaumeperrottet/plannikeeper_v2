@@ -13,7 +13,13 @@
       </ul>
 
       <div class="navbar-center">
-      <span><%= @current_path %></span>
+        <span><%= @current_path %></span>
+        <select id="sector-select-navbar" data-sector-select-target="sectorSelect" data-action="change->sector-select#loadImage">
+          <option value="">Choisir un secteur</option>
+          <% @objet.secteurs.each do |secteur| %>
+            <option value="<%= secteur.id %>" <%= 'selected' if secteur.id == params[:selected_sector_id].to_i %>><%= secteur.nom %></option>
+          <% end %>
+        </select>
       </div>
 
       <ul class="navbar-nav ms-auto">
