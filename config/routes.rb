@@ -9,7 +9,11 @@ Rails.application.routes.draw do
   root 'pages#home'
 
   resources :objets do
-    resources :secteurs, only: [:edit, :update]
+    resources :secteurs, only: [:edit, :update] do
+      member do
+        get 'image'
+      end
+    end
     resources :articles do
       resources :tasks
     end

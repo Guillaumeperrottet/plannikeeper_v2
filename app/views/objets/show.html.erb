@@ -1,4 +1,4 @@
-<div class="object-show">
+<div class="object-show" data-controller="sector-select" data-sector-select-objet-id="<%= @objet.id %>" data-selected-sector-id="<%= params[:selected_sector_id] %>">
   <h1>Bienvenue sur notre page d'affichage d'un objet</h1>
 
   <h1>Détails de l'objet</h1>
@@ -14,18 +14,16 @@
   </p>
 
   <h3>Secteurs</h3>
-  <ul>
+  <select id="sector-select" data-sector-select-target="sectorSelect" data-action="change->sector-select#loadImage">
+    <option value="">Choisir un secteur</option>
     <% @objet.secteurs.each do |secteur| %>
-      <li>
-        <%= secteur.nom %>
-        <% if secteur.image.attached? %>
-          <div class="image-container">
-            <%= image_tag secteur.image, alt: "Image du secteur", class: "objet-image" %>
-          </div>
-        <% end %>
-      </li>
+      <option value="<%= secteur.id %>" <%= 'selected' if secteur.id == params[:selected_sector_id].to_i %>><%= secteur.nom %></option>
     <% end %>
-  </ul>
+  </select>
+
+  <div id="sector-image-container">
+    <%= image_tag '', alt: "Image du secteur sélectionné", data: { sector_select_target: 'sectorImage' }, style: "display: none;" %>
+  </div>
 
   <% if @objet.image.attached? %>
     <p>
@@ -34,6 +32,5 @@
     </p>
   <% end %>
 
-  <%= link_to 'Modifier cet objet', edit_objet_path(@objet), class: 'btn btn-primary' %>
-  <%= link_to 'Retour', objets_path, class: 'btn btn-secondary' %>
+  <%= link_to 'Modifier cet objet', edit_objet_url(@objet), class: 'btn btn-primary' %>
 </div>

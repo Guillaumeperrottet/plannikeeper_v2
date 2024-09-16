@@ -5,23 +5,30 @@ class ApplicationController < ActionController::Base
 
   def set_current_path
     @current_path = case request.path
-                    when root_path then "Home"
-                    when new_objet_path then "Créer un objet"
-                    when edit_objet_path
-                      "Modifier un objet"
-                    when objet_path
-                      if params[:id]
-                        begin
-                          @objet = Objet.find(params[:id])
-                          "Objet : #{@objet.nom}"
-                        rescue ActiveRecord::RecordNotFound
-                          "Objet : Inconnu"
-                        end
-                      else
+                    when root_path
+                      "Home"
+                    when new_objet_path
+                      "Créer un objet"
+                    when %r{\A/objets/new\z}
+                      "Créer un objet"
+                    when %r{\A/objets/(\d+)/edit\z}
+                      begin
+                        @objet = Objet.find($1)
+                        "Modifier un objet : #{@objet.nom}"
+                      rescue ActiveRecord::RecordNotFound
+                        "Modifier un objet"
+                      end
+                    when %r{\A/objets/(\d+)\z}
+                      begin
+                        @objet = Objet.find($1)
+                        "Objet : #{@objet.nom}"
+                      rescue ActiveRecord::RecordNotFound
                         "Objet"
                       end
-                    when objets_path then "Objets"
-                    else "Page"
+                    when objets_path
+                      "Objets"
+                    else
+                      "Page"
                     end
   end
 end
