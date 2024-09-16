@@ -1,45 +1,19 @@
 .object-show {
+  margin-top: 60px; /* Ajustez cette valeur pour correspondre à la hauteur de votre navbar */
+  height: calc(100vh - 60px); /* 100vh pour la hauteur totale de l'écran moins la hauteur de la navbar */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
 
-  h1 {
-    font-size: 2em;
-    margin-bottom: 1em;
-  }
+#sector-image-container {
+  width: 100%;
+  height: 100%;
+}
 
-  p {
-    margin-bottom: 1em;
-  }
-
-  .image-container {
-    width: 50%;
-  }
-
-  .objet-image {
-    max-width: 100%;
-    height: auto;
-    border: 1px solid #ddd;
-    padding: 5px;
-    margin-top: 0.5em;
-  }
-
-  .btn {
-    margin-top: 1em;
-    display: inline-block;
-    padding: 0.5em 1em;
-    font-size: 1em;
-    text-align: center;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    text-decoration: none;
-  }
-
-  .btn-primary {
-    background-color: #007bff;
-    color: white;
-  }
-
-  .btn-secondary {
-    background-color: #6c757d;
-    color: white;
-  }
+#sector-image-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* S'assure que l'image couvre toute la zone sans déformer */
 }

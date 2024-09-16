@@ -1,6 +1,6 @@
 <div class="navbar navbar-expand-sm navbar-light navbar-lewagon">
   <div class="container-fluid d-flex">
-    <a class="navbar-brand" href="#">
+      <a class="navbar-brand" href="<%= root_path %>">
       <%= image_tag "logo.png", alt: "Plannikeeper" %>
     </a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -14,12 +14,14 @@
 
       <div class="navbar-center">
         <span><%= @current_path %></span>
-        <select id="sector-select-navbar" data-sector-select-target="sectorSelect" data-action="change->sector-select#loadImage">
-          <option value="">Choisir un secteur</option>
-          <% @objet.secteurs.each do |secteur| %>
-            <option value="<%= secteur.id %>" <%= 'selected' if secteur.id == params[:selected_sector_id].to_i %>><%= secteur.nom %></option>
-          <% end %>
-        </select>
+        <% if @objet %>
+          <select id="sector-select-navbar" data-sector-select-target="sectorSelect" data-action="change->sector-select#loadImage">
+            <option value="">Choisir un secteur</option>
+            <% @objet.secteurs.each do |secteur| %>
+              <option value="<%= secteur.id %>" <%= 'selected' if secteur.id == params[:selected_sector_id].to_i %>><%= secteur.nom %></option>
+            <% end %>
+          </select>
+        <% end %>
       </div>
 
       <ul class="navbar-nav ms-auto">
