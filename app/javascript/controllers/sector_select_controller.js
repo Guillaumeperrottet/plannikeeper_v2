@@ -4,10 +4,20 @@ export default class extends Controller {
   static targets = ["sectorSelect", "sectorImage"]
 
   connect() {
-    // Assurez-vous que le sélecteur est initialisé correctement
     this.loadImage()
     // Ajouter un écouteur d'événements pour le changement de sélection
     this.sectorSelectTarget.addEventListener('change', () => this.loadImage())
+
+    // Réinitialiser la sélection au chargement
+    this.restoreSelection()
+  }
+
+  restoreSelection() {
+    const selectedSectorId = this.data.get('selectedSectorId')
+    if (selectedSectorId) {
+      this.sectorSelectTarget.value = selectedSectorId
+      this.loadImage()
+    }
   }
 
   loadImage() {
@@ -15,7 +25,7 @@ export default class extends Controller {
     const objetId = this.data.get('objetId')
 
     if (sectorId && objetId) {
-      const url = `/objets/${objetId}/secteurs/${sectorId}/image` // Utilisation des backticks pour l'interpolation
+      const url = `/objets/${objetId}/secteurs/${sectorId}/image`
       fetch(url)
         .then(response => {
           if (!response.ok) {
@@ -24,7 +34,7 @@ export default class extends Controller {
           return response.json()
         })
         .then(data => {
-          console.log('Data received:', data)  // Pour vérifier les données reçues
+          console.log('Data received:', data)
           if (data.image_url) {
             this.showImage(data.image_url)
           } else {
@@ -33,7 +43,7 @@ export default class extends Controller {
         })
         .catch(error => {
           console.error('There was a problem with the fetch operation:', error)
-          this.hideImage()  // Masquer l'image en cas d'erreur
+          this.hideImage()
         })
     } else {
       this.hideImage()

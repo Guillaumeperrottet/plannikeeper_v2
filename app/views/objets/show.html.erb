@@ -1,4 +1,4 @@
-<div class="object-show" data-controller="sector-select" data-sector-select-objet-id="<%= @objet.id %>">
+<div class="object-show" data-controller="sector-select" data-sector-select-objet-id="<%= @objet.id %>" data-selected-sector-id="<%= params[:selected_sector_id] %>">
   <h1>Bienvenue sur notre page d'affichage d'un objet</h1>
 
   <h1>Détails de l'objet</h1>
@@ -14,10 +14,10 @@
   </p>
 
   <h3>Secteurs</h3>
-  <select data-sector-select-target="sectorSelect" data-action="change->sector-select#loadImage">
+  <select id="sector-select" data-sector-select-target="sectorSelect" data-action="change->sector-select#loadImage">
     <option value="">Choisir un secteur</option>
     <% @objet.secteurs.each do |secteur| %>
-      <option value="<%= secteur.id %>"><%= secteur.nom %></option>
+      <option value="<%= secteur.id %>" <%= 'selected' if secteur.id == params[:selected_sector_id].to_i %>><%= secteur.nom %></option>
     <% end %>
   </select>
 
