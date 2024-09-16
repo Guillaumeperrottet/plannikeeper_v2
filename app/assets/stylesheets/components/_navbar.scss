@@ -18,9 +18,8 @@
 }
 
 .navbar-center {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  text-align: center;
-  width: auto; /* Ajuste si nécessaire */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-grow: 1;
 }

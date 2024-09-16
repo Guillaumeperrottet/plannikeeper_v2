@@ -1,6 +1,6 @@
 class SecteursController < ApplicationController
   before_action :set_objet
-  before_action :set_secteur, only: [:new, :create, :edit, :update]
+  before_action :set_secteur, only: [:new, :create, :edit, :update, :image]
 
   def new
     @secteur = Secteur.new
@@ -12,6 +12,14 @@ class SecteursController < ApplicationController
       redirect_to edit_objet_path(@objet), notice: 'Secteur ajouté avec succès.'
     else
       render :new
+    end
+  end
+
+  def image
+    if @secteur.image.attached?
+      render json: { image_url: url_for(@secteur.image) }
+    else
+      render json: { image_url: nil }
     end
   end
 
