@@ -17,6 +17,14 @@ export default class extends Controller {
     }
   }
 
+  handleSectorChange(event) {
+    const sectorId = event.target.value
+    const objetId = this.data.get('objetId')
+    const url = `/objets/${objetId}?selected_sector_id=${sectorId}`;
+    window.history.pushState({}, '', url); // Met à jour l'URL sans recharger la page
+    this.loadImage()
+  }
+
   restoreSelection() {
     const selectedSectorId = this.data.get('selectedSectorId');
     console.log('Restoring selection for Sector ID:', selectedSectorId);
