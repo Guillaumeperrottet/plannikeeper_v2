@@ -4,4 +4,5 @@ class Article < ApplicationRecord
 
   validates :title, presence: true
   validates :description, presence: true
+  validates :position_x, :position_y, :width, :height, presence: true
 end
