@@ -9,7 +9,14 @@
       <strong>Image :</strong>
       <%= image_tag @objet.image, alt: "Image de l'objet", class: "object-image" %>
     </p>
+    <div>
+      <canvas id="canvas" width="800" height="600"></canvas> <!-- Canvas pour Fabric.js -->
+    </div>
+    <button id="add-article" class="btn btn-secondary" onclick="activateDrawing()">+ Ajouter un article</button>
   <% end %>
+
+  <div id="react-root" data-controller="react"></div>
+
 
 <!-- <%= link_to 'Modifier cet objet', edit_objet_url(@objet), class: 'btn btn-primary' %> -->
 </div>
