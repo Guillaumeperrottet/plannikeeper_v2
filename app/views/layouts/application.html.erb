@@ -11,8 +11,34 @@
 
   </head>
 
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    setTimeout(function() {
+      const notice = document.getElementById('flash-notice');
+      const alert = document.getElementById('flash-alert');
+      if (notice) notice.style.display = 'none';
+      if (alert) alert.style.display = 'none';
+    }, 5000); // Masquer après 5 secondes
+  });
+</script>
+
   <body>
     <%= render 'shared/navbar' %>
     <%= yield %>
+    <!-- Chargez Fabric.js ici si nécessaire, sinon il sera chargé via importmap -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.0/fabric.min.js"></script>
+
+      <% if flash[:notice] %>
+    <div id="flash-notice" class="alert alert-success">
+      <%= flash[:notice] %>
+    </div>
+  <% end %>
+
+  <% if flash[:alert] %>
+    <div id="flash-alert" class="alert alert-danger">
+      <%= flash[:alert] %>
+    </div>
+  <% end %>
+
   </body>
 </html>

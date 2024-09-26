@@ -22,6 +22,15 @@
     <%= form.text_field :adresse %>
   </div>
 
+  <div class="field">
+    <%= form.label :image, "Image de l'objet" %>
+    <% if @objet.image.attached? %>
+      <%= image_tag @objet.image, alt: "Image de l'objet", class: "object-image" %>
+    <% end %>
+    <%= form.file_field :image %>
+  </div>
+
+  <h3>Secteurs</h3>
   <div data-controller="sector">
     <div data-sector-target="fields" id="secteurs-fields">
       <%= form.fields_for :secteurs do |secteur_form| %>
@@ -30,7 +39,13 @@
           <%= secteur_form.text_field :nom %>
           <%= secteur_form.hidden_field :_destroy %>
 
-          <%= secteur_form.label :image, "Image du secteur" %>
+          <!-- Remplacer "Image du secteur" par le nom du fichier -->
+          <% if secteur_form.object.image.attached? %>
+            <p>Fichier : <%= secteur_form.object.image.filename.to_s %></p> <!-- Affiche le nom du fichier -->
+          <% else %>
+            <p>Aucune image associée.</p>
+          <% end %>
+
           <%= secteur_form.file_field :image %>
 
           <%= link_to "Supprimer", '#', data: { action: "sector#removeSector" }, class: 'remove_fields' %>
@@ -38,7 +53,7 @@
       <% end %>
     </div>
 
-        <template data-sector-target="template">
+    <template data-sector-target="template">
       <div class="field">
         <%= form.fields_for :secteurs, Secteur.new, child_index: "NEW_RECORD" do |secteur_form| %>
           <%= secteur_form.label :nom, "Nom du secteur" %>
@@ -54,12 +69,6 @@
   </div>
 
   <div class="actions">
-    <%= form.submit "Mettre à jour l'objet" %>
+    <%= form.submit "Modifier l'objet" %>
   </div>
-<% end %>
-
-<button type="button" onclick="window.history.back();" class="btn btn-secondary">Retour</button>
-
-<%= form_with(url: objet_path(@objet), method: :delete, html: { class: 'delete-form', data: { confirm: 'Êtes-vous sûr de vouloir supprimer cet objet ?' } }) do %>
-  <%= submit_tag 'Supprimer', class: 'btn btn-danger' %>
 <% end %>

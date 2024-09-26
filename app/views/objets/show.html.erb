@@ -1,21 +1,19 @@
-<div class="object-show" data-controller="sector-select" data-sector-select-objet-id="<%= @objet.id %>" data-selected-sector-id="<%= params[:selected_sector_id] %>">
+<div class="object-show" data-controller="fabric sector-select" data-sector-select-objet-id="<%= @objet.id %>" data-selected-sector-id="<%= params[:selected_sector_id] %>">
+  <div id="sector-image-container" style="position: relative;">
 
-  <div id="sector-image-container">
-    <%= image_tag '', alt: "Image du secteur sélectionné", data: { sector_select_target: 'sectorImage' }, style: "display: none;" %>
+    <% if @selected_sector && @selected_sector.image.attached? %>
+  <%= image_tag @selected_sector.image, alt: "Image du secteur", class: "sector-image", data: { sector_select_target: 'sectorImage' }, style: "width: 100%; height: auto;" %>
+<% else %>
+  <%= image_tag '', alt: "Image du secteur sélectionné", data: { sector_select_target: 'sectorImage' }, style: "display: none;" %>
+<% end %>
+
+    <!-- Canvas for Fabric.js on top of the image -->
+    <canvas id="canvasId" data-fabric-target="canvas" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;"></canvas>
+
+    <!-- Button to add article, positioned in the top-right corner -->
+    <button id="add-article" class="btn btn-secondary" style="position: absolute; top: 10px; right: 10px;" data-action="click->fabric#activateDrawing">+ Ajouter un article</button>
   </div>
 
-  <% if @objet.image.attached? %>
-    <p>
-      <strong>Image :</strong>
-      <%= image_tag @objet.image, alt: "Image de l'objet", class: "object-image" %>
-    </p>
-    <div>
-      <canvas id="canvas" width="800" height="600"></canvas> <!-- Canvas pour Fabric.js -->
-    </div>
-    <button id="add-article" class="btn btn-secondary" onclick="activateDrawing()">+ Ajouter un article</button>
-  <% end %>
-
-
-
-<!-- <%= link_to 'Modifier cet objet', edit_objet_url(@objet), class: 'btn btn-primary' %> -->
+  <button id="save-zone" class="btn btn-primary" style="position: absolute; bottom: 20px; right: 20px;" data-action="click->fabric#saveZone">Enregistrer l'article</button>
+  <button id="stop-drawing" class="btn btn-danger" style="position: absolute; bottom: 20px; right: 140px;" data-action="click->fabric#stopDrawing">Arrêter le dessin</button>
 </div>
