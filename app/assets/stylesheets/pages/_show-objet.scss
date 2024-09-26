@@ -1,32 +1,7 @@
-// .object-show {
-//   margin: 0; /* Pas de marges */
-//   padding: 0; /* Pas de padding */
-//   height: calc(100vh - 60px); /* Hauteur de l'écran - la hauteur de la navbar */
-//   display: flex;
-//   flex-direction: column;
-//   align-items: center;
-//   justify-content: flex-start; /* Aligner l'image en haut */
-// }
-
-// #sector-image-container {
-//   width: 100%;
-//   height: 100%; /* S'assure que le conteneur prend toute la hauteur disponible */
-//   display: flex;
-// }
-
-// #sector-image-container img {
-//   width: 100%;
-//   height: 100%;
-//   // object-fit: contain; /* Ajuste l'image pour qu'elle s'adapte à l'écran sans déformation */
-//   margin: 0; /* Supprime toute marge */
-//   padding: 0; /* Supprime tout padding */
-// }
-
 #sector-image-container img {
   position: relative;
   width: 100%;
   height: calc(100vh - 70px); /* Ajuste en fonction de la hauteur de la navbar */
-  overflow: hidden;
 }
 
 .sector-image {
@@ -36,6 +11,7 @@
 }
 
 #canvasId {
+  position: absolute;
   width: 100%;
   height: 100%;
   border: none;
@@ -44,6 +20,7 @@
 
 #add-article {
   z-index: 10; /* Le bouton doit être au-dessus du canevas */
+  position: absolute
 }
 
 .btn {
