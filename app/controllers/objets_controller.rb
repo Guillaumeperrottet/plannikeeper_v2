@@ -6,13 +6,13 @@ class ObjetsController < ApplicationController
   end
 
   def show
-    @objet = Objet.find(params[:id])
-    puts @objet.image.attached? # Assurez-vous que c'est vrai
-    @selected_sector_id = params[:sector_id]
+    @secteurs = @objet.secteurs.includes(:image_attachment)
+    @selected_sector_id = params[:selected_sector_id]
   end
 
   def new
     @objet = Objet.new
+    @objet.secteurs.build
   end
 
   def create

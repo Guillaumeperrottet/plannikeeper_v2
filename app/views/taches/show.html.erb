@@ -1,0 +1,14 @@
+<!-- app/views/tâches/show.html.erb -->
+<h2><%= @appartement.nom %></h2>
+
+<%= form_with(model: [@appartement, @appartement.taches.build]) do |f| %>
+  <%= f.label :title, "Titre de la tâche" %>
+  <%= f.text_field :title %>
+  <%= f.submit "Ajouter Tâche" %>
+<% end %>
+
+<ul>
+  <% @appartement.taches.each do |tache| %>
+    <li><%= tache.title %></li>
+  <% end %>
+</ul>

@@ -3,6 +3,10 @@ import { Controller } from "@hotwired/stimulus"
 export default class extends Controller {
   static targets = ["fields", "template"]
 
+  connect() {
+    console.log('Le contrôleur Sector est chargé'); // Message de vérification
+  }
+
   addSector(event) {
     event.preventDefault()
 

@@ -16,11 +16,15 @@ class SecteursController < ApplicationController
   end
 
   def image
+    @objet = Objet.find(params[:objet_id])
+    @secteur = @objet.secteurs.find(params[:id])
     if @secteur.image.attached?
       render json: { image_url: url_for(@secteur.image) }
     else
-      render json: { image_url: nil }
+      render json: { image_url: nil }, status: :not_found
     end
+  rescue ActiveRecord::RecordNotFound
+    render json: { error: 'Secteur or Objet not found' }, status: :not_found
   end
 
   def edit

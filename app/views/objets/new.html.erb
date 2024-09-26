@@ -1,4 +1,4 @@
-<h1>Créer un nouvel objet</h1>
+<h1>Modifier l'objet</h1>
 
 <%= form_with(model: @objet, local: true, html: { multipart: true }) do |form| %>
   <% if @objet.errors.any? %>
@@ -32,6 +32,9 @@
           <%= secteur_form.hidden_field :_destroy %>
 
           <%= secteur_form.label :image, "Image du secteur" %>
+          <% if secteur_form.object.image.attached? %>
+            <%= image_tag secteur_form.object.image, alt: "Image du secteur", class: "sector-image" %>
+          <% end %>
           <%= secteur_form.file_field :image %>
 
           <%= link_to "Supprimer", '#', data: { action: "sector#removeSector" }, class: 'remove_fields' %>

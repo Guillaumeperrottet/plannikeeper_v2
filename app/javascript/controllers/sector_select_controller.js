@@ -1,9 +1,8 @@
-// sector_select_controller.js
 import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
   connect() {
-    console.log('Controller connected');
+    console.log('sector select Controller connected');
 
     this.sectorSelectTarget = document.querySelector('[data-sector-select-target="sectorSelect"]');
     this.sectorImageTarget = document.querySelector('[data-sector-select-target="sectorImage"]');
@@ -12,30 +11,35 @@ export default class extends Controller {
     console.log('Sector Image Target:', this.sectorImageTarget);
 
     if (this.sectorSelectTarget) {
-      this.sectorSelectTarget.addEventListener('change', () => this.loadImage());
+      this.sectorSelectTarget.addEventListener('change', (event) => this.handleSectorChange(event));
       this.restoreSelection();
     }
   }
 
   handleSectorChange(event) {
-    const sectorId = event.target.value
-    const objetId = this.data.get('objetId')
-    const url = `/objets/${objetId}?selected_sector_id=${sectorId}`;
-    window.history.pushState({}, '', url); // Met à jour l'URL sans recharger la page
-    this.loadImage()
+    const sectorId = event.target.value;
+    if (sectorId) {
+      this.loadImage(sectorId);
+      this.element.dataset.selectedSectorId = sectorId; // Stocke la sélection dans un attribut de données
+    } else {
+      this.hideImage();
+      this.element.dataset.selectedSectorId = '';
+    }
   }
 
   restoreSelection() {
     const selectedSectorId = this.data.get('selectedSectorId');
     console.log('Restoring selection for Sector ID:', selectedSectorId);
+
     if (selectedSectorId) {
       this.sectorSelectTarget.value = selectedSectorId;
-      this.loadImage();
+      this.loadImage(selectedSectorId); // Charge l'image pour le secteur restauré
+    } else {
+      this.hideImage(); // Cache l'image si aucun secteur n'est sélectionné
     }
   }
 
-  loadImage() {
-    const sectorId = this.sectorSelectTarget?.value;
+  loadImage(sectorId) {
     const objetId = this.data.get('objetId');
 
     console.log('Loading image for Sector ID:', sectorId);
@@ -71,13 +75,17 @@ export default class extends Controller {
     const image = this.sectorImageTarget;
     if (imageUrl) {
       image.src = imageUrl;
-      image.style.display = 'block';
+      image.style.display = 'block'; // Affiche l'image
     } else {
       this.hideImage();
     }
   }
 
   hideImage() {
-    this.sectorImageTarget.style.display = 'none';
+    if (this.sectorImageTarget) {
+      this.sectorImageTarget.style.display = 'none'; // Cache l'image
+    } else {
+      console.error('sectorImageTarget est undefined, impossible de cacher l\'image.');
+    }
   }
 }
