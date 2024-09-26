@@ -2,9 +2,9 @@
   <div id="sector-image-container" style="position: relative;">
 
     <% if @selected_sector && @selected_sector.image.attached? %>
-  <%= image_tag @selected_sector.image, alt: "Image du secteur", class: "sector-image", data: { sector_select_target: 'sectorImage' }, style: "width: 100%; height: auto;" %>
+  <%= image_tag @selected_sector.image, alt: "Image du secteur", class: "sector-image", data: { sector_select_target: 'sectorImage' }, style: "width: 100%; height: auto;", draggable: "false" %>
 <% else %>
-  <%= image_tag '', alt: "Image du secteur sélectionné", data: { sector_select_target: 'sectorImage' }, style: "display: none;" %>
+  <%= image_tag '', alt: "Image du secteur sélectionné", data: { sector_select_target: 'sectorImage' }, style: "display: none;", draggable: "false" %>
 <% end %>
 
     <!-- Canvas for Fabric.js on top of the image -->

@@ -1,4 +1,4 @@
-import { Controller } from "@hotwired/stimulus"
+import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
   static targets = ["canvas"]
@@ -7,10 +7,37 @@ export default class extends Controller {
     this.canvas = new fabric.Canvas(this.canvasTarget.id);
     console.log("Fabric.js initialized");
 
+    this.canvas.on('mouse:down', function(event) {
+      console.log('Mouse down detected on canvas');
+    });
+
+    this.canvas.on('mouse:move', function(event) {
+      console.log('Mouse moving on canvas');
+    });
+
+    // Désactiver le comportement par défaut de tous les événements de la souris
+    ['mousedown', 'mouseup', 'mousemove', 'dragstart'].forEach(eventName => {
+      this.canvasTarget.addEventListener(eventName, (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+      });
+    });
+
     // Ajuste la taille du canevas en fonction de l'image
     this.adjustCanvasSize();
 
     this.isDrawing = false;
+  }
+
+  activateDrawing() {
+    this.isDrawing = true;
+    this.canvas.isDrawingMode = true;
+    this.canvas.freeDrawingBrush.color = "red";
+    this.canvas.freeDrawingBrush.width = 5;
+
+    // Autoriser les interactions sur le canevas
+    this.canvasTarget.style.pointerEvents = 'auto';
+    console.log("Drawing mode activated");
   }
 
   adjustCanvasSize() {
@@ -22,15 +49,16 @@ export default class extends Controller {
       canvasEl.height = img.clientHeight;
       this.canvas.setWidth(canvasEl.width);
       this.canvas.setHeight(canvasEl.height);
+
+      console.log("Canvas size:", canvasEl.width, canvasEl.height);
     }
   }
 
-  activateDrawing() {
-    this.isDrawing = true;
-    this.canvas.isDrawingMode = true;
-    this.canvas.freeDrawingBrush.color = "red";
-    this.canvas.freeDrawingBrush.width = 5;
-    console.log("Drawing mode activated");
+  stopDrawing() {
+    this.canvas.isDrawingMode = false;
+    this.isDrawing = false;
+    this.canvasTarget.style.pointerEvents = 'none';
+    console.log("Drawing mode deactivated");
   }
 
   saveZone() {
@@ -62,11 +90,5 @@ export default class extends Controller {
         console.error("Erreur lors de la création de l'article :", error);
       });
     });
-  }
-
-  stopDrawing() {
-    this.canvas.isDrawingMode = false;
-    this.isDrawing = false;
-    console.log("Drawing mode deactivated");
   }
 }

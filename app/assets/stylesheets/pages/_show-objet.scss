@@ -1,7 +1,13 @@
+#sector-image-container {
+position: relative;
+}
+
 #sector-image-container img {
-  position: relative;
+  position: absolute;
   width: 100%;
   height: calc(100vh - 70px); /* Ajuste en fonction de la hauteur de la navbar */
+  z-index: 1; /* L'image est en arrière-plan */
+  opacity: 0.5;
 }
 
 .sector-image {
@@ -14,8 +20,11 @@
   position: absolute;
   width: 100%;
   height: 100%;
+  top: 0;
+  left: 0;
   border: none;
-  pointer-events: none; /* Le canvas ne doit pas interférer avec l'image sauf pour les dessins */
+  pointer-events: auto; /* Le canvas ne doit pas interférer avec l'image sauf pour les dessins */
+  z-index: 2; /* Le canevas est au-dessus de l'image */
 }
 
 #add-article {
