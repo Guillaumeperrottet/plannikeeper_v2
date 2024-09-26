@@ -10,5 +10,3 @@ application.debug = false
 eagerLoadControllersFrom("controllers", application)
 
 window.Stimulus = application
-
-// import "./react_app"
