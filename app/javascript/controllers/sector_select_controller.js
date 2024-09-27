@@ -76,6 +76,17 @@ export default class extends Controller {
     if (imageUrl) {
       image.src = imageUrl;
       image.style.display = 'block'; // Affiche l'image
+
+      console.log("Preparing to dispatch 'imageLoaded' event");
+      console.log("Image element:", image);
+      console.log("Image element src:", image.src);
+      console.log("Image element display style:", image.style.display);
+
+      setTimeout(() => {
+        console.log("Image loaded and displayed after delay");
+        const event = new CustomEvent('imageLoaded', { detail: { imageElement: image } });
+        window.dispatchEvent(event);
+      }, 500); // 500 ms de délai pour laisser l'image se charger
     } else {
       this.hideImage();
     }

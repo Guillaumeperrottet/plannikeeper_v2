@@ -7,15 +7,20 @@ export default class extends Controller {
     this.canvas = new fabric.Canvas(this.canvasTarget.id);
     console.log("Fabric.js initialized");
 
-    this.canvas.on('mouse:down', function(event) {
-      console.log('Mouse down detected on canvas');
-    });
+      // Écouter l'événement pour ajuster la taille du canevas une fois l'image chargée
+    window.addEventListener('imageLoaded', (event) => {
+      console.log("Event 'imageLoaded' captured");
+    this.adjustCanvasSize(event.detail.imageElement);
+  });
+
+    // Appel de la méthode pour ajuster la taille du canevas en fonction de l'image
+    this.adjustCanvasSize();
 
     this.canvas.on('mouse:move', function(event) {
       console.log('Mouse moving on canvas');
     });
 
-    // Désactiver le comportement par défaut de tous les événements de la souris
+    // Désactiver le comportement par défaut des événements de la souris sur le canevas
     ['mousedown', 'mouseup', 'mousemove', 'dragstart'].forEach(eventName => {
       this.canvasTarget.addEventListener(eventName, (event) => {
         event.preventDefault();
@@ -23,10 +28,76 @@ export default class extends Controller {
       });
     });
 
-    // Ajuste la taille du canevas en fonction de l'image
-    this.adjustCanvasSize();
-
     this.isDrawing = false;
+  }
+
+  adjustCanvasSize(imgElement) {
+    const canvasEl = this.canvasTarget;
+
+    if (imgElement) {
+      console.log("Image element found in fabric_controller:", imgElement);
+      console.log("Image element src:", imgElement.src);
+      console.log("Image element display style:", imgElement.style.display);
+      console.log("Image element width:", imgElement.clientWidth);
+      console.log("Image element height:", imgElement.clientHeight);
+
+      const imgWidth = imgElement.clientWidth;
+      const imgHeight = imgElement.clientHeight;
+
+      if (imgWidth === 0 || imgHeight === 0) {
+        console.log("Image dimensions are not set correctly yet.");
+        return;
+      }
+
+      // Ajuster la taille du canevas
+      canvasEl.width = imgWidth;
+      canvasEl.height = imgHeight;
+
+      this.canvas.setWidth(imgWidth);
+      this.canvas.setHeight(imgHeight);
+
+      fabric.Image.fromURL(imgElement.src, (img) => {
+        img.set({
+          left: 0,
+          top: 0,
+          scaleX: imgWidth / img.width,
+          scaleY: imgHeight / img.height
+        });
+        this.canvas.setBackgroundImage(img, this.canvas.renderAll.bind(this.canvas));
+      });
+
+      console.log("Canvas and container size adjusted:", imgWidth, imgHeight);
+    } else {
+      console.log("Image element still not found in fabric_controller.");
+    }
+  }
+
+
+
+  resizeCanvas(imgElement, canvasEl) {
+    const imgWidth = imgElement.clientWidth;
+    const imgHeight = imgElement.clientHeight;
+
+    // Ajuster la taille du canevas
+    canvasEl.width = imgWidth;
+    canvasEl.height = imgHeight;
+
+    // Appliquer la taille à Fabric.js
+    this.canvas.setWidth(imgWidth);
+    this.canvas.setHeight(imgHeight);
+
+    // Ajouter l'image comme arrière-plan dans Fabric.js
+    fabric.Image.fromURL(imgElement.src, (img) => {
+      img.set({
+        left: 0,
+        top: 0,
+        scaleX: imgWidth / img.width,
+        scaleY: imgHeight / img.height
+      });
+      this.canvas.setBackgroundImage(img, this.canvas.renderAll.bind(this.canvas));
+    });
+
+    console.log("Canvas size adjusted:", imgWidth, imgHeight);
   }
 
   activateDrawing() {
@@ -35,23 +106,8 @@ export default class extends Controller {
     this.canvas.freeDrawingBrush.color = "red";
     this.canvas.freeDrawingBrush.width = 5;
 
-    // Autoriser les interactions sur le canevas
     this.canvasTarget.style.pointerEvents = 'auto';
     console.log("Drawing mode activated");
-  }
-
-  adjustCanvasSize() {
-    const img = document.querySelector('.sector-image');
-    const canvasEl = this.canvasTarget;
-
-    if (img) {
-      canvasEl.width = img.clientWidth;
-      canvasEl.height = img.clientHeight;
-      this.canvas.setWidth(canvasEl.width);
-      this.canvas.setHeight(canvasEl.height);
-
-      console.log("Canvas size:", canvasEl.width, canvasEl.height);
-    }
   }
 
   stopDrawing() {
