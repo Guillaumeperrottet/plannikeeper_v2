@@ -1,5 +1,5 @@
 class Article < ApplicationRecord
-  belongs_to :objet
+  belongs_to :secteur
   has_many :tasks, dependent: :destroy
 
   validates :title, presence: true

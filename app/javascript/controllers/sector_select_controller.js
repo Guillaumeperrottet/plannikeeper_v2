@@ -14,16 +14,29 @@ export default class extends Controller {
       this.sectorSelectTarget.addEventListener('change', (event) => this.handleSectorChange(event));
       this.restoreSelection();
     }
+
+    // Écouter l'événement pour savoir quand le canevas est prêt
+    window.addEventListener('canvasReady', (event) => {
+      console.log("Canvas is ready, loading articles if needed.");
+      const sectorId = document.body.dataset.selectedSectorId;
+      const objetId = this.element.dataset.sectorSelectObjetId;
+      if (sectorId && objetId) {
+        this.loadArticles(sectorId);
+      }
+    });
   }
 
   handleSectorChange(event) {
     const sectorId = event.target.value;
+    console.log("Selected Sector ID from navbar:", sectorId);
+
     if (sectorId) {
       this.loadImage(sectorId);
-      this.element.dataset.selectedSectorId = sectorId; // Stocke la sélection dans un attribut de données
+      document.body.dataset.selectedSectorId = sectorId; // Stocke l'ID dans un attribut 'data' global
+      console.log("Updated body dataset with selected-sector-id:", sectorId);
     } else {
       this.hideImage();
-      this.element.dataset.selectedSectorId = '';
+      document.body.dataset.selectedSectorId = ''; // Remets à zéro si aucun secteur n'est sélectionné
     }
   }
 
@@ -40,7 +53,7 @@ export default class extends Controller {
   }
 
   loadImage(sectorId) {
-    const objetId = this.data.get('objetId');
+    const objetId = this.data.get('objetId'); // Assure-toi que `objetId` est récupéré une seule fois
 
     console.log('Loading image for Sector ID:', sectorId);
     console.log('Objet ID:', objetId);
@@ -58,6 +71,7 @@ export default class extends Controller {
           console.log('Data received:', data);
           if (data.image_url) {
             this.showImage(data.image_url);
+            this.loadArticles(sectorId); // Appelle loadArticles après avoir chargé l'image
           } else {
             this.hideImage();
           }
@@ -98,5 +112,60 @@ export default class extends Controller {
     } else {
       console.error('sectorImageTarget est undefined, impossible de cacher l\'image.');
     }
+  }
+
+  loadArticles(sectorId) {
+    const objetId = this.element.dataset.sectorSelectObjetId;
+    console.log("Loading articles for sector:", sectorId, "and object:", objetId);
+
+    if (!objetId || !sectorId) {
+      console.error("Objet ID or Sector ID is missing.");
+      return;
+    }
+
+    // Attendre que Fabric.js soit initialisé avant d'ajouter les articles
+    if (!window.canvas || !window.canvas.initialized) {
+      console.error("Canvas is not initialized. Waiting for 'canvasReady' event.");
+      return;
+    }
+
+    console.log(`Loading articles for sector: ${sectorId} and object: ${objetId}`);
+
+    fetch(`/objets/${objetId}/secteurs/${sectorId}/articles`)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then(data => {
+        console.log("Articles loaded:", data.articles);
+
+        if (!data.articles || data.articles.length === 0) {
+          console.log("No articles to load.");
+          return;
+        }
+
+        // Ajoute chaque article au canevas
+        data.articles.forEach(article => {
+          console.log("Adding article to canvas:", article);
+
+          const rect = new fabric.Rect({
+            left: article.position_x,
+            top: article.position_y,
+            width: article.width,
+            height: article.height,
+            fill: 'rgba(0, 255, 0, 0.5)',
+            stroke: 'green',
+            strokeWidth: 2,
+          });
+
+          window.canvas.add(rect); // Ajoute le rectangle au canevas
+          window.canvas.renderAll(); // Rafraîchir le canevas après ajout
+        });
+      })
+      .catch(error => {
+        console.error("Erreur lors du chargement des articles :", error);
+      });
   }
 }

@@ -1,4 +1,4 @@
-<div class="object-show" data-controller="fabric sector-select" data-sector-select-objet-id="<%= @objet.id %>" data-selected-sector-id="<%= params[:selected_sector_id] %>">
+<div class="object-show" data-controller="fabric sector-select" data-objet-id="<%= @objet.id %>" data-sector-select-objet-id="<%= @objet.id %>" data-selected-sector-id="<%= params[:selected_sector_id] %>">
   <div id="sector-image-container" style="position: relative;">
 
     <% if @selected_sector && @selected_sector.image.attached? %>
