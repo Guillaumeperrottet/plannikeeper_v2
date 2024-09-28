@@ -33,18 +33,12 @@ export default class extends Controller {
     if (sectorId) {
       this.loadImage(sectorId);
       document.body.dataset.selectedSectorId = sectorId; // Stocke l'ID dans un attribut 'data' global
-<<<<<<< HEAD
       localStorage.setItem('selectedSectorId', sectorId); // Stocke l'ID du secteur dans localStorage
-=======
->>>>>>> 2cbc6962e5d21ae5040baf60661564cfe97e5709
       console.log("Updated body dataset with selected-sector-id:", sectorId);
     } else {
       this.hideImage();
       document.body.dataset.selectedSectorId = ''; // Remets à zéro si aucun secteur n'est sélectionné
-<<<<<<< HEAD
       localStorage.removeItem('selectedSectorId'); // Supprime du localStorage si aucun secteur n'est sélectionné
-=======
->>>>>>> 2cbc6962e5d21ae5040baf60661564cfe97e5709
     }
   }
 
