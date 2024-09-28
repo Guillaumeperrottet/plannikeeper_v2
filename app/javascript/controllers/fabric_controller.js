@@ -91,7 +91,7 @@ export default class extends Controller {
     saveButton.disabled = true;
 
     const objetId = this.element.dataset.sectorSelectObjetId; // Récupère l'ID de l'objet depuis l'attribut 'data-sector-select-objet-id'
-    const sectorId = document.body.dataset.selectedSectorId; // Récupère l'ID du secteur sélectionné
+    const sectorId = document.body.dataset.selectedSectorId || localStorage.getItem('selectedSectorId'); // Récupère l'ID du secteur sélectionné, depuis localStorage ou body.dataset
 
     console.log("Objet ID:", objetId);
     console.log("Sector ID:", sectorId);
