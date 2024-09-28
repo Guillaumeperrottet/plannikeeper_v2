@@ -18,17 +18,24 @@ export default class extends Controller {
 
   handleSectorChange(event) {
     const sectorId = event.target.value;
+    console.log("Selected Sector ID from navbar:", sectorId);
+
     if (sectorId) {
       this.loadImage(sectorId);
-      this.element.dataset.selectedSectorId = sectorId; // Stocke la sélection dans un attribut de données
+      document.body.dataset.selectedSectorId = sectorId; // Stocke l'ID dans un attribut 'data' global
+      localStorage.setItem('selectedSectorId', sectorId); // Stocke l'ID du secteur dans localStorage
+      console.log("Updated body dataset with selected-sector-id:", sectorId);
     } else {
       this.hideImage();
-      this.element.dataset.selectedSectorId = '';
+      document.body.dataset.selectedSectorId = ''; // Remets à zéro si aucun secteur n'est sélectionné
+      localStorage.removeItem('selectedSectorId'); // Supprime du localStorage si aucun secteur n'est sélectionné
     }
   }
 
+
   restoreSelection() {
-    const selectedSectorId = this.data.get('selectedSectorId');
+    // Vérifie si un secteur est stocké dans localStorage
+    const selectedSectorId = localStorage.getItem('selectedSectorId') || this.data.get('selectedSectorId');
     console.log('Restoring selection for Sector ID:', selectedSectorId);
 
     if (selectedSectorId) {
@@ -38,6 +45,7 @@ export default class extends Controller {
       this.hideImage(); // Cache l'image si aucun secteur n'est sélectionné
     }
   }
+
 
   loadImage(sectorId) {
     const objetId = this.data.get('objetId');
