@@ -33,15 +33,25 @@ export default class extends Controller {
     if (sectorId) {
       this.loadImage(sectorId);
       document.body.dataset.selectedSectorId = sectorId; // Stocke l'ID dans un attribut 'data' global
+<<<<<<< HEAD
+      localStorage.setItem('selectedSectorId', sectorId); // Stocke l'ID du secteur dans localStorage
+=======
+>>>>>>> 2cbc6962e5d21ae5040baf60661564cfe97e5709
       console.log("Updated body dataset with selected-sector-id:", sectorId);
     } else {
       this.hideImage();
       document.body.dataset.selectedSectorId = ''; // Remets à zéro si aucun secteur n'est sélectionné
+<<<<<<< HEAD
+      localStorage.removeItem('selectedSectorId'); // Supprime du localStorage si aucun secteur n'est sélectionné
+=======
+>>>>>>> 2cbc6962e5d21ae5040baf60661564cfe97e5709
     }
   }
 
+
   restoreSelection() {
-    const selectedSectorId = this.data.get('selectedSectorId');
+    // Vérifie si un secteur est stocké dans localStorage
+    const selectedSectorId = localStorage.getItem('selectedSectorId') || this.data.get('selectedSectorId');
     console.log('Restoring selection for Sector ID:', selectedSectorId);
 
     if (selectedSectorId) {
@@ -51,6 +61,7 @@ export default class extends Controller {
       this.hideImage(); // Cache l'image si aucun secteur n'est sélectionné
     }
   }
+
 
   loadImage(sectorId) {
     const objetId = this.data.get('objetId'); // Assure-toi que `objetId` est récupéré une seule fois
