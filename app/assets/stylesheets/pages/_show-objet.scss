@@ -1,9 +1,17 @@
 /* Conteneur de l'image */
 #sector-image-container {
   position: relative;
-  width: 100%;
-  height: calc(100vh - 70px); /* Ajustement dynamique de la hauteur */
+  width: 100%; /* Prend toute la largeur par défaut */
+  height: calc(100vh - 70px); /* Hauteur dynamique */
+  transition: width 0.3s ease; /* Transition douce lorsque la largeur change */
+  float: left;
 }
+
+/* Quand le panneau est visible, rétrécir l'image */
+#sector-image-container.with-panel {
+  width: calc(100% - 300px); /* Réduit la largeur pour laisser la place au panneau */
+}
+
 
 /* Image de secteur en arrière-plan */
 #sector-image-container img {
@@ -22,9 +30,8 @@
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: 5; /* Canevas au-dessus de l'image mais sous les boutons */
-  border: none;
-  pointer-events: auto; /* Autorise les dessins */
+  z-index: 5;
+  pointer-events: auto;
 }
 
 /* Bordures pour tester */
@@ -43,8 +50,31 @@
   z-index: 10; /* Toujours au-dessus du canevas */
 }
 
-/* Bouton spécifique pour l'ajout d'articles */
+/* Boutons au-dessus du canevas */
 #add-article {
+  position: absolute;
   top: 10px;
   right: 10px;
+  z-index: 10;
+}
+
+/* Panneau latéral */
+#article-panel {
+  position: fixed;
+  top: 70px;
+  right: 0;
+  width: 300px;
+  height: calc(100vh - 70px);
+  background-color: white;
+  z-index: 20;
+  box-shadow: -2px 0px 5px rgba(0, 0, 0, 0.2);
+  padding: 20px;
+  overflow-y: auto;
+  transition: transform 0.3s ease; /* Transition pour l'apparition/disparition */
+  transform: translateX(100%); /* Par défaut, panneau masqué */
+}
+
+/* Affichage du panneau */
+#article-panel.visible {
+  transform: translateX(0); /* Fait glisser le panneau dans l'écran */
 }

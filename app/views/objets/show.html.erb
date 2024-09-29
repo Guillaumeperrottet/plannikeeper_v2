@@ -1,11 +1,10 @@
-<div class="object-show" data-controller="fabric sector-select" data-objet-id="<%= @objet.id %>" data-sector-select-objet-id="<%= @objet.id %>" data-selected-sector-id="<%= params[:selected_sector_id] %>">
-  <div id="sector-image-container" style="position: relative;">
-
+<div class="object-show" data-controller="fabric sector-select panel" data-objet-id="<%= @objet.id %>" data-sector-select-objet-id="<%= @objet.id %>" data-selected-sector-id="<%= params[:selected_sector_id] || @selected_sector&.id %> %>">
+  <div id="sector-image-container" data-panel-target="sectorImageContainer" style="position: relative;">
     <% if @selected_sector && @selected_sector.image.attached? %>
-  <%= image_tag @selected_sector.image, alt: "Image du secteur", class: "sector-image", data: { sector_select_target: 'sectorImage' }, style: "width: 100%; height: auto;", draggable: "false" %>
-<% else %>
-  <%= image_tag '', alt: "Image du secteur sélectionné", data: { sector_select_target: 'sectorImage' }, style: "display: none;", draggable: "false" %>
-<% end %>
+      <%= image_tag @selected_sector.image, alt: "Image du secteur", class: "sector-image", data: { sector_select_target: 'sectorImage' }, style: "width: 100%; height: auto;", draggable: "false" %>
+    <% else %>
+      <%= image_tag '', alt: "Image du secteur sélectionné", data: { sector_select_target: 'sectorImage' }, style: "display: none;", draggable: "false" %>
+    <% end %>
 
     <!-- Canvas for Fabric.js on top of the image -->
     <canvas id="canvasId" data-fabric-target="canvas" class="fabric-canvas"></canvas>
@@ -13,7 +12,49 @@
     <!-- Button to add article, positioned in the top-right corner -->
     <button id="add-article" class="btn btn-secondary" style="position: absolute; top: 10px; right: 10px;" data-action="click->fabric#activateDrawing">+ Ajouter un article</button>
   </div>
+</div>
 
-  <%# <button id="save-zone" class="btn btn-primary" style="position: absolute; bottom: 20px; right: 20px;" data-action="click->fabric#saveZone">Enregistrer l'article</button>
-  <button id="stop-drawing" class="btn btn-danger" style="position: absolute; bottom: 20px; right: 140px;" data-action="click->fabric#stopDrawing">Arrêter le dessin</button> %>
+<!-- Panel for displaying article info -->
+<div id="article-panel" class="side-panel hidden" data-controller="panel">
+  <div class="side-panel-header">
+    <h3 id="article-title" data-panel-target="title">Titre de l'article</h3>
+    <button id="close-panel" data-action="panel#closePanel">X</button>
+  </div>
+
+  <div class="side-panel-content">
+    <div id="todo-list" class="hidden" data-panel-target="todoList">
+      <!-- Liste des tâches de l'article -->
+      <h4>Tâches</h4>
+      <ul id="task-list">
+        <!-- Les tâches seront ajoutées ici via JavaScript -->
+      </ul>
+      <button onclick="toggleTaskForm()">Créer une tâche</button>
+    </div>
+
+    <div id="task-form" class="hidden" data-panel-target="taskForm">
+      <!-- Formulaire de création de tâche -->
+      <h4>Créer une tâche</h4>
+      <form id="new-task-form">
+        <label for="realization-date">Date de réalisation :</label>
+        <input type="date" id="realization-date" name="realization_date" required>
+
+        <label for="cfc">CFC :</label>
+        <select id="cfc" name="cfc" required>
+          <option value="231">CFC 231 - Electricité</option>
+        </select>
+
+        <label for="executor">Exécutant :</label>
+        <input type="text" id="executor" name="executor" required>
+
+        <label for="task-file">Charger des documents :</label>
+        <input type="file" id="task-file" name="task_file" required>
+
+        <label for="task-description">Description :</label>
+        <textarea id="task-description" name="description" required></textarea>
+
+        <button type="submit">Créer</button>
+        <button type="button" onclick="toggleTaskForm()">Annuler</button>
+      </form>
+    </div>
+  </div>
 </div>
