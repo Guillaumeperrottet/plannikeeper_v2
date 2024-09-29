@@ -134,8 +134,6 @@ export default class extends Controller {
       return;
     }
 
-    console.log(`Loading articles for sector: ${sectorId} and object: ${objetId}`);
-
     fetch(`/objets/${objetId}/secteurs/${sectorId}/articles`)
       .then(response => {
         if (!response.ok) {
@@ -151,15 +149,28 @@ export default class extends Controller {
           return;
         }
 
+        // Récupère la taille actuelle du canevas
+        const canvasWidth = window.canvas.width;
+        const canvasHeight = window.canvas.height;
+
         // Ajoute chaque article au canevas
         data.articles.forEach(article => {
           console.log("Adding article to canvas:", article);
 
+          // Log des dimensions de l'article pour vérifier
+          console.log(`Article dimensions: left=${article.position_x}, top=${article.position_y}, width=${article.width}, height=${article.height}`);
+
+          // Calculer les positions absolues à partir des coordonnées relatives
+          const left = article.position_x * canvasWidth;
+          const top = article.position_y * canvasHeight;
+          const width = article.width * canvasWidth;
+          const height = article.height * canvasHeight;
+
           const rect = new fabric.Rect({
-            left: article.position_x,
-            top: article.position_y,
-            width: article.width,
-            height: article.height,
+            left: left,
+            top: top,
+            width: width,
+            height: height,
             fill: 'rgba(0, 255, 0, 0.5)',
             stroke: 'green',
             strokeWidth: 2,
@@ -173,4 +184,5 @@ export default class extends Controller {
         console.error("Erreur lors du chargement des articles :", error);
       });
   }
+
 }

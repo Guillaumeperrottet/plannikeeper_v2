@@ -10,7 +10,7 @@ Rails.application.routes.draw do
   resources :objets do
     resources :secteurs, only: [:edit, :update] do
       member do
-        get 'image'
+        get 'image', to: 'secteurs#image'
       end
       resources :articles, only: [:create, :index] # Imbriquer les articles sous les secteurs
     end
