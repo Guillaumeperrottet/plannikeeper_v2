@@ -68,6 +68,9 @@ export default class extends Controller {
 
       // Appel à la fonction pour ajuster les articles
       this.adjustArticleDimensions(imgWidth, imgHeight);
+
+      // Charger et afficher les articles existants
+      this.loadAndDisplayArticles();
     } else {
       console.log("Image element still not found in fabric_controller.");
     }
@@ -114,7 +117,9 @@ export default class extends Controller {
       height: 0,
       fill: 'rgba(0, 255, 0, 0.5)',
       stroke: 'green',
-      strokeWidth: 2
+      strokeWidth: 2,
+      selectable: false,  // Désactive la sélection
+      evented: false      // Désactive toutes les interactions (déplacement/redimensionnement)
     });
 
     this.canvas.add(this.currentRect);
@@ -218,5 +223,32 @@ export default class extends Controller {
     .catch(error => {
       console.error("Erreur lors de la création de l'article :", error);
     });
+  }
+
+  // Fonction pour charger et afficher les articles existants
+  loadAndDisplayArticles() {
+    const articles = this.element.dataset.articles ? JSON.parse(this.element.dataset.articles) : [];
+
+    articles.forEach(article => {
+      const left = article.position_x * this.canvas.width;  // Ajuster en fonction de la taille actuelle du canevas
+      const top = article.position_y * this.canvas.height;
+      const width = article.width * this.canvas.width;
+      const height = article.height * this.canvas.height;
+
+      const rect = new fabric.Rect({
+        left: left,
+        top: top,
+        width: width,
+        height: height,
+        fill: 'transparent',
+        stroke: 'red',
+        selectable: false,  // Désactive la sélection
+        evented: false      // Désactive toutes les interactions (déplacement/redimensionnement)
+      });
+
+      this.canvas.add(rect);
+    });
+
+    console.log("Articles loaded and displayed on canvas");
   }
 }
