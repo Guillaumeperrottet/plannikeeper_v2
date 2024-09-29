@@ -42,7 +42,6 @@ export default class extends Controller {
     }
   }
 
-
   restoreSelection() {
     // Vérifie si un secteur est stocké dans localStorage
     const selectedSectorId = localStorage.getItem('selectedSectorId') || this.data.get('selectedSectorId');
@@ -56,7 +55,6 @@ export default class extends Controller {
     }
   }
 
-
   loadImage(sectorId) {
     const objetId = this.data.get('objetId'); // Assure-toi que `objetId` est récupéré une seule fois
 
@@ -65,6 +63,7 @@ export default class extends Controller {
 
     if (sectorId && objetId) {
       const url = `/objets/${objetId}/secteurs/${sectorId}/image`;
+      console.log("Fetching image from URL:", url); // Log the URL
       fetch(url)
         .then(response => {
           if (!response.ok) {
@@ -134,7 +133,9 @@ export default class extends Controller {
       return;
     }
 
-    fetch(`/objets/${objetId}/secteurs/${sectorId}/articles`)
+    const url = `/objets/${objetId}/secteurs/${sectorId}/articles`;
+    console.log("Fetching articles from URL:", url); // Log the URL for fetching articles
+    fetch(url)
       .then(response => {
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
@@ -142,7 +143,7 @@ export default class extends Controller {
         return response.json();
       })
       .then(data => {
-        console.log("Articles loaded:", data.articles);
+        console.log("Articles loaded from server:", data.articles); // Log received articles
 
         if (!data.articles || data.articles.length === 0) {
           console.log("No articles to load.");
@@ -161,28 +162,34 @@ export default class extends Controller {
           console.log(`Article dimensions: left=${article.position_x}, top=${article.position_y}, width=${article.width}, height=${article.height}`);
 
           // Calculer les positions absolues à partir des coordonnées relatives
-          const left = article.position_x * canvasWidth;
-          const top = article.position_y * canvasHeight;
-          const width = article.width * canvasWidth;
-          const height = article.height * canvasHeight;
+          const left = parseFloat(article.position_x) * canvasWidth;
+          const top = parseFloat(article.position_y) * canvasHeight;
+          const width = parseFloat(article.width) * canvasWidth;
+          const height = parseFloat(article.height) * canvasHeight;
 
-          const rect = new fabric.Rect({
-            left: left,
-            top: top,
-            width: width,
-            height: height,
-            fill: 'rgba(0, 255, 0, 0.5)',
-            stroke: 'green',
-            strokeWidth: 2,
-          });
+          // Vérifie que les dimensions ne sont pas nulles
+          if (width > 0 && height > 0) {
+            console.log(`Calculated dimensions: left=${left}, top=${top}, width=${width}, height=${height}`);
 
-          window.canvas.add(rect); // Ajoute le rectangle au canevas
-          window.canvas.renderAll(); // Rafraîchir le canevas après ajout
+            const rect = new fabric.Rect({
+              left: left,
+              top: top,
+              width: width,
+              height: height,
+              fill: 'rgba(0, 255, 0, 0.5)',
+              stroke: 'green',
+              strokeWidth: 2,
+            });
+
+            window.canvas.add(rect); // Ajoute le rectangle au canevas
+            window.canvas.renderAll(); // Rafraîchir le canevas après ajout
+          } else {
+            console.warn(`Skipping article with invalid dimensions: left=${left}, top=${top}, width=${width}, height=${height}`);
+          }
         });
       })
       .catch(error => {
         console.error("Erreur lors du chargement des articles :", error);
       });
   }
-
 }

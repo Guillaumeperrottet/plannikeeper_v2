@@ -14,7 +14,6 @@ export default class extends Controller {
     this.startX = 0;
     this.startY = 0;
 
-    // Log the initial dimensions of the canvas
     console.log("Initial canvas dimensions:", this.canvas.width, this.canvas.height);
 
     this.canvas.on('mouse:down', this.startDrawing.bind(this));
@@ -28,7 +27,6 @@ export default class extends Controller {
       this.adjustCanvasSize(event.detail.imageElement);
     });
 
-    // Ajout d'un écouteur pour gérer le redimensionnement de la fenêtre
     window.addEventListener('resize', () => {
       console.log("Window resized, adjusting canvas and articles.");
       this.adjustCanvasSize(document.querySelector('img[data-sector-select-target="sectorImage"]'));
@@ -66,31 +64,30 @@ export default class extends Controller {
         console.log("Canvas and image adjusted:", imgWidth, imgHeight);
       });
 
-      // Appel à la fonction pour ajuster les articles
       this.adjustArticleDimensions(imgWidth, imgHeight);
 
-      // Charger et afficher les articles existants
       this.loadAndDisplayArticles();
     } else {
       console.log("Image element still not found in fabric_controller.");
     }
   }
 
-  // Fonction pour ajuster les articles après le redimensionnement
   adjustArticleDimensions(canvasWidth, canvasHeight) {
-    const originalWidth = 1728; // La largeur d'origine de l'image
-    const originalHeight = 504;  // La hauteur d'origine de l'image
+    const originalWidth = 1728;
+    const originalHeight = 504;
 
     const widthRatio = canvasWidth / originalWidth;
     const heightRatio = canvasHeight / originalHeight;
 
+    console.log("Adjusting article dimensions with ratios:", widthRatio, heightRatio);
+
     this.canvas.getObjects().forEach((article) => {
-      if (article.originalLeft && article.originalTop) {
+      console.log("Article original positions:", article.originalLeft, article.originalTop, article.originalWidth, article.originalHeight);
+      if (article.originalLeft !== undefined && article.originalTop !== undefined) {
         article.left = article.originalLeft * widthRatio;
         article.top = article.originalTop * heightRatio;
-        article.width = article.originalWidth * widthRatio;
-        article.height = article.originalHeight * heightRatio;
-        article.setCoords(); // Pour mettre à jour les coordonnées de l'article
+        article.setCoords();
+        console.log("Adjusted article positions to:", article.left, article.top);
       }
     });
 
@@ -118,8 +115,8 @@ export default class extends Controller {
       fill: 'rgba(0, 255, 0, 0.5)',
       stroke: 'green',
       strokeWidth: 2,
-      selectable: false,  // Désactive la sélection
-      evented: false      // Désactive toutes les interactions (déplacement/redimensionnement)
+      selectable: false,
+      evented: false
     });
 
     this.canvas.add(this.currentRect);
@@ -201,6 +198,7 @@ export default class extends Controller {
       }
     };
 
+    // Log added here to show the data before it's sent
     console.log("Data sent to the server:", data);  // Log the data being sent
 
     fetch(`/objets/${objetId}/secteurs/${sectorId}/articles`, {
@@ -225,30 +223,74 @@ export default class extends Controller {
     });
   }
 
-  // Fonction pour charger et afficher les articles existants
+
   loadAndDisplayArticles() {
-    const articles = this.element.dataset.articles ? JSON.parse(this.element.dataset.articles) : [];
+    const objetId = this.element.dataset.sectorSelectObjetId;
+    const sectorId = document.body.dataset.selectedSectorId || localStorage.getItem('selectedSectorId');
 
-    articles.forEach(article => {
-      const left = article.position_x * this.canvas.width;  // Ajuster en fonction de la taille actuelle du canevas
-      const top = article.position_y * this.canvas.height;
-      const width = article.width * this.canvas.width;
-      const height = article.height * this.canvas.height;
+    if (!objetId || !sectorId) {
+      console.error("Objet ID or Sector ID is missing.");
+      return;
+    }
 
-      const rect = new fabric.Rect({
-        left: left,
-        top: top,
-        width: width,
-        height: height,
-        fill: 'transparent',
-        stroke: 'red',
-        selectable: false,  // Désactive la sélection
-        evented: false      // Désactive toutes les interactions (déplacement/redimensionnement)
+    const url = `/objets/${objetId}/secteurs/${sectorId}/articles`;
+    console.log("Fetching articles from URL:", url);
+
+    fetch(url)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then(data => {
+        console.log("Articles loaded from server:", data.articles);
+
+        if (!data.articles || data.articles.length === 0) {
+          console.log("No articles to load.");
+          return;
+        }
+
+        // Efface les anciens objets du canevas avant de charger les nouveaux
+        this.canvas.clear();
+
+        data.articles.forEach(article => {
+          console.log("Adding article to canvas:", article);
+
+          const left = article.position_x * this.canvas.width;
+          const top = article.position_y * this.canvas.height;
+          const width = article.width * this.canvas.width;
+          const height = article.height * this.canvas.height;
+
+          console.log("Article dimensions:", `left=${article.position_x}, top=${article.position_y}, width=${article.width}, height=${article.height}`);
+          console.log("Calculated dimensions:", `left=${left}, top=${top}, width=${width}, height=${height}`);
+
+          const rect = new fabric.Rect({
+            left: left,
+            top: top,
+            width: width,
+            height: height,
+            fill: 'transparent',
+            stroke: 'red',
+            selectable: false,
+            evented: false
+          });
+
+          // Enregistre les dimensions originales pour le redimensionnement
+          rect.originalLeft = article.position_x;
+          rect.originalTop = article.position_y;
+          rect.originalWidth = article.width;
+          rect.originalHeight = article.height;
+
+          this.canvas.add(rect);
+        });
+
+        this.canvas.renderAll();
+        console.log("Articles loaded and displayed on canvas");
+      })
+      .catch(error => {
+        console.error("Erreur lors du chargement des articles :", error);
       });
-
-      this.canvas.add(rect);
-    });
-
-    console.log("Articles loaded and displayed on canvas");
   }
+
 }
