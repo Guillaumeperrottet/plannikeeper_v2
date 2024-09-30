@@ -6,8 +6,13 @@ class ObjetsController < ApplicationController
   end
 
   def show
+    @objet = Objet.find(params[:id])
     @secteurs = @objet.secteurs.includes(:image_attachment)
     @selected_sector_id = params[:selected_sector_id]
+    # Assurez-vous de récupérer l'ID de l'article depuis les paramètres
+    @article = Article.find_by(id: params[:article_id])
+    # Chargez les tâches seulement si l'article existe
+    @tasks = @article.present? ? @article.tasks : []
   end
 
   def new

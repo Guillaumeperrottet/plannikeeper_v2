@@ -23,8 +23,18 @@ class ArticlesController < ApplicationController
     end
   end
 
+  def show
+    @objet = Objet.find(params[:objet_id])
+    @secteur = Secteur.find(params[:secteur_id])
+    @article = Article.find_by(id: params[:id])
 
-
+    if @article.nil?
+      # Gérer le cas où l'article n'existe pas
+      redirect_to root_path, alert: "L'article n'existe pas"
+    else
+      @tasks = @article.tasks # Maintenant que @article est défini, on peut accéder aux tâches
+    end
+  end
 
 
   private
