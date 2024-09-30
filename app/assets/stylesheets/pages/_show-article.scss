@@ -1,0 +1,37 @@
+.container {
+  margin-top: 20px;
+}
+
+.filters {
+  display: flex;
+  justify-content: flex-start;
+  gap: 10px; /* Espacement entre les boutons */
+}
+
+.filters button {
+  flex-shrink: 0; /* Pour éviter que les boutons ne se compressent */
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.add-task {
+  margin-top: 20px;
+  text-align: right;
+}
+
+.badge {
+  padding: 5px 10px;
+}
+
+.btn-sm {
+  padding: 5px 10px;
+}
+
+.btn-absolute {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}

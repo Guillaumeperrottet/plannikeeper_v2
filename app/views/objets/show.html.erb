@@ -1,4 +1,4 @@
-<div class="object-show" data-controller="fabric sector-select panel" data-objet-id="<%= @objet.id %>" data-sector-select-objet-id="<%= @objet.id %>" data-selected-sector-id="<%= params[:selected_sector_id] || @selected_sector&.id %> %>">
+<div class="object-show" data-controller="fabric sector-select panel" data-objet-id="<%= @objet.id %>" data-sector-select-objet-id="<%= @objet.id %>" data-selected-sector-id="<%= params[:selected_sector_id] || @selected_sector&.id %>">
   <div id="sector-image-container" data-panel-target="sectorImageContainer" style="position: relative;">
     <% if @selected_sector && @selected_sector.image.attached? %>
       <%= image_tag @selected_sector.image, alt: "Image du secteur", class: "sector-image", data: { sector_select_target: 'sectorImage' }, style: "width: 100%; height: auto;", draggable: "false" %>
@@ -6,17 +6,16 @@
       <%= image_tag '', alt: "Image du secteur sélectionné", data: { sector_select_target: 'sectorImage' }, style: "display: none;", draggable: "false" %>
     <% end %>
 
-    <!-- Canvas for Fabric.js on top of the image -->
     <canvas id="canvasId" data-fabric-target="canvas" class="fabric-canvas"></canvas>
-
-    <!-- Button to add article, positioned in the top-right corner -->
     <button id="add-article" class="btn btn-secondary" style="position: absolute; top: 10px; right: 10px;" data-action="click->fabric#activateDrawing">+ Ajouter un article</button>
   </div>
 </div>
 
-<div id="article-panel" class="side-panel hidden" data-controller="panel panel-tab" data-panel-target="sectorImageContainer" data-panel-objet-id="<%= @objet.id %>" data-panel-selected-sector-id="<%= @selected_sector&.id %>">
+<div id="article-panel" class="side-panel hidden" data-controller="panel panel-tab" data-panel-target="sectorImageContainer" data-panel-objet-id="<%= @objet.id %>" data-panel-selected-sector-id="<%= params[:selected_sector_id] || @selected_sector&.id %>">
   <div class="side-panel-header">
-    <h3 id="article-title" data-panel-target="title">Titre de l'article</h3>
+    <h3 id="article-title" data-panel-target="title" data-article-id="">
+      <a href="#" data-action="click->panel#redirectToArticle">Titre de l'article</a>
+    </h3>
     <button id="close-panel" data-action="panel#closePanel">X</button>
   </div>
 
@@ -37,26 +36,30 @@
   <!-- Contenu du tab "Créer tâche" -->
   <div id="create-task" class="tabcontent" data-panel-tab-target="tabContent" data-tab-content="create-task" style="display: none;">
     <h4>Créer une tâche</h4>
-    <form>
-      <!-- Formulaire pour créer une tâche -->
-      <label for="realization-date">Date de réalisation</label>
-      <input type="date" id="realization-date" name="realization_date" required>
+    <form data-controller="task" data-action="submit->task#submit" data-article-id="<%= @article&.id %>" data-objet-id="<%= @objet.id %>" enctype="multipart/form-data">
+  <!-- Ton formulaire -->
+  <label for="task-name">Nom de la tâche</label>
+  <input type="text" id="task-name" name="task[name]" required>
 
-      <label for="cfc">CFC</label>
-      <select id="cfc" name="cfc" required>
-        <option value="231">CFC 231 - Electricité</option>
-      </select>
+  <label for="realisation-date">Date de réalisation</label>
+  <input type="date" id="realisation-date" name="task[realisation_date]" required>
 
-      <label for="executor">Exécutant</label>
-      <input type="text" id="executor" name="executor" required>
+  <label for="cfc">CFC</label>
+  <select id="cfc" name="task[cfc]" required>
+    <option value="231">CFC 231 - Electricité</option>
+  </select>
 
-      <label for="task-file">Charger des documents</label>
-      <input type="file" id="task-file" name="task_file" required>
+  <label for="executant">Exécutant</label>
+  <input type="text" id="executant" name="task[executant]" required>
 
-      <label for="task-description">Description</label>
-      <textarea id="task-description" name="description" required></textarea>
+  <label for="task-file">Charger des documents</label>
+  <input type="file" id="task-file" name="task[image]">
 
-      <button type="submit">Créer</button>
-    </form>
+  <label for="task-description">Description</label>
+  <textarea id="task-description" name="task[description]" required></textarea>
+
+  <button type="submit">Créer</button>
+</form>
+
   </div>
 </div>

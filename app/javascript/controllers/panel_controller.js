@@ -5,34 +5,75 @@ export default class extends Controller {
 
   connect() {
     console.log("Panel controller connected.");
+    if (this.hasTitleTarget) {
+      console.log("Title target:", this.titleTarget);  // Vérifiez si la cible title est bien trouvée
+    } else {
+      console.warn("Title target is missing at connect time.");
+    }
+  }
+
+  observeTitle() {
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (this.hasTitleTarget) {
+          console.log("Title target found after DOM update:", this.titleTarget);
+          observer.disconnect();  // Arrêter d'observer une fois que l'élément est trouvé
+        }
+      });
+    });
+
+    observer.observe(document.body, { childList: true, subtree: true });
   }
 
   openPanel(article) {
-    console.log("Opening panel with article:", article);  // Log pour voir les données de l'article
+    console.log("Opening panel with article:", article);
 
-    // Vérifier si l'élément `titleTarget` existe bien
+    // Stockez l'ID de l'article dans localStorage
+    localStorage.setItem('selectedArticleId', article.id);
+
+    // Vérifie que l'élément `titleTarget` existe avant de le manipuler
     if (this.titleTarget) {
-      this.titleTarget.textContent = article.title;
-      console.log("Title set to:", article.title);  // Log pour vérifier si le titre est bien mis à jour
+      // Mise à jour du contenu du titre et ajout de l'ID de l'article
+      this.titleTarget.innerHTML = `<a href="#" data-action="click->panel#redirectToArticle">${article.title}</a>`;
+      this.titleTarget.dataset.articleId = article.id;  // Stocke l'ID de l'article dans un data attribute
+      console.log("Title set to:", article.title);
     } else {
-      console.error("Title target not found.");
+      console.error("Title target is missing!");
     }
 
-    // Appel pour charger les tâches de l'article
+    // Charge les tâches associées à l'article
     this.loadTasks(article.id);
 
-    this.showPanel();  // Ouvre le panel
+    // Affiche le panneau
+    this.showPanel();
   }
+
+
+  redirectToArticle(event) {
+    event.preventDefault();
+    const articleId = this.titleTarget.dataset.articleId;
+    const objetId = this.element.dataset.panelObjetId;  // Récupère l'ID de l'objet depuis le dataset
+    const secteurId = localStorage.getItem('selectedSectorId') || this.element.dataset.panelSelectedSectorId;  // Récupère l'ID du secteur depuis le localStorage ou le dataset
+
+    console.log("Redirection avec : Article ID", articleId, "Objet ID", objetId, "Secteur ID", secteurId);
+    console.log("Redirecting to article:", articleId, objetId, secteurId);
+
+
+    if (articleId && objetId && secteurId) {
+      window.location.href = `/objets/${objetId}/secteurs/${secteurId}/articles/${articleId}`;
+    } else {
+      console.error("Article ID, Objet ID ou Secteur ID est manquant !");
+    }
+  }
+
 
 
   loadTasks(articleId) {
     // Assure-toi d'avoir les IDs nécessaires pour construire l'URL
     const objetId = this.element.dataset.panelObjetId;
     const secteurId = localStorage.getItem('selectedSectorId') || this.element.dataset.panelSelectedSectorId;
-    // Ajout des logs pour débogage
-    console.log("Objet ID from dataset:", this.element.dataset.panelObjetId);
-    console.log("Secteur ID", secteurId);
 
+    console.log("Chargement des tâches pour l'article ID:", articleId);
 
     if (!objetId || !secteurId) {
       console.error("Objet ID ou Secteur ID manquant !");
@@ -43,7 +84,6 @@ export default class extends Controller {
     const url = `/objets/${objetId}/secteurs/${secteurId}/articles/${articleId}/tasks`;
     console.log("Fetching tasks from URL:", url);
 
-    // Effectue la requête pour charger les tâches
     fetch(url)
       .then(response => {
         if (!response.ok) {
@@ -53,12 +93,39 @@ export default class extends Controller {
       })
       .then(tasks => {
         console.log("Tasks loaded:", tasks);
-        this.displayTasks(tasks); // Affiche les tâches dans le panel
+        const taskList = document.getElementById('task-list');
+        console.log("Task list element found:", taskList);
+
+        // Vérifier si l'élément taskList existe
+        if (!taskList) {
+          console.error("Element 'task-list' non trouvé.");
+          return;
+        }
+
+        // Vide la liste actuelle des tâches
+        taskList.innerHTML = '';
+
+        if (!tasks || tasks.length === 0) {
+          taskList.innerHTML = '<li>Aucune tâche disponible.</li>';
+          console.log("No tasks found, displaying default message.");
+          return;
+        }
+
+        // Ajoute chaque tâche dans la liste
+        tasks.forEach(task => {
+          const taskItem = document.createElement('li');
+          taskItem.textContent = `${task.realization_date} - ${task.description}`;
+          taskList.appendChild(taskItem);
+          console.log("Task added to list:", task);
+        });
+
+        console.log("All tasks displayed.");
       })
       .catch(error => {
         console.error("Erreur lors du chargement des tâches:", error);
       });
   }
+
 
   displayTasks(tasks) {
     const taskList = document.getElementById('task-list');
