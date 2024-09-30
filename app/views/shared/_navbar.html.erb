@@ -12,9 +12,15 @@
         <!-- Elements to the left -->
       </ul>
 
-      <div class="navbar-center">
-        <span><%= @current_path %></span>
-        <% if @objet %>
+<div class="navbar-center">
+  <% if @page_title.present? %>
+    <span><%= @page_title %></span>
+  <% else %>
+    <span><%= @current_path %></span> <!-- Affiche le chemin si @page_title n'est pas défini -->
+  <% end %>
+
+  <% if controller_name == 'objets' && action_name == 'show' && @objet.present? %>
+          <!-- Afficher le sélecteur de secteur uniquement sur la page show de l'objet -->
           <select id="sector-select-navbar" data-sector-select-target="sectorSelect" data-action="change->sector-select#loadImage">
             <option value="">Choisir un secteur</option>
             <% @objet.secteurs.each do |secteur| %>

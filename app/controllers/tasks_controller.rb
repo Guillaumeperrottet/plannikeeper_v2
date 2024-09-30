@@ -1,5 +1,6 @@
 class TasksController < ApplicationController
   before_action :set_article_and_sector, only: [:new, :create, :edit, :update, :index]
+  before_action :set_page_title, only: [:new, :edit, :show] # Ajuste les actions où tu veux afficher ce titre
 
   def new
     @task = @article.tasks.new
@@ -22,6 +23,10 @@ class TasksController < ApplicationController
       logger.debug("Task saving failed: #{@task.errors.full_messages}")
       render json: { errors: @task.errors.full_messages }, status: :unprocessable_entity
     end
+  end
+
+  def show
+    @task = @article.tasks.find(params[:id]) # Si tu souhaites afficher une tâche spécifique
   end
 
   def index_for_objet
@@ -114,4 +119,16 @@ class TasksController < ApplicationController
     params.require(:task).permit(:name, :description, :realisation_date, :cfc, :executant, :image) # Assurez-vous que tous ces champs sont bien inclus
   end
 
+  def set_page_title
+    case action_name
+    when 'new'
+      @page_title = 'Création de tâche'
+    when 'edit'
+      @page_title = 'Édition de tâche'
+    when 'show'
+      @page_title = 'Détails de la tâche'
+    else
+      @page_title = 'Plannikeeper'
+    end
+  end
 end
