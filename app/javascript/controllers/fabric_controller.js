@@ -282,6 +282,7 @@ export default class extends Controller {
 
           // Redirection au clic
           rect.on('mousedown', () => {
+            console.log("Article clicked:", article);
             this.openPanelWithArticleData(article); // Ouvre le panneau avec les données de l'article
           });
 

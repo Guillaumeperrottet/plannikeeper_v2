@@ -8,6 +8,7 @@ export default class extends Controller {
   }
 
   openPanel(article) {
+    console.log("Opening panel with article:", article);
     this.titleTarget.textContent = article.title;
     this.loadTasks(article.id);
     this.showPanel();
@@ -68,13 +69,24 @@ export default class extends Controller {
 
   showPanel() {
     const panel = document.getElementById("article-panel");
-    panel.classList.remove("hidden");
-    this.resizeImageContainer();
+    if (panel) {
+      panel.classList.add("visible");  // Assure-toi que cette classe est bien utilisée pour afficher le panel
+      const imageContainer = document.getElementById("sector-image-container");
+      imageContainer.classList.add("with-panel"); // Rétrécit l'image
+      this.resizeImageContainer();  // Ajuste la taille du conteneur d'image si nécessaire
+      console.log("Panel opened");
+    } else {
+      console.error("Panel element not found.");
+    }
   }
+
 
   closePanel() {
     const panel = document.getElementById("article-panel");
-    panel.classList.add("hidden");
+    panel.classList.remove("visible");
+    const imageContainer = document.getElementById("sector-image-container");
+    imageContainer.classList.remove("with-panel"); // Réinitialise la taille de l'image
+
     this.resizeImageContainer(true); // Reset image container size when closing
   }
 
