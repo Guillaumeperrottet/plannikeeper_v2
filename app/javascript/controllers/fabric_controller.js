@@ -155,7 +155,7 @@ export default class extends Controller {
     const formHtml = `
       <div id="article-form" style="position: absolute; background: white; padding: 10px; border: 1px solid black; z-index: 1000;">
         <label for="article-title">Title:</label>
-        <input type="text" id="article-title" name="title" required><br>
+        <input type="text" id="article-title-input" name="title" required><br>
         <label for="article-description">Description:</label>
         <textarea id="article-description" name="description" required></textarea><br>
         <button id="save-article">Save</button>
@@ -173,7 +173,7 @@ export default class extends Controller {
   }
 
   saveArticle() {
-    const title = document.getElementById('article-title').value;
+    const title = document.getElementById('article-title-input').value;
     const description = document.getElementById('article-description').value;
 
     if (title && description) {

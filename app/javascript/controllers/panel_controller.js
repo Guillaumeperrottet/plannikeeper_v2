@@ -15,12 +15,12 @@ export default class extends Controller {
 
   loadTasks(articleId) {
     // Assure-toi d'avoir les IDs nécessaires pour construire l'URL
-    const objetId = this.element.dataset.objetId;
-    const secteurId = this.element.dataset.selectedSectorId;
-
+    const objetId = this.element.dataset.panelObjetId;
+    const secteurId = localStorage.getItem('selectedSectorId') || this.element.dataset.panelSelectedSectorId;
     // Ajout des logs pour débogage
-    console.log("Objet ID:", objetId);
-    console.log("Secteur ID:", secteurId);
+    console.log("Objet ID from dataset:", this.element.dataset.panelObjetId);
+    console.log("Secteur ID", secteurId);
+
 
     if (!objetId || !secteurId) {
       console.error("Objet ID ou Secteur ID manquant !");

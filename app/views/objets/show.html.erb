@@ -15,7 +15,7 @@
 </div>
 
 <!-- Panel for displaying article info -->
-<div id="article-panel" class="side-panel hidden" data-controller="panel">
+<div id="article-panel" class="side-panel hidden" data-controller="panel" data-panel-target="sectorImageContainer" data-panel-objet-id="<%= @objet.id %>" data-panel-selected-sector-id="<%= @selected_sector&.id %>">
   <div class="side-panel-header">
     <h3 id="article-title" data-panel-target="title">Titre de l'article</h3>
     <button id="close-panel" data-action="panel#closePanel">X</button>
