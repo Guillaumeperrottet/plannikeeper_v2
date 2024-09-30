@@ -1,0 +1,81 @@
+/* Conteneur principal pour le formulaire de tâche */
+.task-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.task-title {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+
+/* Styliser les groupes de formulaires avec une classe spécifique */
+.task-form-group {
+  margin-bottom: 20px;
+}
+
+.task-form-group label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 10px;
+  font-size: 1.1rem;
+}
+
+.task-form-group input[type="text"],
+.task-form-group input[type="date"],
+.task-form-group select,
+.task-form-group textarea {
+  width: 100%;
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Styliser le champ de description avec une classe spécifique */
+.task-form-group textarea {
+  height: 150px;
+}
+
+/* Styliser les boutons */
+.task-form-actions {
+  text-align: center;
+}
+
+.task-form-actions .btn {
+  padding: 10px 20px;
+  font-size: 1.2rem;
+  background-color: #007bff;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  cursor: pointer;
+}
+
+.task-form-actions .btn:hover {
+  background-color: #0056b3;
+}
+
+/* Style pour le fichier image */
+.task-form-group input[type="file"] {
+  border: none;
+}
+
+.task-form-group img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  border: 1px dashed #ccc;
+  padding: 10px;
+  margin-top: 10px;
+  border-radius: 4px;
+}
+
+/* Style pour les étiquettes avec étoiles rouges (indiquant les champs requis) */
+.task-form-group label:after {
+  content: " *";
+  color: red;
+}
