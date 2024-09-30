@@ -10,4 +10,7 @@ class Task < ApplicationRecord
   validates :cfc, presence: true
   validates :executant, presence: true
   validates :description, presence: true
+
+  scope :this_week, -> { where(realisation_date: Date.today.beginning_of_week..Date.today.end_of_week) }
+  scope :upcoming, -> { where('realisation_date > ?', Date.today.end_of_week) }
 end
