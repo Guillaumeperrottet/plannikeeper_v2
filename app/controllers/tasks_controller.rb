@@ -17,28 +17,65 @@ class TasksController < ApplicationController
         logger.debug("No image attached.")
       end
 
-      redirect_to objet_secteur_article_path(@objet, @secteur, @article), notice: 'Tâche créée avec succès.'
+      render json: { success: true, task: @task }, status: :created
     else
       logger.debug("Task saving failed: #{@task.errors.full_messages}")
       render json: { errors: @task.errors.full_messages }, status: :unprocessable_entity
     end
   end
 
-  def index
-    @tasks = @article.tasks
+  def index_for_objet
+    @objet = Objet.find(params[:objet_id])
+    @tasks = @objet.articles.joins(:tasks).map(&:tasks).flatten
+
     tasks_with_images = @tasks.map do |task|
-      # Vérifie si l'image est bien attachée avec ActiveStorage
       if task.image.attached?
         { task: task, image_url: url_for(task.image) }
       else
         { task: task, image_url: nil }
       end
     end
-    render json: tasks_with_images
+
+    render json: { this_week_tasks: tasks_with_images, upcoming_tasks: [] } # Ajuste selon tes besoins
   end
 
+  def index
+    @tasks = @article.tasks
 
+    # Scopes ou méthodes pour les tâches de cette semaine et à venir
+    this_week_tasks = @tasks.this_week
+    upcoming_tasks = @tasks.upcoming
 
+    # Construction des tâches avec ou sans image pour "cette semaine"
+    this_week_tasks_with_images = this_week_tasks.map do |task|
+      {
+        id: task.id,
+        name: task.name,
+        realisation_date: task.realisation_date.strftime("%d %b %Y"),
+        cfc: task.cfc,
+        description: task.description,
+        image_url: task.image.attached? ? url_for(task.image) : nil
+      }
+    end
+
+    # Construction des tâches avec ou sans image pour "à venir"
+    upcoming_tasks_with_images = upcoming_tasks.map do |task|
+      {
+        id: task.id,
+        name: task.name,
+        realisation_date: task.realisation_date.strftime("%d %b %Y"),
+        cfc: task.cfc,
+        description: task.description,
+        image_url: task.image.attached? ? url_for(task.image) : nil
+      }
+    end
+
+    # Retourne un JSON avec les tâches de cette semaine et les tâches à venir
+    render json: {
+      this_week_tasks: this_week_tasks_with_images,
+      upcoming_tasks: upcoming_tasks_with_images
+    }
+  end
 
 
 

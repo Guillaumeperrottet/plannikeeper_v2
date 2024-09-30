@@ -8,6 +8,9 @@ Rails.application.routes.draw do
   root 'pages#home'
 
   resources :objets do
+    # Nouvelle route pour accéder aux tâches directement via un objet
+    get 'tasks', to: 'tasks#index_for_objet'
+
     resources :secteurs, only: [:edit, :update] do
       member do
         get 'image', to: 'secteurs#image'
