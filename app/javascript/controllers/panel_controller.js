@@ -70,10 +70,12 @@ export default class extends Controller {
   showPanel() {
     const panel = document.getElementById("article-panel");
     if (panel) {
-      panel.classList.add("visible");  // Assure-toi que cette classe est bien utilisée pour afficher le panel
+      panel.classList.add("visible");
       const imageContainer = document.getElementById("sector-image-container");
-      imageContainer.classList.add("with-panel"); // Rétrécit l'image
-      this.resizeImageContainer();  // Ajuste la taille du conteneur d'image si nécessaire
+      imageContainer.classList.add("with-panel");
+
+      console.log("Classes on image container:", imageContainer.classList); // Vérifie les classes
+      this.resizeImageContainer();
       console.log("Panel opened");
     } else {
       console.error("Panel element not found.");
@@ -81,13 +83,20 @@ export default class extends Controller {
   }
 
 
+
   closePanel() {
     const panel = document.getElementById("article-panel");
-    panel.classList.remove("visible");
     const imageContainer = document.getElementById("sector-image-container");
-    imageContainer.classList.remove("with-panel"); // Réinitialise la taille de l'image
 
-    this.resizeImageContainer(true); // Reset image container size when closing
+    // Retire la classe 'visible' du panneau pour le fermer
+    panel.classList.remove("visible");
+
+    // Ajoute un délai avant d'ajuster la taille du conteneur d'image
+    // Cela attend que la transition de fermeture soit terminée
+    setTimeout(() => {
+      imageContainer.classList.remove("with-panel"); // Réinitialise la taille de l'image
+      this.resizeImageContainer(true); // Reset image container size when closing
+    }, 300);  // 300ms correspond à la durée de la transition CSS (transition: transform 0.3s ease)
   }
 
   resizeImageContainer(reset = false) {
@@ -95,7 +104,7 @@ export default class extends Controller {
     if (reset) {
       sectorImageContainer.style.width = "100%";
     } else {
-      sectorImageContainer.style.width = "calc(100% - 300px)";
+      sectorImageContainer.style.width = "calc(100% - 1325px)";
     }
   }
 }

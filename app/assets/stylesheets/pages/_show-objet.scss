@@ -7,12 +7,6 @@
   float: left;
 }
 
-/* Quand le panneau est visible, rétrécir l'image */
-#sector-image-container.with-panel {
-  width: calc(100% - 300px); /* Réduit la largeur pour laisser la place au panneau */
-}
-
-
 /* Image de secteur en arrière-plan */
 #sector-image-container img {
   position: absolute;
@@ -63,7 +57,7 @@
   position: fixed;
   top: 70px;
   right: 0;
-  width: 300px;
+  // width: 300px;
   height: calc(100vh - 70px);
   background-color: white;
   z-index: 20;
