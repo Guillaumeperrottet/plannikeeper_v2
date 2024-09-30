@@ -1,0 +1,39 @@
+<div class="task-container">
+  <h1 class="task-title">Créer une nouvelle tâche</h1>
+
+  <%= form_with model: @task, url: objet_secteur_article_tasks_path(@objet, @secteur, @article), local: true, html: { multipart: true } do |f| %>
+    <div class="task-form-group">
+      <%= f.label :name, "Nom de la tâche" %>
+      <%= f.text_field :name, class: "form-control" %>
+    </div>
+
+    <div class="task-form-group">
+      <%= f.label :realisation_date, "Date de réalisation" %>
+      <%= f.date_field :realisation_date, class: "form-control" %>
+    </div>
+
+    <div class="task-form-group">
+      <%= f.label :cfc, "CFC" %>
+      <%= f.select :cfc, options_for_select([["CFC 231 - Electricité", "231"]]), class: "form-control" %>
+    </div>
+
+    <div class="task-form-group">
+      <%= f.label :executant, "Exécutant" %>
+      <%= f.text_field :executant, class: "form-control" %>
+    </div>
+
+    <div class="task-form-group">
+      <%= f.label :description, "Description de la tâche" %>
+      <%= f.text_area :description, class: "form-control" %>
+    </div>
+
+    <div class="task-form-group">
+      <%= f.label :image, "Charger des documents" %>
+      <%= f.file_field :image, class: "form-control" %>
+    </div>
+
+    <div class="task-form-actions">
+      <%= f.submit "Sauvegarder", class: "btn btn-primary" %>
+    </div>
+  <% end %>
+</div>

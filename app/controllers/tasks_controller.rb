@@ -17,7 +17,7 @@ class TasksController < ApplicationController
         logger.debug("No image attached.")
       end
 
-      render json: { success: true, task: @task }, status: :created
+      redirect_to objet_secteur_article_path(@objet, @secteur, @article), notice: 'Tâche créée avec succès.'
     else
       logger.debug("Task saving failed: #{@task.errors.full_messages}")
       render json: { errors: @task.errors.full_messages }, status: :unprocessable_entity
