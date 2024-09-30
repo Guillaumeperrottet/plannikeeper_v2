@@ -1,5 +1,6 @@
 class ObjetsController < ApplicationController
   before_action :set_objet, only: %i[show edit update destroy]
+  before_action :set_page_title, only: [:new, :edit, :show] # Ajuste les actions où tu veux afficher ce titre
 
   def index
     @objets = Objet.all
@@ -54,5 +55,16 @@ class ObjetsController < ApplicationController
 
   def objet_params
     params.require(:objet).permit(:nom, :adresse, secteurs_attributes: [:id, :nom, :image, :_destroy])
+  end
+
+  def set_page_title
+    case action_name
+    when 'new'
+      @page_title = 'Création objet'
+    when 'edit'
+      @page_title = 'Édition objet'
+    else
+      @page_title = 'Plannikeeper'
+    end
   end
 end

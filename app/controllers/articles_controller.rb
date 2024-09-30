@@ -1,4 +1,6 @@
 class ArticlesController < ApplicationController
+  before_action :set_page_title, only: [:new, :show] # Ajuste les actions où tu veux afficher ce titre
+
   def create
     @secteur = Secteur.find(params[:secteur_id])
     @article = @secteur.articles.build(article_params)
@@ -41,5 +43,14 @@ class ArticlesController < ApplicationController
 
   def article_params
     params.require(:article).permit(:title, :description, :position_x, :position_y, :width, :height, :secteur_id, :objet_id)
+  end
+
+  def set_page_title
+    case action_name
+    when 'show'
+      @page_title = 'Article - TODO'
+    else
+      @page_title = 'Plannikeeper'
+    end
   end
 end
