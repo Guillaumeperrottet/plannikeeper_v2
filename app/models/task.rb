@@ -2,7 +2,7 @@ class Task < ApplicationRecord
   belongs_to :article
 
   # Pour l'image avec ActiveStorage
-  # has_one_attached :image
+  has_one_attached :image
 
   # Validations
   validates :name, presence: true

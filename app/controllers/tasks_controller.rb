@@ -6,13 +6,12 @@ class TasksController < ApplicationController
   end
 
   def create
-    logger.debug("Entering Task creation")
     @task = @article.tasks.new(task_params) # Utilise les paramètres autorisés
     if @task.save
       logger.debug("Task saved successfully")
 
-      # Vérifie si l'image existe avant de vérifier si elle est attachée
-      if @task.image.present? && @task.image.attached?
+      # Vérifier l'attachement de l'image après que la tâche a été sauvegardée
+      if @task.image.attached?
         logger.debug("Image attached: #{@task.image.filename}")
       else
         logger.debug("No image attached.")
@@ -25,12 +24,11 @@ class TasksController < ApplicationController
     end
   end
 
-
-  # GET /articles/:article_id/tasks
   def index
     @tasks = @article.tasks
     tasks_with_images = @tasks.map do |task|
-      if task.image.present? && task.image.attached?
+      # Vérifie si l'image est bien attachée avec ActiveStorage
+      if task.image.attached?
         { task: task, image_url: url_for(task.image) }
       else
         { task: task, image_url: nil }
@@ -38,6 +36,9 @@ class TasksController < ApplicationController
     end
     render json: tasks_with_images
   end
+
+
+
 
 
 

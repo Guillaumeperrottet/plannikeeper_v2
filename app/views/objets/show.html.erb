@@ -36,7 +36,8 @@
   <!-- Contenu du tab "Créer tâche" -->
   <div id="create-task" class="tabcontent" data-panel-tab-target="tabContent" data-tab-content="create-task" style="display: none;">
     <h4>Créer une tâche</h4>
-    <form data-controller="task" data-action="submit->task#submit" data-article-id="<%= @article&.id %>" data-objet-id="<%= @objet.id %>">
+    <form data-controller="task" data-action="submit->task#submit" data-article-id="<%= @article&.id %>" data-objet-id="<%= @objet.id %>" enctype="multipart/form-data">
+  <!-- Ton formulaire -->
   <label for="task-name">Nom de la tâche</label>
   <input type="text" id="task-name" name="task[name]" required>
 
