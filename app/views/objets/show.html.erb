@@ -14,47 +14,49 @@
   </div>
 </div>
 
-<!-- Panel for displaying article info -->
-<div id="article-panel" class="side-panel hidden" data-controller="panel" data-panel-target="sectorImageContainer" data-panel-objet-id="<%= @objet.id %>" data-panel-selected-sector-id="<%= @selected_sector&.id %>">
+<div id="article-panel" class="side-panel hidden" data-controller="panel panel-tab" data-panel-target="sectorImageContainer" data-panel-objet-id="<%= @objet.id %>" data-panel-selected-sector-id="<%= @selected_sector&.id %>">
   <div class="side-panel-header">
     <h3 id="article-title" data-panel-target="title">Titre de l'article</h3>
     <button id="close-panel" data-action="panel#closePanel">X</button>
   </div>
 
-  <div class="side-panel-content">
-    <div id="todo-list" class="hidden" data-panel-target="todoList">
-      <!-- Liste des tâches de l'article -->
-      <h4>Tâches</h4>
-      <ul id="task-list">
-        <!-- Les tâches seront ajoutées ici via JavaScript -->
-      </ul>
-      <button onclick="toggleTaskForm()">Créer une tâche</button>
+  <!-- Menu des onglets -->
+  <div class="tab-menu">
+    <button class="tablinks active" data-action="panel-tab#openTab" data-tab="todo" data-panel-tab-target="tabLinks">TODO</button>
+    <button class="tablinks" data-action="panel-tab#openTab" data-tab="create-task" data-panel-tab-target="tabLinks">Créer tâche</button>
+  </div>
+
+  <!-- Contenu du tab "TODO" -->
+  <div id="todo" class="tabcontent" data-panel-tab-target="tabContent" data-tab-content="todo" style="display: block;">
+    <h4>Liste des tâches</h4>
+    <div id="task-list" class="task-list">
+      <!-- Tâches dynamiques ici -->
     </div>
+  </div>
 
-    <div id="task-form" class="hidden" data-panel-target="taskForm">
-      <!-- Formulaire de création de tâche -->
-      <h4>Créer une tâche</h4>
-      <form id="new-task-form">
-        <label for="realization-date">Date de réalisation :</label>
-        <input type="date" id="realization-date" name="realization_date" required>
+  <!-- Contenu du tab "Créer tâche" -->
+  <div id="create-task" class="tabcontent" data-panel-tab-target="tabContent" data-tab-content="create-task" style="display: none;">
+    <h4>Créer une tâche</h4>
+    <form>
+      <!-- Formulaire pour créer une tâche -->
+      <label for="realization-date">Date de réalisation</label>
+      <input type="date" id="realization-date" name="realization_date" required>
 
-        <label for="cfc">CFC :</label>
-        <select id="cfc" name="cfc" required>
-          <option value="231">CFC 231 - Electricité</option>
-        </select>
+      <label for="cfc">CFC</label>
+      <select id="cfc" name="cfc" required>
+        <option value="231">CFC 231 - Electricité</option>
+      </select>
 
-        <label for="executor">Exécutant :</label>
-        <input type="text" id="executor" name="executor" required>
+      <label for="executor">Exécutant</label>
+      <input type="text" id="executor" name="executor" required>
 
-        <label for="task-file">Charger des documents :</label>
-        <input type="file" id="task-file" name="task_file" required>
+      <label for="task-file">Charger des documents</label>
+      <input type="file" id="task-file" name="task_file" required>
 
-        <label for="task-description">Description :</label>
-        <textarea id="task-description" name="description" required></textarea>
+      <label for="task-description">Description</label>
+      <textarea id="task-description" name="description" required></textarea>
 
-        <button type="submit">Créer</button>
-        <button type="button" onclick="toggleTaskForm()">Annuler</button>
-      </form>
-    </div>
+      <button type="submit">Créer</button>
+    </form>
   </div>
 </div>

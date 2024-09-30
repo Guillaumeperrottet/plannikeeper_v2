@@ -8,11 +8,22 @@ export default class extends Controller {
   }
 
   openPanel(article) {
-    console.log("Opening panel with article:", article);
-    this.titleTarget.textContent = article.title;
+    console.log("Opening panel with article:", article);  // Log pour voir les données de l'article
+
+    // Vérifier si l'élément `titleTarget` existe bien
+    if (this.titleTarget) {
+      this.titleTarget.textContent = article.title;
+      console.log("Title set to:", article.title);  // Log pour vérifier si le titre est bien mis à jour
+    } else {
+      console.error("Title target not found.");
+    }
+
+    // Appel pour charger les tâches de l'article
     this.loadTasks(article.id);
-    this.showPanel();
+
+    this.showPanel();  // Ouvre le panel
   }
+
 
   loadTasks(articleId) {
     // Assure-toi d'avoir les IDs nécessaires pour construire l'URL
@@ -51,21 +62,37 @@ export default class extends Controller {
 
   displayTasks(tasks) {
     const taskList = document.getElementById('task-list');
-    taskList.innerHTML = ''; // Vide la liste actuelle des tâches
+
+    // Log pour vérifier si l'élément taskList existe
+    if (!taskList) {
+      console.error("Element 'task-list' non trouvé.");
+      return;
+    }
+    console.log("Task list element found:", taskList);
+
+    // Log pour vérifier les tâches reçues
+    console.log("Received tasks:", tasks);
+
+    // Vide la liste actuelle des tâches
+    taskList.innerHTML = '';
 
     if (!tasks || tasks.length === 0) {
       taskList.innerHTML = '<li>Aucune tâche disponible.</li>';
+      console.log("No tasks found, displaying default message.");
       return;
     }
 
+    // Ajoute chaque tâche dans la liste
     tasks.forEach(task => {
       const taskItem = document.createElement('li');
-      taskItem.textContent = `${task.name} - CFC: ${task.cfc} - Réalisation: ${task.realization_date} - Exécutant: ${task.executor}`;
+      taskItem.textContent = `${task.realization_date} - ${task.description}`;
       taskList.appendChild(taskItem);
+      console.log("Task added to list:", task);
     });
 
-    console.log("Tasks displayed:", tasks);
+    console.log("All tasks displayed.");
   }
+
 
   showPanel() {
     const panel = document.getElementById("article-panel");
