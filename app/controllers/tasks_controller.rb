@@ -1,12 +1,19 @@
 class TasksController < ApplicationController
   before_action :set_article_and_sector, only: [:new, :create, :edit, :update, :index]
   before_action :set_page_title, only: [:new, :edit, :show] # Ajuste les actions où tu veux afficher ce titre
+  before_action :set_breadcrumbs, only: [:new, :edit, :show]
 
   def new
+    puts "Appel de la méthode 'new'"
+    @objet = Objet.find(params[:objet_id])
+    @secteur = Secteur.find(params[:secteur_id])
+    @article = Article.find(params[:article_id])
+    add_breadcrumb "Création de tâche", new_objet_secteur_article_task_path(@objet, @secteur, @article) # Ajout direct ici
     @task = @article.tasks.new
   end
 
   def create
+    logger.debug "Appel de la méthode 'create'"
     @task = @article.tasks.new(task_params) # Utilise les paramètres autorisés
     if @task.save
       logger.debug("Task saved successfully")
@@ -82,8 +89,6 @@ class TasksController < ApplicationController
     }
   end
 
-
-
   def edit
     @task = @article.tasks.find(params[:id])
   end
@@ -97,9 +102,24 @@ class TasksController < ApplicationController
     end
   end
 
+  def set_breadcrumbs
+    logger.debug "---- Entrée dans la méthode 'set_breadcrumbs' ----"
+  logger.debug "Objet: #{@objet}, Secteur: #{@secteur}, Article: #{@article}"
+
+    if @objet && @secteur && @article
+      add_breadcrumb "Vos objets", root_path
+      add_breadcrumb @objet.nom, objet_path(@objet)
+      add_breadcrumb @secteur.nom, objet_secteur_path(@objet, @secteur)
+      add_breadcrumb "Todo", objet_secteur_article_path(@objet, @secteur, @article)
+    else
+      logger.debug "Une ou plusieurs variables d'instance sont manquantes !"
+    end
+  end
+
   private
 
   def set_article_and_sector
+    logger.debug "Appel de la méthode 'set_article_and_sector'"
     @objet = Objet.find_by(id: params[:objet_id])
     @secteur = Secteur.find_by(id: params[:secteur_id])
     @article = Article.find_by(id: params[:article_id])

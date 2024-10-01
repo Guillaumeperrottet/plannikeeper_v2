@@ -1,6 +1,7 @@
 class SecteursController < ApplicationController
   before_action :set_objet
   before_action :set_secteur, only: [:new, :create, :edit, :update, :image]
+  before_action :set_breadcrumbs
 
   def new
     @secteur = Secteur.new
@@ -35,6 +36,16 @@ class SecteursController < ApplicationController
       redirect_to @objet, notice: 'Secteur was successfully updated.'
     else
       render :edit
+    end
+  end
+
+  def set_breadcrumbs
+    add_breadcrumb "Vos objets", root_path
+    if @objet
+      add_breadcrumb @objet.nom, objet_path(@objet)
+    end
+    if @article
+      add_breadcrumb "Todo", article_path(@article)
     end
   end
 
