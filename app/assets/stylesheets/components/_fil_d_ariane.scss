@@ -1,0 +1,33 @@
+.breadcrumb-container {
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.breadcrumb {
+  position: absolute;
+    z-index: 1000;
+  display: flex;
+  justify-content: flex-start;
+  background: none;
+  padding: 0;
+  margin-top: 0;
+}
+
+.breadcrumb-item + .breadcrumb-item::before {
+  content: ">";
+  padding: 0 5px;
+  color: #ccc;
+}
+
+.breadcrumb-item a {
+  text-decoration: none;
+  color: #666;
+}
+
+.breadcrumb-item.active {
+  color: #000;
+}
+
+.breadcrumb a:hover {
+  color: #272424; /* Couleur plus claire lors du hover */
+}

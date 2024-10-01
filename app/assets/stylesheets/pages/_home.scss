@@ -3,7 +3,7 @@
   font-family: Arial, sans-serif;
   display: flex;
   flex-direction: column;
-  min-height: 100vh; /* Assure que la page prend toute la hauteur */
+  justify-content: space-between;
 }
 
 .header {

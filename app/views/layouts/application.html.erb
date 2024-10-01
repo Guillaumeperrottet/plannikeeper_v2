@@ -24,6 +24,9 @@
 
   <body>
     <%= render 'shared/navbar' %>
+    <% unless current_page?(root_path) %>
+      <%= render 'shared/breadcrumbs' %>
+    <% end %>
     <%= yield %>
     <!-- Chargez Fabric.js ici si nécessaire, sinon il sera chargé via importmap -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.0/fabric.min.js"></script>

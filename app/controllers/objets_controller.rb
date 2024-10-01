@@ -1,9 +1,11 @@
 class ObjetsController < ApplicationController
   before_action :set_objet, only: %i[show edit update destroy]
   before_action :set_page_title, only: [:new, :edit, :show] # Ajuste les actions où tu veux afficher ce titre
+  before_action :set_breadcrumbs
 
   def index
     @objets = Objet.all
+    redirect_to root_path
   end
 
   def show
@@ -45,6 +47,16 @@ class ObjetsController < ApplicationController
   def destroy
     @objet.destroy
     redirect_to root_path, notice: 'Objet was successfully destroyed.'
+  end
+
+  def set_breadcrumbs
+    add_breadcrumb "Vos objets", root_path
+    if @objet
+      add_breadcrumb @objet.nom, objet_path(@objet)
+    end
+    if @article
+      add_breadcrumb "Todo", article_path(@article)
+    end
   end
 
   private

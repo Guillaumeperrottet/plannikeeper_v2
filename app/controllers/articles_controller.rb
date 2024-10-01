@@ -1,5 +1,6 @@
 class ArticlesController < ApplicationController
   before_action :set_page_title, only: [:new, :show] # Ajuste les actions où tu veux afficher ce titre
+  before_action :set_breadcrumbs
 
   def create
     @secteur = Secteur.find(params[:secteur_id])
@@ -38,6 +39,17 @@ class ArticlesController < ApplicationController
     end
   end
 
+  def set_breadcrumbs
+    add_breadcrumb "Vos objets", root_path
+    if @objet
+      add_breadcrumb @objet.nom, objet_path(@objet)
+    end
+    if action_name == 'new'
+      add_breadcrumb "Création de tâche", new_objet_secteur_article_task_path(@objet, @secteur, @article)
+    elsif @article
+      add_breadcrumb "Todo", article_path(@article)
+    end
+  end
 
   private
 
