@@ -78,3 +78,46 @@ form button {
 form button:hover {
   background-color: #555;
 }
+
+/* Header avec flèche et titre */
+.side-panel-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+/* Styles pour le titre */
+.side-panel-header h3 {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 15px;
+  text-align: left;
+  color: #333; /* Couleur sombre pour plus de visibilité */
+}
+
+.side-panel-header a {
+  text-decoration: none;
+  color: #333;
+}
+
+.side-panel-header a:hover {
+  text-decoration: underline;
+  color: #000;
+}
+
+/* Styles pour la flèche */
+#close-panel {
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: #888;
+  cursor: pointer;
+  margin-right: 10px; /* Ajout d'un espace entre la flèche et le titre */
+  transition: color 0.3s ease;
+  position: relative;
+  top: -6px;
+}
+
+#close-panel:hover {
+  color: #000;
+}

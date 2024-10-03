@@ -154,7 +154,7 @@ export default class extends Controller {
   showArticleForm() {
     const formHtml = `
       <div id="article-form" style="position: absolute; background: white; padding: 10px; border: 1px solid black; z-index: 1000;">
-        <label for="article-title">Title:</label>
+        <label for="article-title">Nom de l'article :</label>
         <input type="text" id="article-title-input" name="title" required><br>
         <label for="article-description">Description:</label>
         <textarea id="article-description" name="description" required></textarea><br>
@@ -275,7 +275,8 @@ export default class extends Controller {
             fill: 'transparent',
             stroke: 'red',
             selectable: false,
-            evented: true  // Permet les événements de clic
+            evented: true,  // Permet les événements de clic
+            hoverCursor: 'pointer' // Change le curseur pour une main lors du survol
           });
 
           rect.articleId = article.id;
@@ -290,6 +291,7 @@ export default class extends Controller {
           rect.on('mouseover', () => {
             rect.set('stroke', 'blue');
             this.canvas.renderAll();
+            this.canvas.hoverCursor = 'pointer'; // Ajoute cette ligne pour changer le curseur en main lors du survol
           });
 
           rect.on('mouseout', () => {
