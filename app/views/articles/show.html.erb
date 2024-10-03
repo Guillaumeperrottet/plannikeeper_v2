@@ -7,43 +7,48 @@
     <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">Statut</button>
   </div>
 
-  <table class="table">
-    <thead>
-      <tr>
-        <th>Tâche</th>
-        <th>Date de création</th>
-        <th>Date de fin</th>
-        <th>CFC</th>
-        <th>Exécutant</th>
-        <th>Statut</th>
-        <th>Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-  <% if @tasks.present? %>
-    <% @tasks.each do |task| %>
-      <tr>
-        <td><%= task.description %></td>
-        <td><%= task.cfc %></td>
-        <td><%= task.executant %></td>
-        <td>
-          <%= link_to edit_objet_secteur_article_task_path(@objet, @secteur, @article, task), class: 'btn btn-sm btn-warning' do %>
-            <i class="fas fa-edit"></i>
-          <% end %>
+<table class="table">
+  <thead>
+    <tr>
+      <th>Tâche</th>
+      <th>Date de création</th>
+      <th>Date de fin</th>
+      <th>CFC</th>
+      <th>Exécutant</th>
+      <th>Statut</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% if @tasks.present? %>
+      <% @tasks.each do |task| %>
+        <tr>
+          <td><%= task.description %></td>
+          <td><%= task.created_at.strftime('%d - %m - %Y') %></td>
+          <td><%= task.cfc %></td>
+          <td><%= task.executant %></td>
+          <td>
+            <!--<span class="status-badge <%= task.status %>"><%= task.status %></span>-->
+          </td>
+          <td>
+            <%= link_to edit_objet_secteur_article_task_path(@objet, @secteur, @article, task), class: 'btn btn-sm btn-warning' do %>
+              <i class="fas fa-edit"></i>
+            <% end %>
 
-          <%= link_to objet_secteur_article_task_path(@objet, @secteur, @article, task), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-sm btn-danger' do %>
-            <i class="fas fa-trash"></i>
-          <% end %>
-
-        </td>
+            <%= link_to objet_secteur_article_task_path(@objet, @secteur, @article, task), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-sm btn-danger' do %>
+              <i class="fas fa-trash"></i>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    <% else %>
+      <tr>
+        <td colspan="7">Aucune tâche disponible.</td>
       </tr>
     <% end %>
-  <% else %>
-    <tr>
-      <td colspan="7">Aucune tâche disponible.</td>
-    </tr>
-  <% end %>
-</tbody>
+  </tbody>
+</table>
+
 
 
   <%= link_to new_objet_secteur_article_task_path(@objet, @secteur, @article), class: 'btn btn-primary' do %>
