@@ -154,7 +154,7 @@ export default class extends Controller {
   showArticleForm() {
     const formHtml = `
       <div id="article-form" style="position: absolute; background: white; padding: 10px; border: 1px solid black; z-index: 1000;">
-        <label for="article-title">Title:</label>
+        <label for="article-title">Nom de l'article :</label>
         <input type="text" id="article-title-input" name="title" required><br>
         <label for="article-description">Description:</label>
         <textarea id="article-description" name="description" required></textarea><br>
@@ -272,11 +272,19 @@ export default class extends Controller {
             top: top,
             width: width,
             height: height,
-            fill: 'transparent',
-            stroke: 'red',
+            fill: 'rgba(0, 255, 0, 0.1)', // Transparence pour l'article
+            stroke: 'transparent', // Pas de bordure initiale
+            strokeWidth: 0, // Pas de bordure
             selectable: false,
-            evented: true  // Permet les événements de clic
-          });
+            evented: true,
+            hoverCursor: 'pointer', // Change le curseur en main au survol
+            shadow: {
+              color: 'rgba(0, 0, 0, 0)', // Pas d'ombre par défaut
+              blur: 0,
+              offsetX: 0,
+              offsetY: 0
+                    }
+        });
 
           rect.articleId = article.id;
 
@@ -286,14 +294,29 @@ export default class extends Controller {
             this.openPanelWithArticleData(article); // Ouvre le panneau avec les données de l'article
           });
 
-          // Changement de couleur au survol
+          // Survol - Ajout d'une ombre discrète au survol
           rect.on('mouseover', () => {
-            rect.set('stroke', 'blue');
+            rect.set({
+              shadow: {
+                color: 'rgba(0, 0, 0, 0.4)', // Ombre discrète noire
+                blur: 10,
+                offsetX: 5,
+                offsetY: 5
+              },
+              fill: 'rgba(0, 255, 0, 0.15)' // Légèrement plus opaque au survol
+            });
             this.canvas.renderAll();
           });
 
           rect.on('mouseout', () => {
-            rect.set('stroke', 'red');
+            rect.set({
+              shadow: {
+                color: 'rgba(0, 0, 0, 0)', // Pas d'ombre en dehors du survol
+                blur: 0,
+                offsetX: 0,
+                offsetY: 0
+              }
+            });
             this.canvas.renderAll();
           });
 

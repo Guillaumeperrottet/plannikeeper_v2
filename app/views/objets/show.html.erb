@@ -13,10 +13,10 @@
 
 <div id="article-panel" class="side-panel hidden" data-controller="panel panel-tab" data-panel-target="sectorImageContainer" data-panel-objet-id="<%= @objet.id %>" data-panel-selected-sector-id="<%= params[:selected_sector_id] || @selected_sector&.id %>">
   <div class="side-panel-header">
+      <button id="close-panel" data-action="panel#closePanel">&#x2190;</button> <!-- Flèche à gauche -->
     <h3 id="article-title" data-panel-target="title" data-article-id="">
       <a href="#" data-action="click->panel#redirectToArticle">Titre de l'article</a>
     </h3>
-    <button id="close-panel" data-action="panel#closePanel">X</button>
   </div>
 
   <!-- Menu des onglets -->
