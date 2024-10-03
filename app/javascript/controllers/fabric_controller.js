@@ -97,6 +97,10 @@ export default class extends Controller {
 
   activateDrawing() {
     this.isDrawing = true;
+
+    this.canvas.upperCanvasEl.classList.add("cursor-plus");
+    document.body.classList.add("cursor-plus");
+
     console.log("Drawing mode activated");
   }
 
@@ -145,6 +149,9 @@ export default class extends Controller {
   stopDrawing() {
     if (!this.isDrawing || !this.currentRect) return;
 
+  document.body.classList.remove("cursor-plus"); // Ou le canevas, si tu préfères
+  this.canvas.upperCanvasEl.classList.remove("cursor-plus");
+
     this.isDrawing = false;
     console.log("Stopped drawing, rectangle dimensions:", this.currentRect.left, this.currentRect.top, this.currentRect.width, this.currentRect.height);
 
@@ -154,13 +161,15 @@ export default class extends Controller {
   showArticleForm() {
     const formHtml = `
       <div id="article-form" style="position: absolute; background: white; padding: 10px; border: 1px solid black; z-index: 1000;">
-        <label for="article-title">Nom de l'article :</label>
-        <input type="text" id="article-title-input" name="title" required><br>
-        <label for="article-description">Description:</label>
-        <textarea id="article-description" name="description" required></textarea><br>
-        <button id="save-article">Save</button>
-        <button id="cancel-article">Cancel</button>
-      </div>
+      <label for="article-title-input">Nom de l'article :</label>
+      <input type="text" id="article-title-input" name="title" required><br>
+
+      <label for="article-description">Description :</label>
+      <textarea id="article-description" name="description" required></textarea><br>
+
+      <button id="save-article">Save</button>
+      <button id="cancel-article">Cancel</button>
+    </div>
     `;
     document.body.insertAdjacentHTML('beforeend', formHtml);
 

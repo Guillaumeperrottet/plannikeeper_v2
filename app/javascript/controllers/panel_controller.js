@@ -5,11 +5,11 @@ export default class extends Controller {
 
   connect() {
     console.log("Panel controller connected.");
-    if (this.hasTitleTarget) {
-      console.log("Title target:", this.titleTarget);
-    } else {
-      console.warn("Title target is missing at connect time.");
-    }
+    // if (this.hasTitleTarget) {
+    //   console.log("Title target:", this.titleTarget);
+    // } else {
+    //   console.warn("Title target is missing at connect time.");
+    // }
   }
 
   openPanel(article) {

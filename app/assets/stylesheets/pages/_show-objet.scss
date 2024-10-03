@@ -25,6 +25,7 @@
   height: 100%;
   z-index: 5;
   pointer-events: auto;
+  cursor: inherit;
 }
 
 // /* Bordures pour tester */
@@ -65,4 +66,8 @@
 #article-panel.visible {
   transform: translateX(0);
   width: 30vw; /* Largeur par défaut */
+}
+
+.cursor-plus {
+  cursor: crosshair !important; /* Le curseur croisé ressemble à un "+" */
 }
