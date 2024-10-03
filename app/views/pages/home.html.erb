@@ -1,6 +1,6 @@
 <div class="home-page" data-controller="task">
   <div class="header">
-    <h1 class="main-title">Vos objets</h1>
+    <%# <h1 class="main-title">Vos objets</h1> %>
     <ul class="object-list">
       <% @objets.each do |objet| %>
         <li>
@@ -10,45 +10,50 @@
       <% end %>
     </ul>
 
-    <%= link_to "Créer un objet", new_objet_path, class: "create-object" %>
+    <a href="<%= new_objet_path %>" class="create-object">
+      <span class="icon">+</span> Créer un objet
+    </a>
   </div>
 
+  <div class="spacer"></div>
+
   <div class="agenda-section">
-    <div class="agenda-header">
-      <h2>Agenda todo list</h2>
-      <div class="select-objet">
-        <select id="object-selector" class="form-select" data-action="change->task#loadTasks">
-          <% @objets.each do |objet| %>
-            <option value="<%= objet.id %>"><%= objet.nom %></option>
-          <% end %>
-        </select>
-      </div>
+  <div class="agenda-header">
+    <h2>Agenda todo list</h2>
+    <div class="select-objet">
+      <select id="object-selector" class="form-select" data-action="change->task#loadTasks">
+        <% @objets.each do |objet| %>
+          <option value="<%= objet.id %>"><%= objet.nom %></option>
+        <% end %>
+      </select>
     </div>
-    <div class="tasks-display">
-      <div class="task-group this-week">
-        <h3>Cette semaine</h3>
-        <ul id="this-week-tasks" data-task-target="thisWeekTasks">
-          <% if @this_week_tasks.any? %>
-            <% @this_week_tasks.each do |task| %>
-              <li><%= task.realisation_date.strftime("%d %b %Y") %> - <%= task.cfc %> / <%= task.description %></li>
-            <% end %>
-          <% else %>
-            <li>Aucune tâche cette semaine.</li>
+  </div>
+
+  <div class="tasks-display">
+    <div class="task-group this-week">
+      <h3>Cette semaine</h3>
+      <ul id="this-week-tasks" data-task-target="thisWeekTasks">
+        <% if @this_week_tasks.any? %>
+          <% @this_week_tasks.each do |task| %>
+            <li><%= task.realisation_date.strftime("%d %b %Y") %> - <%= task.cfc %> / <%= task.description %></li>
           <% end %>
-        </ul>
-      </div>
-      <div class="task-group upcoming">
-        <h3>A venir</h3>
-        <ul id="upcoming-tasks" data-task-target="upcomingTasks">
-          <% if @upcoming_tasks.any? %>
-            <% @upcoming_tasks.each do |task| %>
-              <li><%= task.cfc %> - <%= task.description %></li>
-            <% end %>
-          <% else %>
-            <li>Aucune tâche à venir.</li>
+        <% else %>
+          <li>Aucune tâche cette semaine.</li>
+        <% end %>
+      </ul>
+    </div>
+
+    <div class="task-group upcoming">
+      <h3>A venir</h3>
+      <ul id="upcoming-tasks" data-task-target="upcomingTasks">
+        <% if @upcoming_tasks.any? %>
+          <% @upcoming_tasks.each do |task| %>
+            <li><%= task.cfc %> - <%= task.description %></li>
           <% end %>
-        </ul>
-      </div>
+        <% else %>
+          <li>Aucune tâche à venir.</li>
+        <% end %>
+      </ul>
     </div>
   </div>
 </div>

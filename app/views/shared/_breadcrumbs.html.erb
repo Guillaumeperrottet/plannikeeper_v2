@@ -3,7 +3,7 @@
     <li class="breadcrumb-item">
       <%= link_to 'Vos objets', objets_path %>
     </li>
-    <% if @objet %>
+    <% if @objet && @objet.id.present? %>
       <li class="breadcrumb-item">
         <%= link_to @objet.nom, objet_path(@objet) %>
       </li>
