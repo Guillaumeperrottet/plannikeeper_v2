@@ -26,7 +26,7 @@ class ObjetsController < ApplicationController
   def create
     @objet = Objet.new(objet_params)
     if @objet.save
-      redirect_to @objet, notice: 'Objet was successfully created.'
+      redirect_to @objet, notice: 'Votre objet a bien été créer'
     else
       render :new
     end

@@ -1,61 +1,63 @@
-<%= form_with(model: @objet, local: true, html: { multipart: true }) do |form| %>
-  <% if @objet.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@objet.errors.count, "error") %> prohibited this objet from being saved:</h2>
-      <ul>
-        <% @objet.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
+<div class="page-new-objet">
+  <%= form_with(model: @objet, local: true, html: { multipart: true }) do |form| %>
+    <% if @objet.errors.any? %>
+      <div id="error_explanation">
+        <h2><%= pluralize(@objet.errors.count, "error") %> prohibited this objet from being saved:</h2>
+        <ul>
+          <% @objet.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div class="field">
+      <%= form.label :nom %>
+      <%= form.text_field :nom %>
+    </div>
+
+    <div class="field">
+      <%= form.label :adresse %>
+      <%= form.text_field :adresse %>
+    </div>
+
+    <h3>Secteurs</h3>
+    <div data-controller="sector">
+      <div data-sector-target="fields" id="secteurs-fields">
+        <%= form.fields_for :secteurs do |secteur_form| %>
+          <div class="field">
+            <%= secteur_form.label :nom, "Nom du secteur" %>
+            <%= secteur_form.text_field :nom %>
+            <%= secteur_form.hidden_field :_destroy %>
+
+            <%= secteur_form.label :image, "Choisir un plan" %>
+            <% if secteur_form.object.image.attached? %>
+              <%= image_tag secteur_form.object.image, alt: "Choisir un plan", class: "sector-image" %>
+            <% end %>
+            <%= secteur_form.file_field :image %>
+
+            <%= link_to "Supprimer", '#', data: { action: "sector#removeSector" }, class: 'remove_fields' %>
+          </div>
         <% end %>
-      </ul>
+      </div>
+
+      <template data-sector-target="template">
+        <div class="field">
+          <%= form.fields_for :secteurs, Secteur.new, child_index: "NEW_RECORD" do |secteur_form| %>
+            <%= secteur_form.label :nom, "Nom du secteur" %>
+            <%= secteur_form.text_field :nom %>
+            <%= secteur_form.hidden_field :_destroy %>
+            <%= secteur_form.file_field :image %>
+            <%= link_to "Supprimer", '#', data: { action: "sector#removeSector" }, class: 'remove_fields' %>
+          </div>
+        <% end %>
+      </template>
+
+      <%= link_to "Ajouter un secteur", "#", data: { action: "sector#addSector" } %>
+    </div>
+
+    <div class="actions">
+      <%= form.submit "Créer l'objet" %>
     </div>
   <% end %>
-
-  <div class="field">
-    <%= form.label :nom %>
-    <%= form.text_field :nom %>
-  </div>
-
-  <div class="field">
-    <%= form.label :adresse %>
-    <%= form.text_field :adresse %>
-  </div>
-
-  <h3>Secteurs</h3>
-  <div data-controller="sector">
-    <div data-sector-target="fields" id="secteurs-fields">
-      <%= form.fields_for :secteurs do |secteur_form| %>
-        <div class="field">
-          <%= secteur_form.label :nom, "Nom du secteur" %>
-          <%= secteur_form.text_field :nom %>
-          <%= secteur_form.hidden_field :_destroy %>
-
-          <%= secteur_form.label :image, "Image du secteur" %>
-          <% if secteur_form.object.image.attached? %>
-            <%= image_tag secteur_form.object.image, alt: "Image du secteur", class: "sector-image" %>
-          <% end %>
-          <%= secteur_form.file_field :image %>
-
-          <%= link_to "Supprimer", '#', data: { action: "sector#removeSector" }, class: 'remove_fields' %>
-        </div>
-      <% end %>
-    </div>
-
-    <template data-sector-target="template">
-      <div class="field">
-        <%= form.fields_for :secteurs, Secteur.new, child_index: "NEW_RECORD" do |secteur_form| %>
-          <%= secteur_form.label :nom, "Nom du secteur" %>
-          <%= secteur_form.text_field :nom %>
-          <%= secteur_form.hidden_field :_destroy %>
-          <%= secteur_form.file_field :image %>
-          <%= link_to "Supprimer", '#', data: { action: "sector#removeSector" }, class: 'remove_fields' %>
-        </div>
-      <% end %>
-    </template>
-
-    <%= link_to "Ajouter un secteur", "#", data: { action: "sector#addSector" } %>
-  </div>
-
-  <div class="actions">
-    <%= form.submit "Créer l'objet" %>
-  </div>
-<% end %>
+</div>
