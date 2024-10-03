@@ -4,11 +4,22 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  min-height: calc(100vh - 60px);  /* Ajuste la hauteur de la page pour tenir compte de la navbar */
+  height: calc(100vh - 60px);      /* Assure que le contenu occupe le reste de l'espace disponible */
+  overflow: hidden;   /* Empêche le défilement */
+  padding: 0; /* Retirer tout padding inutile */
+}
+
+.spacer {
+  flex-grow: 1; /* Prend tout l'espace disponible */
 }
 
 .header {
-  text-align: center;
+  margin-top: 100px; /* Ajuster l'espace entre la navbar et la section "Vos objets" */
+  margin-left: 100px;
+  text-align: left; /* Aligne les titres à gauche */
   margin-bottom: 50px;
+  padding: 0; /* Enlever tout padding ou marge par défaut */
 }
 
 
@@ -16,31 +27,6 @@
   font-size: 2.5rem;
   margin-bottom: 20px;
   font-weight: bold;
-}
-
-.object-list {
-  list-style: none;
-  padding: 0;
-  display: flex;
-  justify-content: center;
-  gap: 30px;
-  flex-wrap: wrap;  /* Permet aux objets de s'ajuster sur plusieurs lignes si nécessaire */
-}
-
-.object-list li {
-  font-size: 1.2rem;
-  color: #333;
-  display: inline-flex;
-  align-items: center;
-}
-
-.object-bullet {
-  display: inline-block;
-  width: 10px;
-  height: 10px;
-  background-color: gray;
-  border-radius: 50%;
-  margin-right: 10px;
 }
 
 .create-object {
@@ -56,17 +42,28 @@
 }
 
 .agenda-section {
-  background-color: #f9f9f9;
-  padding: 40px;
-  border-radius: 10px;
-  text-align: center;
-  box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
-  bottom: 0;
+  background-color: #f0f0f0; /* Couleur grise plus légère */
+  padding: 10px 20px;
+  margin-top: 0; /* Évite toute marge entre la section agenda et les éléments précédents */
+  position: relative;
+  justify-content: center;
+  flex-direction: column; /* Colonne pour aligner le titre et les sections de tâches */
+  align-items: flex-start; /* Aligner les éléments à gauche */
+  height: 350px; /* Hauteur fixe pour l'agenda */
+  flex-shrink: 0;
+  margin-bottom: 0; /* Supprimer toute marge sous la section agenda */
+
 }
 
-.agenda-title {
-  font-size: 2rem;
-  margin-bottom: 30px;
+.agenda-header {
+  display: flex;
+  justify-content: center; /* Centrer le titre et le sélecteur */
+  align-items: center;
+  width: 100%;
+  margin-top: 10px;
+  margin-bottom: 30px; /* Ajouter de l'espace entre le header et les tâches */
+  gap: 20px; /* Espace entre le titre et le sélecteur */
+
 }
 
 .object-selector {
@@ -89,35 +86,88 @@
 
 .task-group {
   width: 45%;
-  background-color: white;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
-  font-size: 1rem;
+  padding: 0; /* Supprime les padding interne pour les sections */
+  margin-top: 0; /* Réduire l'espace en haut des sections */
+  margin-bottom: 0; /* Réduire l'espace en bas des sections */
+  text-align: left;
+  height: 100%;   /* Assure que les groupes de tâches prennent toute la hauteur de l'agenda */
+  overflow-y: auto;  /* Permet de scroller à l'intérieur si le contenu est trop grand */
+}
+
+/* Ajouter une hauteur limite aux listes de tâches */
+.task-group ul {
+  max-height: 220px; /* Hauteur maximum pour les listes de tâches */
+  overflow-y: auto;  /* Activer le défilement si le contenu dépasse */
 }
 
 .task-group h3 {
-  font-size: 1.5rem;
-  margin-bottom: 15px;
+  text-align: center; /* Centre les titres */
+  font-size: 1.2rem; /* Ajuster la taille si nécessaire */
 }
 
-.task-group ul {
+.tasks-display {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0 10px;
+  margin: 0; /* Retirer les marges entre les sections */
+}
+
+.tasks-display::before {
+  content: '';
+  position: absolute;
+  display: block;
+  width: 1px;
+  height: 100%;
+  background-color: #ccc; /* Séparateur vertical entre les deux colonnes */
+  margin: 0 20px;
+  transform: translateX(-50%); /* Centre le trait exactement au milieu */
+  left: 49%; /* Place le trait au milieu */
+
+}
+
+.object-list {
   list-style: none;
   padding: 0;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* Garder l'alignement à gauche */
+  gap: 10px;
+  max-width: 600px; /* Limiter la largeur totale pour centrer */
+  margin-left: 50px; /* Décale légèrement vers le centre */
 }
 
-.task-group li {
-  font-size: 1rem;
-  color: #555;
+.object-list li {
+  font-size: 1.2rem;
+  color: #333;
+  display: flex;
+  align-items: center;
   margin-bottom: 10px;
 }
 
-.this-week {
-  border-left: 5px solid #28a745;
+.object-bullet {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  background-color: gray;
+  border-radius: 50%;
+  margin-right: 10px;
 }
 
-.upcoming {
-  border-left: 5px solid #ffcc00;
+
+.create-object {
+  margin-left: 50px; /* Ajuste cette valeur selon l'emplacement désiré */
+  display: block;
+  font-size: 1.2rem;
+  color: #333; /* Assure que la couleur du texte est la même que les autres */
+  text-decoration: none;
+}
+
+.create-object .icon {
+  font-size: 1.5rem;
+  margin-right: 10px;
+  color: #333; /* Assure que l'icône ait la même couleur que le texte */
 }
 
 .object-link {
@@ -127,11 +177,15 @@
   font-weight: 500;
 }
 
-.object-link:hover {
+.create-object:hover {
   text-decoration: underline;
-  color: #007bff;
+  color: #333; /* Assure que l'icône ait la même couleur que le texte */
 }
 
 .tasks-display {
   display: flex;
 }
+
+// * {
+//   outline: 1px solid red;
+// }
