@@ -272,12 +272,19 @@ export default class extends Controller {
             top: top,
             width: width,
             height: height,
-            fill: 'transparent',
-            stroke: 'red',
+            fill: 'rgba(0, 255, 0, 0.1)', // Transparence pour l'article
+            stroke: 'transparent', // Pas de bordure initiale
+            strokeWidth: 0, // Pas de bordure
             selectable: false,
-            evented: true,  // Permet les événements de clic
-            hoverCursor: 'pointer' // Change le curseur pour une main lors du survol
-          });
+            evented: true,
+            hoverCursor: 'pointer', // Change le curseur en main au survol
+            shadow: {
+              color: 'rgba(0, 0, 0, 0)', // Pas d'ombre par défaut
+              blur: 0,
+              offsetX: 0,
+              offsetY: 0
+                    }
+        });
 
           rect.articleId = article.id;
 
@@ -287,15 +294,29 @@ export default class extends Controller {
             this.openPanelWithArticleData(article); // Ouvre le panneau avec les données de l'article
           });
 
-          // Changement de couleur au survol
+          // Survol - Ajout d'une ombre discrète au survol
           rect.on('mouseover', () => {
-            rect.set('stroke', 'blue');
+            rect.set({
+              shadow: {
+                color: 'rgba(0, 0, 0, 0.4)', // Ombre discrète noire
+                blur: 10,
+                offsetX: 5,
+                offsetY: 5
+              },
+              fill: 'rgba(0, 255, 0, 0.15)' // Légèrement plus opaque au survol
+            });
             this.canvas.renderAll();
-            this.canvas.hoverCursor = 'pointer'; // Ajoute cette ligne pour changer le curseur en main lors du survol
           });
 
           rect.on('mouseout', () => {
-            rect.set('stroke', 'red');
+            rect.set({
+              shadow: {
+                color: 'rgba(0, 0, 0, 0)', // Pas d'ombre en dehors du survol
+                blur: 0,
+                offsetX: 0,
+                offsetY: 0
+              }
+            });
             this.canvas.renderAll();
           });
 
