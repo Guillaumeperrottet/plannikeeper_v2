@@ -16,7 +16,12 @@ Rails.application.routes.draw do
         get 'image', to: 'secteurs#image'
       end
       resources :articles, only: [:create, :index, :show] do
-        resources :tasks, only: [:new, :create, :edit, :update, :destroy, :index] # Imbriquer les tâches sous les articles
+        resources :tasks, only: [:new, :create, :edit, :update, :destroy, :index] do
+          # Route pour archiver une tâche
+          member do
+            patch 'archive', to: 'tasks#archive'
+          end
+        end
       end
     end
   end

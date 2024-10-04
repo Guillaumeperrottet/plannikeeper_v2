@@ -1,7 +1,9 @@
 class TasksController < ApplicationController
-  before_action :set_article_and_sector, only: [:new, :create, :edit, :update, :index]
+  before_action :set_article_and_sector, only: [:new, :create, :edit, :update, :index, :archive, :destroy]
   before_action :set_page_title, only: [:new, :edit, :show] # Ajuste les actions où tu veux afficher ce titre
   before_action :set_breadcrumbs, only: [:new, :edit, :show]
+  before_action :set_task, only: [:edit, :update, :destroy, :archive]
+
 
   def new
     puts "Appel de la méthode 'new'"
@@ -14,9 +16,22 @@ class TasksController < ApplicationController
 
   def create
     logger.debug "Appel de la méthode 'create'"
+    # logger.debug "Task params: #{task_params.inspect}" # Ajout pour inspection
+
     @task = @article.tasks.new(task_params) # Utilise les paramètres autorisés
+
+      # Définir la couleur en fonction du type de tâche
+  case @task.task_type
+  when 'réparations'
+    @task.color = 'orange'
+  when 'récurrence'
+    @task.color = 'lightblue' # Bleu clair
+  when 'entretiens'
+    @task.color = 'lightgreen' # Vert clair
+  end
+
     if @task.save
-      logger.debug("Task saved successfully")
+      logger.debug("Tâche sauvegarder avec succès")
 
       # Vérifier l'attachement de l'image après que la tâche a été sauvegardée
       if @task.image.attached?
@@ -25,7 +40,9 @@ class TasksController < ApplicationController
         logger.debug("No image attached.")
       end
 
-      render json: { success: true, task: @task }, status: :created
+    # Rediriger vers la page de l'article
+    redirect_to objet_secteur_article_path(@objet, @secteur, @article), notice: 'La tâche a été créée avec succès.'
+      # render json: { success: true, task: @task }, status: :created
     else
       logger.debug("Task saving failed: #{@task.errors.full_messages}")
       render json: { errors: @task.errors.full_messages }, status: :unprocessable_entity
@@ -34,6 +51,25 @@ class TasksController < ApplicationController
 
   def show
     @task = @article.tasks.find(params[:id]) # Si tu souhaites afficher une tâche spécifique
+  end
+
+  def destroy
+    @task = @article.tasks.find(params[:id])
+    if @task.destroy
+      redirect_to objet_secteur_article_path(@objet, @secteur, @article), notice: 'La tâche a été supprimée avec succès.'
+    else
+      redirect_to objet_secteur_article_path(@objet, @secteur, @article), alert: "La suppression de la tâche a échoué."
+    end
+  end
+
+  def archive
+    if @task.update(status: "fermée")
+      flash[:notice] = "Tâche archivée avec succès."
+      redirect_to objet_secteur_article_path(@objet, @secteur, @article)
+    else
+      flash[:alert] = "Impossible d'archiver la tâche."
+      redirect_to objet_secteur_article_path(@objet, @secteur, @article)
+    end
   end
 
   def index_for_objet
@@ -135,8 +171,12 @@ class TasksController < ApplicationController
     @article = Article.find(params[:article_id])
   end
 
+  def set_task
+    @task = @article.tasks.find(params[:id])
+  end
+
   def task_params
-    params.require(:task).permit(:name, :description, :realisation_date, :cfc, :executant, :image) # Assurez-vous que tous ces champs sont bien inclus
+    params.require(:task).permit(:name, :description, :realisation_date, :cfc, :executant, :executant_comment, :image, :task_type, :color, :status, :recurring, :end_date, :period)
   end
 
   def set_page_title

@@ -7,49 +7,59 @@
     <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">Statut</button>
   </div>
 
-<table class="table">
-  <thead>
-    <tr>
-      <th>Tâche</th>
-      <th>Date de création</th>
-      <th>Date de fin</th>
-      <th>CFC</th>
-      <th>Exécutant</th>
-      <th>Statut</th>
-      <th>Actions</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% if @tasks.present? %>
-      <% @tasks.each do |task| %>
-        <tr>
-          <td><%= task.description %></td>
-          <td><%= task.created_at.strftime('%d - %m - %Y') %></td>
-          <td><%= task.cfc %></td>
-          <td><%= task.executant %></td>
-          <td>
-            <!--<span class="status-badge <%= task.status %>"><%= task.status %></span>-->
-          </td>
-          <td>
-            <%= link_to edit_objet_secteur_article_task_path(@objet, @secteur, @article, task), class: 'btn btn-sm btn-warning' do %>
-              <i class="fas fa-edit"></i>
-            <% end %>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Tâche</th>
+        <th>Date de création</th>
+        <th>Date de fin</th>
+        <th>CFC</th>
+        <th>Exécutant</th>
+        <th>Statut</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% if @tasks.present? %>
+        <% @tasks.each do |task| %>
+          <tr>
+            <td><%= task.description %></td>
+            <td><%= task.created_at.strftime('%d - %m - %Y') %></td>
+            <td><%= task.end_date.present? ? task.end_date.strftime('%d - %m - %Y') : "N/A" %></td>
+            <td><%= task.cfc %></td>
+            <td><%= task.executant %></td>
+            <td><%= task.status.present? ? task.status.capitalize : "Non défini" %></td>
+            <td>
+              <%= link_to edit_objet_secteur_article_task_path(@objet, @secteur, @article, task), class: 'btn btn-sm btn-warning' do %>
+                <i class="fas fa-edit"></i>
+              <% end %>
 
-            <%= link_to objet_secteur_article_task_path(@objet, @secteur, @article, task), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-sm btn-danger' do %>
-              <i class="fas fa-trash"></i>
-            <% end %>
-          </td>
+              <%= link_to archive_objet_secteur_article_task_path(@objet, @secteur, @article, task), method: :patch, data: { confirm: 'Êtes-vous sûr de vouloir archiver cette tâche ?' }, class: 'btn btn-sm btn-secondary' do %>
+                <i class="fas fa-archive"></i>
+              <% end %>
+
+              <td>
+              <%= link_to edit_objet_secteur_article_task_path(@objet, @secteur, @article, task), class: 'btn btn-sm btn-warning' do %>
+                <i class="fas fa-edit"></i>
+              <% end %>
+
+              <!-- Formulaire pour la suppression -->
+              <%= form_with url: objet_secteur_article_task_path(@objet, @secteur, @article, task), method: :delete, class: "d-inline" do %>
+                <button type="submit" class="btn btn-sm btn-danger" data-confirm="Êtes-vous sûr de vouloir supprimer cette tâche ?">
+                  <i class="fas fa-trash"></i>
+                </button>
+              <% end %>
+            </td>
+            </td>
+          </tr>
+        <% end %>
+      <% else %>
+        <tr>
+          <td colspan="7">Aucune tâche disponible.</td>
         </tr>
       <% end %>
-    <% else %>
-      <tr>
-        <td colspan="7">Aucune tâche disponible.</td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
-
-
+    </tbody>
+  </table>
 
   <%= link_to new_objet_secteur_article_task_path(@objet, @secteur, @article), class: 'btn btn-primary' do %>
     + Ajouter une tâche

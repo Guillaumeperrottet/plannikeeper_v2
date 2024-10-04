@@ -3,29 +3,66 @@
 
   <%= form_with model: @task, url: objet_secteur_article_tasks_path(@objet, @secteur, @article), local: true, html: { multipart: true } do |f| %>
     <div class="task-form-group">
-      <%= f.label :name, "Nom de la tâche" %>
+      <%= f.label :name, "Intitulé" %>
       <%= f.text_field :name, class: "form-control" %>
     </div>
 
     <div class="task-form-group">
-      <%= f.label :realisation_date, "Date de réalisation" %>
-      <%= f.date_field :realisation_date, class: "form-control" %>
+      <%= f.label :description, "Description" %>
+      <%= f.text_area :description, class: "form-control" %>
     </div>
 
     <div class="task-form-group">
-      <%= f.label :cfc, "CFC" %>
-      <%= f.select :cfc, options_for_select([["CFC 231 - Electricité", "231"]]), class: "form-control" %>
+      <%= f.label :task_type, "Type de tâche" %>
+      <%= f.select :task_type, ['réparations', 'entretiens', 'récurrence'], { prompt: "Sélectionnez un type" }, { id: "task-type-select", class: "form-control" } %>
+    </div>
+
+    <!-- Options de récurrence (période + date de début spécifique) -->
+    <div id="recurring-options" style="display:none;">
+      <div class="task-form-group">
+        <%= f.label :period, "Période de récurrence" %>
+        <%= f.select :period, ['Hebdomadaire', 'Mensuelle', 'Trimestrielle', 'Annuelle'], { prompt: "Sélectionnez une période" }, class: "form-control" %>
+      </div>
+
+      <div class="task-form-group">
+        <%= f.label :recurrence_start_date, "Date de début de la récurrence" %>
+        <%= f.date_field :recurrence_start_date, class: "form-control" %>
+      </div>
+    </div>
+
+    <!-- Dates pour les tâches non récurrentes -->
+    <div id="non-recurring-options">
+      <div class="task-form-group">
+        <%= f.label :realisation_date, "Date de début de réalisation" %>
+        <%= f.date_field :realisation_date, class: "form-control" %>
+      </div>
+
+      <div class="task-form-group">
+        <%= f.label :end_date, "Date de fin" %>
+        <%= f.date_field :end_date, class: "form-control" %>
+      </div>
+    </div>
+
+    <div class="task-form-group">
+      <%= f.label :cfc, "Numéro CFC" %>
+      <%= f.text_field :cfc, class: "form-control" %>
     </div>
 
     <div class="task-form-group">
       <%= f.label :executant, "Exécutant" %>
-      <%= f.text_field :executant, class: "form-control" %>
+      <%= f.select :executant, ['interne', 'sous-traitant'], { prompt: "Sélectionnez un exécutant" }, class: "form-control" %>
     </div>
 
     <div class="task-form-group">
-      <%= f.label :description, "Description de la tâche" %>
-      <%= f.text_area :description, class: "form-control" %>
+      <%= f.label :executant_comment, "Commentaire sur l'exécutant" %>
+      <%= f.text_area :executant_comment, class: "form-control" %>
     </div>
+
+    <div class="task-form-group">
+      <%= f.label :status, "Statut de la tâche" %>
+      <%= f.text_field :status, class: "form-control" %>
+    </div>
+
 
     <div class="task-form-group">
       <%= f.label :image, "Charger des documents" %>
@@ -37,3 +74,21 @@
     </div>
   <% end %>
 </div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const taskTypeSelect = document.getElementById('task-type-select');
+    const recurringOptions = document.getElementById('recurring-options');
+    const nonRecurringOptions = document.getElementById('non-recurring-options');
+
+    taskTypeSelect.addEventListener('change', function() {
+      if (taskTypeSelect.value === 'récurrence') {
+        recurringOptions.style.display = 'block';
+        nonRecurringOptions.style.display = 'none';
+      } else {
+        recurringOptions.style.display = 'none';
+        nonRecurringOptions.style.display = 'block';
+      }
+    });
+  });
+</script>
