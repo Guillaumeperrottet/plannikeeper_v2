@@ -1,6 +1,8 @@
 class ApplicationController < ActionController::Base
   before_action :set_current_path
-  before_action :authenticate_user!
+  before_action :authenticate_user!, except: [:public]
+    # Exclure Devise
+    before_action :authenticate_user!, unless: :devise_controller?
 
   private
 
