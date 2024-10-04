@@ -28,3 +28,37 @@
 .navbar-center span {
   margin-right: 1rem; /* Espace entre @current_path et le sélecteur */
 }
+
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  right: 0;
+  background-color: white;
+  border: 1px solid #ccc;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  width: 200px;
+  z-index: 1000;
+}
+
+.dropdown-menu.show {
+  display: block;
+}
+
+.dropdown-item {
+  padding: 10px;
+  text-decoration: none;
+  display: block;
+  color: black;
+}
+
+.dropdown-item:hover {
+  background-color: #f0f0f0;
+}
+
+.avatar {
+  border-radius: 50%;
+  cursor: pointer;
+  width: 40px;
+}
