@@ -262,3 +262,20 @@ table.table td, table.table th {
   overflow-y: auto; /* Ajoute un défilement vertical si le contenu dépasse la hauteur */
   padding-right: 15px; /* Pour éviter que la barre de défilement ne cache le contenu */
 }
+
+.icon-container {
+  display: flex; /* Utiliser flexbox pour aligner les icônes côte à côte */
+  align-items: center; /* Centrer les icônes verticalement */
+  gap: 10px; /* Espacement entre les icônes */
+}
+
+.icon-container i {
+  font-size: 20px; /* Ajuster la taille des icônes si nécessaire */
+  cursor: pointer; /* Change le curseur au survol */
+}
+
+.btn {
+  background-color: transparent; /* Rendre les boutons transparents pour un aspect épuré */
+  border: none; /* Supprime la bordure */
+  padding: 0; /* Supprime le padding */
+}
