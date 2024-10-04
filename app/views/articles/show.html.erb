@@ -74,15 +74,17 @@
                 <span class="status-label <%= task.task_type.downcase %>"><%= task.status.present? ? task.status.capitalize : "Non défini" %></span>
               </td>
               <td>
-                <%= link_to archive_objet_secteur_article_task_path(@objet, @secteur, @article, task), method: :patch, data: { confirm: 'Êtes-vous sûr de vouloir archiver cette tâche ?' }, class: 'btn btn-sm btn-secondary' do %>
-                  <i class="fas fa-archive"></i>
-                <% end %>
+                <div class="icon-container">
+                  <%= link_to archive_objet_secteur_article_task_path(@objet, @secteur, @article, task), method: :patch, data: { confirm: 'Êtes-vous sûr de vouloir archiver cette tâche ?' }, class: 'btn btn-sm btn-secondary' do %>
+                    <i class="fa-solid fa-box-archive"></i>
+                  <% end %>
 
-                <%= form_with url: objet_secteur_article_task_path(@objet, @secteur, @article, task), method: :delete, class: "d-inline" do %>
-                  <button type="submit" class="btn btn-sm btn-danger" data-confirm="Êtes-vous sûr de vouloir supprimer cette tâche ?">
-                    <i class="fas fa-trash"></i>
-                  </button>
-                <% end %>
+                  <%= form_with url: objet_secteur_article_task_path(@objet, @secteur, @article, task), method: :delete, class: "d-inline" do %>
+                    <button type="submit" class="btn btn-sm btn-danger" data-confirm="Êtes-vous sûr de vouloir supprimer cette tâche ?">
+                      <i class="fa-solid fa-trash"></i>
+                    </button>
+                  <% end %>
+                </div>
               </td>
             </tr>
           <% end %>
