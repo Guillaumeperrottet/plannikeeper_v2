@@ -67,26 +67,33 @@
   flex-grow: 0; /* Empêche le bouton de prendre trop d'espace */
 }
 
-
-/* Style de la table des tâches */
-table.table .task-row {
+.table .task-row {
+  background-color: transparent;
+  border-radius: 20px; /* Arrondir les bordures */
   transition: background-color 0.3s ease;
+  border: 1px solid #ddd; /* Ajouter une bordure légère */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Ajouter une légère ombre */
 }
 
-.table .task-row.reparations {
-  background-color: rgba(255, 165, 0, 0.2) !important; /* Orange léger */
+/* Bordure autour des lignes de tâches */
+.table .task-row td {
+  border: none;
 }
 
-.table .task-row.recurrence {
-  background-color: rgba(173, 216, 230, 0.2) !important; /* Bleu léger */
+.table .task-row.reparations .status-badge {
+  background-color: rgba(255, 165, 0, 0.8); /* Orange pour les réparations */
 }
 
-.table .task-row.entretiens {
-  background-color: rgba(144, 238, 144, 0.2) !important; /* Vert léger */
+.table .task-row.recurrence .status-badge {
+  background-color: rgba(173, 216, 230, 0.8); /* Bleu pour les récurrences */
 }
 
-/* Autres ajustements possibles */
-table.table .task-row:hover {
+.table .task-row.entretiens .status-badge {
+  background-color: rgba(144, 238, 144, 0.8); /* Vert pour les entretiens */
+}
+
+/* Ajouter un effet hover */
+.table .task-row:hover {
   background-color: rgba(0, 0, 0, 0.05); /* Légère surbrillance au survol */
 }
 
@@ -94,7 +101,7 @@ table.table .task-row:hover {
   width: 100%;
   table-layout: auto; /* Laisse les colonnes s'ajuster automatiquement */
   border-collapse: separate;
-  border-spacing: 0 10px; /* Espacement entre les lignes */
+  border-spacing: 0 15px; /* Espacement entre les lignes */
 }
 
 .table thead th {
@@ -238,4 +245,20 @@ body {
 table.table td, table.table th {
   background-color: transparent !important;
   box-shadow: none !important;
+}
+
+/* Style des badges de statut */
+.status-badge {
+  display: inline-block;
+  padding: 5px 10px;
+  border-radius: 50px; /* Forme arrondie */
+  color: white;
+  font-weight: bold;
+  text-transform: capitalize;
+}
+
+.scrollable-content {
+  max-height: calc(100vh - 200px); /* Ajustez selon le reste de la mise en page */
+  overflow-y: auto; /* Ajoute un défilement vertical si le contenu dépasse la hauteur */
+  padding-right: 15px; /* Pour éviter que la barre de défilement ne cache le contenu */
 }

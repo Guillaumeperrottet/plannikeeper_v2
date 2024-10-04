@@ -39,24 +39,25 @@
     </form>
   </div>
 
-      <div class="content-area">
-        <table class="table table-hover">
-          <thead>
-            <tr>
-              <th>Tâche</th>
-              <th>Date de création</th>
-              <th>Date de fin ou Période</th>
-              <th>CFC</th>
-              <th>Type</th>
-              <th>Exécutant</th>
-              <th>Statut</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
+  <!-- Conteneur défilant pour la partie des tâches -->
+  <div class="scrollable-content">
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th>Tâche</th>
+          <th>Date de création</th>
+          <th>Date de fin ou Période</th>
+          <th>CFC</th>
+          <th>Type</th>
+          <th>Exécutant</th>
+          <th>Statut</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
         <% if @tasks.present? %>
           <% @tasks.each do |task| %>
-              <tr class="task-row" style="background-color: <%= task.color %> !important;" data-link="<%= edit_objet_secteur_article_task_path(@objet, @secteur, @article, task) %>">
+            <tr class="task-row <%= task.task_type.downcase %>" data-link="<%= edit_objet_secteur_article_task_path(@objet, @secteur, @article, task) %>">
               <td><%= task.name %></td>
               <td><%= task.created_at.strftime('%d - %m - %Y') %></td>
               <td>
@@ -69,7 +70,9 @@
               <td style="white-space: nowrap;"><%= task.cfc %></td>
               <td><%= task.task_type.capitalize %></td>
               <td><%= task.executant %></td>
-              <td><%= task.status.present? ? task.status.capitalize : "Non défini" %></td>
+              <td>
+                <span class="status-label <%= task.task_type.downcase %>"><%= task.status.present? ? task.status.capitalize : "Non défini" %></span>
+              </td>
               <td>
                 <%= link_to archive_objet_secteur_article_task_path(@objet, @secteur, @article, task), method: :patch, data: { confirm: 'Êtes-vous sûr de vouloir archiver cette tâche ?' }, class: 'btn btn-sm btn-secondary' do %>
                   <i class="fas fa-archive"></i>
