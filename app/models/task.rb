@@ -1,8 +1,9 @@
 class Task < ApplicationRecord
   belongs_to :article
 
-  enum status: { ouverte: 'ouverte', fermee: 'fermee' }
-
+  enum status: { ouverte: 'ouverte', fermee: 'fermee', en_cours: 'en cours' }
+   # Par défaut, les tâches auront le statut 'ouverte'
+   after_initialize :set_default_status, if: :new_record?
 
   before_save :set_default_color
 
@@ -43,5 +44,9 @@ class Task < ApplicationRecord
     when 'entretiens'
       self.color ||= 'lightgreen'
     end
+  end
+
+  def set_default_status
+    self.status ||= 'ouverte'
   end
 end

@@ -176,7 +176,7 @@ class TasksController < ApplicationController
   end
 
   def task_params
-    params.require(:task).permit(:name, :description, :realisation_date, :cfc, :executant, :executant_comment, :image, :task_type, :color, :status, :recurring, :end_date, :period)
+    params.require(:task).permit(:name, :description, :realisation_date, :cfc, :executant, :executant_comment, :image, :task_type, :color, :recurring, :end_date, :period)
   end
 
   def set_page_title
