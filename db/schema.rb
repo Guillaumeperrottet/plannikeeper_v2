@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_10_03_180208) do
+ActiveRecord::Schema[7.1].define(version: 2024_10_04_150840) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -87,6 +87,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_10_03_180208) do
     t.datetime "end_date"
     t.string "period"
     t.text "executant_comment"
+    t.date "recurrence_reminder_date"
     t.index ["article_id"], name: "index_tasks_on_article_id"
   end
 

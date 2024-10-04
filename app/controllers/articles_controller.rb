@@ -35,7 +35,17 @@ class ArticlesController < ApplicationController
       # Gérer le cas où l'article n'existe pas
       redirect_to root_path, alert: "L'article n'existe pas"
     else
-      @tasks = @article.tasks # Maintenant que @article est défini, on peut accéder aux tâches
+      # Tri des tâches par date de fin ou de réalisation (urgente en premier) avec Arel.sql
+      @tasks = @article.tasks.order(Arel.sql('COALESCE(end_date, realisation_date) ASC'))
+
+      # Application des filtres si nécessaire
+      if params[:executant_filter].present?
+        @tasks = @tasks.where(executant: params[:executant_filter])
+      end
+
+      if params[:cfc_filter].present?
+        @tasks = @tasks.where(cfc: params[:cfc_filter])
+      end
     end
   end
 

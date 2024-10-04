@@ -16,33 +16,40 @@ class TasksController < ApplicationController
 
   def create
     logger.debug "Appel de la méthode 'create'"
-    # logger.debug "Task params: #{task_params.inspect}" # Ajout pour inspection
 
-    @task = @article.tasks.new(task_params) # Utilise les paramètres autorisés
+    @task = @article.tasks.new(task_params)
 
-      # Définir la couleur en fonction du type de tâche
-  case @task.task_type
-  when 'réparations'
-    @task.color = 'orange'
-  when 'récurrence'
-    @task.color = 'lightblue' # Bleu clair
-  when 'entretiens'
-    @task.color = 'lightgreen' # Vert clair
-  end
+    # Définir la couleur en fonction du type de tâche
+    case @task.task_type
+    when 'réparations'
+      @task.color = 'orange'
+      @task.recurring = false # Non récurrent
+    when 'récurrence'
+      @task.color = 'lightblue' # Bleu clair
+      @task.recurring = true # Récurrence activée automatiquement
+    when 'entretiens'
+      @task.color = 'lightgreen' # Vert clair
+      @task.recurring = false # Non récurrent
+    end
+
+    # Gestion de la récurrence automatique pour les tâches récurrentes
+    if @task.recurring?
+      @task.recurrence_reminder_date ||= Date.today # Définir une date par défaut si elle n'est pas fournie
+      current_date = @task.recurrence_reminder_date
+      next_recurrence = calculate_next_recurrence(current_date, @task.period)
+      @task.end_date = next_recurrence
+    end
 
     if @task.save
-      logger.debug("Tâche sauvegarder avec succès")
+      logger.debug("Tâche sauvegardée avec succès")
 
-      # Vérifier l'attachement de l'image après que la tâche a été sauvegardée
       if @task.image.attached?
         logger.debug("Image attached: #{@task.image.filename}")
       else
         logger.debug("No image attached.")
       end
 
-    # Rediriger vers la page de l'article
-    redirect_to objet_secteur_article_path(@objet, @secteur, @article), notice: 'La tâche a été créée avec succès.'
-      # render json: { success: true, task: @task }, status: :created
+      redirect_to objet_secteur_article_path(@objet, @secteur, @article), notice: 'La tâche a été créée avec succès.'
     else
       logger.debug("Task saving failed: #{@task.errors.full_messages}")
       render json: { errors: @task.errors.full_messages }, status: :unprocessable_entity
@@ -96,18 +103,21 @@ class TasksController < ApplicationController
 
   def index_for_objet
     @objet = Objet.find(params[:objet_id])
-    @tasks = @objet.articles.joins(:tasks).map(&:tasks).flatten
 
-    tasks_with_images = @tasks.map do |task|
-      if task.image.attached?
-        { task: task, image_url: url_for(task.image) }
-      else
-        { task: task, image_url: nil }
-      end
-    end
+    # Récupérer toutes les tâches ouvertes de cet objet
+    @tasks = Task.joins(:article).where(articles: { objet_id: @objet.id }, task_open: true)
 
-    render json: { this_week_tasks: tasks_with_images, upcoming_tasks: [] } # Ajuste selon tes besoins
+    # Filtrer les tâches pour cette semaine et celles à venir
+    @this_week_tasks = @tasks.this_week
+    @upcoming_tasks = @tasks.upcoming
+
+    render json: {
+      this_week_tasks: format_tasks(@this_week_tasks),
+      upcoming_tasks: format_tasks(@upcoming_tasks)
+    }
   end
+
+
 
   def index
     @tasks = @article.tasks
@@ -156,10 +166,22 @@ class TasksController < ApplicationController
     @task = @article.tasks.find(params[:id])
   end
 
+  def this_week
+    where("(recurring = ? AND end_date BETWEEN ? AND ?) OR (recurring = ? AND realisation_date BETWEEN ? AND ?)",
+          false, Date.today.beginning_of_week, Date.today.end_of_week,
+          true, Date.today.beginning_of_week, Date.today.end_of_week)
+  end
+
   def update
     @task = @article.tasks.find(params[:id])
+
+    # Mise à jour de la date de rappel pour les tâches récurrentes
+    if @task.recurring?
+      @task.recurrence_reminder_date = calculate_next_recurrence(@task.recurrence_reminder_date, @task.period)
+    end
+
     if @task.update(task_params)
-      redirect_to @article, notice: 'Tâche mise à jour avec succès.'
+      redirect_to objet_secteur_article_path(@objet, @secteur, @article), notice: 'Tâche mise à jour avec succès.'
     else
       render :edit
     end
@@ -181,6 +203,38 @@ class TasksController < ApplicationController
 
   private
 
+# Méthode pour calculer la prochaine date de récurrence
+def calculate_next_recurrence(current_date, period)
+  current_date ||= Date.today
+  case period
+  when 'Hebdomadaire'
+    current_date + 1.week
+  when 'Mensuelle'
+    current_date + 1.month
+  when 'Trimestrielle'
+    current_date + 3.months
+  when 'Annuelle'
+    current_date + 1.year
+  else
+    current_date
+  end
+end
+
+
+  def format_tasks(tasks)
+    tasks.map do |task|
+      {
+        end_date: task.end_date&.strftime('%d %b'),
+        name: task.name,
+        article_title: task.article.title,
+        article_id: task.article.id,
+        secteur_id: task.article.secteur.id, # Inclut l'ID du secteur
+        objet_id: task.article.objet.id, # Inclut l'ID de l'objet
+        task_id: task.id
+      }
+    end
+  end
+
   def set_article_and_sector
     logger.debug "Appel de la méthode 'set_article_and_sector'"
     @objet = Objet.find_by(id: params[:objet_id])
@@ -198,14 +252,6 @@ class TasksController < ApplicationController
     @article = Article.find(params[:article_id])
   end
 
-  def set_task
-    @task = @article.tasks.find(params[:id])
-  end
-
-  def task_params
-    params.require(:task).permit(:name, :description, :realisation_date, :cfc, :executant, :executant_comment, :image, :task_type, :color, :recurring, :end_date, :period)
-  end
-
   def set_page_title
     case action_name
     when 'new'
@@ -217,5 +263,13 @@ class TasksController < ApplicationController
     else
       @page_title = 'Plannikeeper'
     end
+  end
+
+  def set_task
+    @task = @article.tasks.find(params[:id])
+  end
+
+  def task_params
+    params.require(:task).permit(:name, :description, :realisation_date, :cfc, :executant, :executant_comment, :image, :task_type, :color, :end_date, :period)
   end
 end

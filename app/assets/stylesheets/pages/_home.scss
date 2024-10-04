@@ -189,3 +189,7 @@
 // * {
 //   outline: 1px solid red;
 // }
+
+#this-week-tasks li, #upcoming-tasks li {
+  cursor: pointer; /* Cela change le curseur en main pour les tâches uniquement */
+}
