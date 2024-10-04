@@ -17,11 +17,12 @@
 
   <div class="spacer"></div>
 
-  <div class="agenda-section">
+<div class="agenda-section">
   <div class="agenda-header">
     <h2>Agenda todo list</h2>
     <div class="select-objet">
       <select id="object-selector" class="form-select" data-action="change->task#loadTasks">
+        <option value="">Sélectionner un objet</option>
         <% @objets.each do |objet| %>
           <option value="<%= objet.id %>"><%= objet.nom %></option>
         <% end %>
@@ -33,26 +34,14 @@
     <div class="task-group this-week">
       <h3>Cette semaine</h3>
       <ul id="this-week-tasks" data-task-target="thisWeekTasks">
-        <% if @this_week_tasks.any? %>
-          <% @this_week_tasks.each do |task| %>
-            <li><%= task.realisation_date.strftime("%d %b %Y") %> - <%= task.cfc %> / <%= task.description %></li>
-          <% end %>
-        <% else %>
-          <li>Aucune tâche cette semaine.</li>
-        <% end %>
+        <li>Aucune tâche cette semaine.</li>
       </ul>
     </div>
 
     <div class="task-group upcoming">
       <h3>A venir</h3>
       <ul id="upcoming-tasks" data-task-target="upcomingTasks">
-        <% if @upcoming_tasks.any? %>
-          <% @upcoming_tasks.each do |task| %>
-            <li><%= task.cfc %> - <%= task.description %></li>
-          <% end %>
-        <% else %>
-          <li>Aucune tâche à venir.</li>
-        <% end %>
+        <li>Aucune tâche à venir.</li>
       </ul>
     </div>
   </div>

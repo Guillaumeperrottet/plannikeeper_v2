@@ -1,9 +1,12 @@
 class Task < ApplicationRecord
   belongs_to :article
+  has_one :secteur, through: :article
+  has_one :objet, through: :article
 
   enum status: { ouverte: 'ouverte', fermee: 'fermee', en_cours: 'en cours' }
-   # Par défaut, les tâches auront le statut 'ouverte'
-   after_initialize :set_default_status, if: :new_record?
+  # Par défaut, les tâches auront le statut 'ouverte'
+  after_initialize :set_default_status, if: :new_record?
+  after_initialize :set_default_recurrence, if: :new_record?
 
   before_save :set_default_color
 
@@ -17,6 +20,8 @@ class Task < ApplicationRecord
   validates :executant, presence: true
   validates :task_type, presence: true
   validates :status, presence: true
+  validates :recurrence_reminder_date, presence: true, if: :recurring?
+
 
   # Pour gérer la récurrence et la période
   validate :validate_recurrence
@@ -24,8 +29,16 @@ class Task < ApplicationRecord
   # Pour l'historique des tâches
   has_paper_trail
 
-  scope :this_week, -> { where(realisation_date: Date.today.beginning_of_week..Date.today.end_of_week) }
-  scope :upcoming, -> { where('realisation_date > ?', Date.today.end_of_week) }
+  # Scope pour les tâches de cette semaine (moins de 7 jours avant la date de fin)
+  scope :this_week, -> {
+    where("(recurring = ? OR recurring IS NULL OR recurring = ?) AND end_date BETWEEN ? AND ?",
+          false, true, Date.today.beginning_of_day, (Date.today + 7.days).end_of_day)
+  }
+
+  scope :upcoming, -> {
+    where("(recurring = ? OR recurring IS NULL OR recurring = ?) AND end_date BETWEEN ? AND ?",
+          false, true, (Date.today + 8.days).beginning_of_day, (Date.today + 30.days).end_of_day)
+  }
 
   private
 
@@ -48,5 +61,9 @@ class Task < ApplicationRecord
 
   def set_default_status
     self.status ||= 'ouverte'
+  end
+
+  def set_default_recurrence
+    self.recurring ||= false
   end
 end
