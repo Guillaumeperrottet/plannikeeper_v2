@@ -50,8 +50,30 @@ class TasksController < ApplicationController
   end
 
   def show
-    @task = @article.tasks.find(params[:id]) # Si tu souhaites afficher une tâche spécifique
+    @article = Article.find(params[:id])
+    @tasks = @article.tasks
+
+    # Initialiser les variables avec des valeurs par défaut
+    @executants = []
+    @cfcs = []
+
+    # Vérifier s'il y a des tâches disponibles
+    if @tasks.present?
+      # Extraire les exécutants et les CFC disponibles à partir des tâches
+      @executants = @tasks.pluck(:executant).compact.uniq
+      @cfcs = @tasks.pluck(:cfc).compact.uniq
+    end
+
+    # Ajout des filtres si nécessaire
+    if params[:executant_filter].present?
+      @tasks = @tasks.where(executant: params[:executant_filter])
+    end
+
+    if params[:cfc_filter].present?
+      @tasks = @tasks.where(cfc: params[:cfc_filter])
+    end
   end
+
 
   def destroy
     @task = @article.tasks.find(params[:id])
@@ -89,7 +111,12 @@ class TasksController < ApplicationController
 
   def index
     @tasks = @article.tasks
+    @executants = @tasks.pluck(:executant).uniq
+    @cfcs = @tasks.pluck(:cfc).uniq
 
+    @tasks = @tasks.where(executant: params[:executant_filter]) if params[:executant_filter].present?
+    @tasks = @tasks.where(cfc: params[:cfc_filter]) if params[:cfc_filter].present?
+    @tasks = @tasks.where(status: params[:status_filter]) if params[:status_filter].present?
     # Scopes ou méthodes pour les tâches de cette semaine et à venir
     this_week_tasks = @tasks.this_week
     upcoming_tasks = @tasks.upcoming

@@ -1,0 +1,124 @@
+<div class="task-container">
+  <h1 class="task-title">Modifier la tâche</h1>
+
+  <%= form_with model: @task, url: objet_secteur_article_task_path(@objet, @secteur, @article, @task), local: true, html: { multipart: true } do |f| %>
+    <div class="task-form-group">
+      <%= f.label :name, "Intitulé" %>
+      <%= f.text_field :name, class: "form-control" %>
+    </div>
+
+    <div class="task-form-group">
+      <%= f.label :description, "Description" %>
+      <%= f.text_area :description, class: "form-control" %>
+    </div>
+
+    <div class="task-form-group">
+      <%= f.label :task_type, "Type de tâche" %>
+      <%= f.select :task_type, ['réparations', 'entretiens', 'récurrence'], { prompt: "Sélectionnez un type" }, { id: "task-type-select", class: "form-control" } %>
+    </div>
+
+    <!-- Options de récurrence (période + date de début spécifique) -->
+    <div id="recurring-options" style="display:none;">
+      <div class="task-form-group">
+        <%= f.label :period, "Période de récurrence" %>
+        <%= f.select :period, ['Hebdomadaire', 'Mensuelle', 'Trimestrielle', 'Annuelle'], { prompt: "Sélectionnez une période" }, class: "form-control" %>
+      </div>
+
+      <div class="task-form-group">
+        <%= f.label :recurrence_start_date, "Date de début de la récurrence" %>
+        <%= f.date_field :recurrence_start_date, class: "form-control" %>
+      </div>
+    </div>
+
+    <!-- Dates pour les tâches non récurrentes -->
+    <div id="non-recurring-options">
+      <div class="task-form-group">
+        <%= f.label :realisation_date, "Date de début de réalisation" %>
+        <%= f.date_field :realisation_date, class: "form-control" %>
+      </div>
+
+      <div class="task-form-group">
+        <%= f.label :end_date, "Date de fin" %>
+        <%= f.date_field :end_date, class: "form-control" %>
+      </div>
+    </div>
+
+    <div class="task-form-group">
+      <%= f.label :cfc, "Numéro CFC" %>
+      <%= f.text_field :cfc, class: "form-control" %>
+    </div>
+
+    <div class="task-form-group">
+      <%= f.label :executant, "Exécutant" %>
+      <%= f.select :executant, ['interne', 'sous-traitant'], { prompt: "Sélectionnez un exécutant" }, class: "form-control" %>
+    </div>
+
+    <div class="task-form-group">
+      <%= f.label :executant_comment, "Commentaire sur l'exécutant" %>
+      <%= f.text_area :executant_comment, class: "form-control" %>
+    </div>
+
+    <div class="task-form-group">
+      <%= f.label :image, "Charger des documents" %>
+      <%= f.file_field :image, class: "form-control", id: "task-image-input" %>
+    </div>
+
+    <!-- Image Preview Section -->
+    <div class="task-form-group" id="image-preview-container" style="display: none;">
+      <label>Prévisualisation de l'image</label>
+      <img id="image-preview" src="<%= @task.image.attached? ? url_for(@task.image) : '' %>" alt="Prévisualisation" style="max-width: 100%; height: auto; margin-top: 10px;">
+    </div>
+
+    <div class="task-form-actions">
+      <%= f.submit "Mettre à jour", class: "btn btn-primary" %>
+    </div>
+  <% end %>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const taskTypeSelect = document.getElementById('task-type-select');
+    const recurringOptions = document.getElementById('recurring-options');
+    const nonRecurringOptions = document.getElementById('non-recurring-options');
+
+    taskTypeSelect.addEventListener('change', function() {
+      if (taskTypeSelect.value === 'récurrence') {
+        recurringOptions.style.display = 'block';
+        nonRecurringOptions.style.display = 'none';
+      } else {
+        recurringOptions.style.display = 'none';
+        nonRecurringOptions.style.display = 'block';
+      }
+    });
+
+    // Affiche les bonnes options si la page est chargée avec une tâche de type récurrence
+    if (taskTypeSelect.value === 'récurrence') {
+      recurringOptions.style.display = 'block';
+      nonRecurringOptions.style.display = 'none';
+    }
+
+    // Prévisualisation d'image
+    const imageInput = document.getElementById('task-image-input');
+    const imagePreviewContainer = document.getElementById('image-preview-container');
+    const imagePreview = document.getElementById('image-preview');
+
+    // Affiche la prévisualisation si une image est déjà attachée (cas d'édition)
+    if (imagePreview.src) {
+      imagePreviewContainer.style.display = 'block';
+    }
+
+    imageInput.addEventListener('change', function(event) {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          imagePreview.src = e.target.result;
+          imagePreviewContainer.style.display = 'block'; // Afficher la div contenant l'image
+        }
+        reader.readAsDataURL(file); // Lire le fichier comme URL pour l'afficher
+      } else {
+        imagePreviewContainer.style.display = 'none'; // Cacher la div si aucun fichier sélectionné
+      }
+    });
+  });
+</script>
