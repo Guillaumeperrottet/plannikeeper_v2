@@ -27,6 +27,11 @@ group :production do
   gem 'pg', '~> 1.1'
 end
 
+gem 'devise'
+
+# Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
+# gem "image_processing", "~> 1.2"
+
 # Use sqlite3 as the database for Active Record in development and test
 group :development, :test do
   gem 'sqlite3', '~> 1.4'

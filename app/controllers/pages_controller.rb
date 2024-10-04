@@ -28,5 +28,7 @@ class PagesController < ApplicationController
                     else
                       "Autre"
                     end
+  def public
+    # Code pour ta page publique
   end
 end
