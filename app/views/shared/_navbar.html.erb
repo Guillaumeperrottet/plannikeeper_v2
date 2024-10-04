@@ -31,13 +31,14 @@
       </div>
 
       <ul class="navbar-nav ms-auto">
-        <li class="nav-item dropdown">
-          <img class="avatar dropdown-toggle" id="navbarDropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" src="https://kitt.lewagon.com/placeholder/users/ssaunier" />
-          <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-            <a class="dropdown-item" href="#">Action</a>
-            <a class="dropdown-item" href="#">Another action</a>
-            <a class="dropdown-item" data-turbo-method="delete" href="#">Log out</a>
-          </div>
+        <li class="nav-item dropdown" data-controller="dropdown" data-action="click->dropdown#toggle">
+          <img class="avatar" src="https://kitt.lewagon.com/placeholder/users/ssaunier" alt="User Avatar" />
+          <ul class="dropdown-menu" data-dropdown-target="menu">
+            <li><a class="dropdown-item" href="<%= edit_user_registration_path %>">Mon profil</a></li>
+            <li><a class="dropdown-item" href="<%= edit_user_registration_path %>">Paramètres</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" data-turbo-method="delete" href="<%= destroy_user_session_path %>">Déconnexion</a></li>
+          </ul>
         </li>
       </ul>
     </div>

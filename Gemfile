@@ -19,6 +19,7 @@ gem "simple_form"
 gem "autoprefixer-rails"
 gem 'breadcrumbs_on_rails'
 gem 'paper_trail'
+gem 'devise'
 
 # Use PostgreSQL as the database for Active Record in production
 group :production do
