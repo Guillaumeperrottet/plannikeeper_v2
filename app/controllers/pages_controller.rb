@@ -7,4 +7,8 @@ class PagesController < ApplicationController
     @this_week_tasks = selected_objet&.tasks&.this_week || [] # Retourne un tableau vide s'il n'y a rien
     @upcoming_tasks = selected_objet&.tasks&.upcoming || []   # Retourne un tableau vide s'il n'y a rien
   end
+
+  def public
+    # Code pour ta page publique
+  end
 end

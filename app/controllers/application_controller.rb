@@ -1,5 +1,6 @@
 class ApplicationController < ActionController::Base
   before_action :set_current_path
+  before_action :authenticate_user!
 
   private
 
