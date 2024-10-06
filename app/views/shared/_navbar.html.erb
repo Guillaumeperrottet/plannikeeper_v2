@@ -38,7 +38,7 @@
             <li><a class="dropdown-item" href="<%= edit_user_registration_path %>">Mon profil</a></li>
             <li><a class="dropdown-item" href="<%= edit_user_registration_path %>">Paramètres</a></li>
             <li><hr class="dropdown-divider"></li>
-            <li><%= link_to 'Déconnexion', destroy_user_session_path, method: :delete %></li>
+            <li><%= link_to 'Déconnexion', destroy_user_session_path, method: :delete, class: 'dropdown-item' %></li>
 
           </ul>
         </li>
