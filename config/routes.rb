@@ -15,16 +15,9 @@ Rails.application.routes.draw do
   get 'public', to: 'pages#public'
   get '/privacy', to: 'pages#privacy'
   get '/terms', to: 'pages#terms'
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Page de santé
   get "up" => "rails/health#show", as: :rails_health_check
-  get 'public', to: 'pages#public'
-
-
-  root 'pages#home'
-  # Route pour le profil utilisateur
-  resource :profile, only: [:show]
 
   # Route pour le profil utilisateur
   resource :profile, only: [:show]

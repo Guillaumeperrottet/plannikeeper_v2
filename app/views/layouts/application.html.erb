@@ -26,7 +26,7 @@
       <%= render 'shared/navbar' %>
     <% end %>
 
-    <% unless devise_controller? || current_page?(root_path) %>
+    <% unless devise_controller? || current_page?(authenticated_root_path) || current_page?(unauthenticated_root_path) %>
       <%= render 'shared/breadcrumbs' %>
     <% end %>
 
