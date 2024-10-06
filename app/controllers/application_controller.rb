@@ -1,10 +1,15 @@
 class ApplicationController < ActionController::Base
   before_action :set_current_path
+  before_action :set_devise_mapping
   before_action :authenticate_user!, unless: :devise_or_public?
 
   include Rails.application.routes.url_helpers # Ajout pour inclure les helpers de routes
 
   private
+
+  def set_devise_mapping
+    @request.env["devise.mapping"] = Devise.mappings[:user]
+  end
 
   def devise_or_public?
     devise_controller? || action_name == "public"
