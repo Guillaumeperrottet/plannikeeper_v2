@@ -1,15 +1,22 @@
 Rails.application.routes.draw do
-  devise_for :users, controllers: {
+  devise_scope :user do
+    authenticated :user do
+      root to: 'dashboard#dashboard', as: :authenticated_root
+    end
+
+    unauthenticated do
+      root to: 'devise/sessions#new', as: :unauthenticated_root
+    end
+  end
+
+  devise_for :users, skip: [:registrations], controllers: {
     omniauth_callbacks: 'users/omniauth_callbacks'
   }
 
-  # Redirection conditionnelle selon si l'utilisateur est authentifié ou non
-  authenticated :user do
-    root to: 'dashboard#dashboard', as: :authenticated_root # Utiliser la méthode dashboard
-  end
-
-  unauthenticated do
-    root to: 'devise/sessions#new', as: :unauthenticated_root
+  # Si tu veux activer l'inscription des utilisateurs via Devise
+  as :user do
+    get 'users/sign_up', to: 'devise/registrations#new', as: :new_user_registration
+    post 'users', to: 'devise/registrations#create', as: :user_registration
   end
 
   get 'public', to: 'pages#public'
