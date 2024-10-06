@@ -1,21 +1,17 @@
 class ObjetsController < ApplicationController
   before_action :set_objet, only: %i[show edit update destroy]
-  before_action :set_page_title, only: [:new, :edit, :show] # Ajuste les actions où tu veux afficher ce titre
-  before_action :set_breadcrumbs
+  before_action :set_page_title, only: %i[new edit show] # Ajuste les actions où tu veux afficher ce titre
+  before_action :set_breadcrumbs, only: %i[show edit new]
 
   def index
-    @objets = Objet.all
+    @objets = current_user.objets # Ne récupère que les objets de l'utilisateur connecté
     redirect_to authenticated_root_path
   end
 
   def show
-    @objet = Objet.find(params[:id])
     @secteurs = @objet.secteurs.includes(:image_attachment)
     @selected_sector_id = params[:selected_sector_id]
-    # Assurez-vous de récupérer l'ID de l'article depuis les paramètres
-    @article = Article.find_by(id: params[:article_id])
-    # Chargez les tâches seulement si l'article existe
-    @tasks = @article.present? ? @article.tasks : []
+    set_article_and_tasks
   end
 
   def new
@@ -24,9 +20,9 @@ class ObjetsController < ApplicationController
   end
 
   def create
-    @objet = Objet.new(objet_params)
+    @objet = current_user.objets.build(objet_params) # Associe l'objet à l'utilisateur actuel
     if @objet.save
-      redirect_to @objet, notice: 'Votre objet a bien été créer'
+      redirect_to @objet, notice: 'Votre objet a bien été créé.'
     else
       render :new
     end
@@ -36,7 +32,6 @@ class ObjetsController < ApplicationController
   end
 
   def update
-    @objet = Objet.find(params[:id])
     if @objet.update(objet_params)
       redirect_to @objet, notice: 'Objet mis à jour avec succès.'
     else
@@ -46,23 +41,18 @@ class ObjetsController < ApplicationController
 
   def destroy
     @objet.destroy
-    redirect_to authenticated_root_path, notice: 'Objet was successfully destroyed.'
-  end
-
-  def set_breadcrumbs
-    add_breadcrumb "Vos objets", authenticated_root_path
-    if @objet
-      add_breadcrumb @objet.nom, objet_path(@objet)
-    end
-    if @article
-      add_breadcrumb "Todo", article_path(@article)
-    end
+    redirect_to authenticated_root_path, notice: 'Objet supprimé avec succès.'
   end
 
   private
 
   def set_objet
-    @objet = Objet.find(params[:id])
+    @objet = current_user.objets.find(params[:id]) # Recherche l'objet dans les objets de l'utilisateur connecté
+  end
+
+  def set_article_and_tasks
+    @article = Article.find_by(id: params[:article_id])
+    @tasks = @article.present? ? @article.tasks : []
   end
 
   def objet_params
@@ -70,13 +60,21 @@ class ObjetsController < ApplicationController
   end
 
   def set_page_title
-    case action_name
-    when 'new'
-      @page_title = 'Création objet'
-    when 'edit'
-      @page_title = 'Édition objet'
-    else
-      @page_title = 'Plannikeeper'
+    @page_title = case action_name
+                  when 'new'
+                    'Création objet'
+                  when 'edit'
+                    'Édition objet'
+                  else
+                    'Plannikeeper'
+                  end
+  end
+
+  def set_breadcrumbs
+    add_breadcrumb "Vos objets", authenticated_root_path
+    if @objet.present?
+      add_breadcrumb @objet.nom, objet_path(@objet)
     end
+    add_breadcrumb "Todo", article_path(@article) if @article.present?
   end
 end
