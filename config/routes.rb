@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  devise_for :users
   devise_scope :user do
     authenticated :user do
       root to: 'dashboard#dashboard', as: :authenticated_root
@@ -8,10 +9,6 @@ Rails.application.routes.draw do
       root to: 'devise/sessions#new', as: :unauthenticated_root
     end
   end
-
-  devise_for :users, controllers: {
-    omniauth_callbacks: 'users/omniauth_callbacks'
-  }
 
   get 'public', to: 'pages#public'
   get '/privacy', to: 'pages#privacy'
