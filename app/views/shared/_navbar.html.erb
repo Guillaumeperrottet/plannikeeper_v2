@@ -35,8 +35,8 @@
         <li class="nav-item dropdown" data-controller="dropdown" data-action="click->dropdown#toggle">
           <img class="avatar" src="https://kitt.lewagon.com/placeholder/users/ssaunier" alt="User Avatar" />
           <ul class="dropdown-menu" data-dropdown-target="menu">
-            <li><a class="dropdown-item" href="<%= edit_registration_path %>">Mon profil</a></li>
-            <li><a class="dropdown-item" href="<%= edit_registration_path %>">Paramètres</a></li>
+            <li><a class="dropdown-item" href="<%= edit_user_registration_path %>">Mon profil</a></li>
+            <li><a class="dropdown-item" href="<%= edit_user_registration_path %>">Paramètres</a></li>
             <li><hr class="dropdown-divider"></li>
             <li><%= link_to 'Déconnexion', destroy_user_session_path, method: :delete %></li>
 
