@@ -5,7 +5,7 @@ Rails.application.routes.draw do
 
   # Redirection conditionnelle selon si l'utilisateur est authentifié ou non
   authenticated :user do
-    root to: 'pages#home', as: :authenticated_root
+    root to: 'dashboard#dashboard', as: :authenticated_root # Utiliser la méthode dashboard
   end
 
   unauthenticated do
@@ -15,6 +15,7 @@ Rails.application.routes.draw do
   get 'public', to: 'pages#public'
   get '/privacy', to: 'pages#privacy'
   get '/terms', to: 'pages#terms'
+  get '/home', to: 'pages#home' # Nouvelle route pour la page Home
 
   # Page de santé
   get "up" => "rails/health#show", as: :rails_health_check

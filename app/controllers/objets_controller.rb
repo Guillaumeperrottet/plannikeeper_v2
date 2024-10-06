@@ -5,7 +5,7 @@ class ObjetsController < ApplicationController
 
   def index
     @objets = Objet.all
-    redirect_to root_path
+    redirect_to authenticated_root_path
   end
 
   def show
@@ -46,11 +46,11 @@ class ObjetsController < ApplicationController
 
   def destroy
     @objet.destroy
-    redirect_to root_path, notice: 'Objet was successfully destroyed.'
+    redirect_to authenticated_root_path, notice: 'Objet was successfully destroyed.'
   end
 
   def set_breadcrumbs
-    add_breadcrumb "Vos objets", root_path
+    add_breadcrumb "Vos objets", authenticated_root_path
     if @objet
       add_breadcrumb @objet.nom, objet_path(@objet)
     end

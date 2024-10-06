@@ -1,35 +1,21 @@
 class PagesController < ApplicationController
-  before_action :set_current_path
   def home
-    @objets = Objet.all
-    selected_objet = Objet.find(params[:objet_id]) if params[:objet_id].present?
+    # Code pour la page d'accueil
+  end
 
-    # Initialiser les tâches de la semaine et à venir
-    @this_week_tasks = selected_objet&.tasks&.this_week || [] # Retourne un tableau vide s'il n'y a rien
-    @upcoming_tasks = selected_objet&.tasks&.upcoming || []   # Retourne un tableau vide s'il n'y a rien
+  def dashboard
+    # Code pour le tableau de bord de l'utilisateur authentifié
+  end
+
+  def public
+    # Code pour la page publique
   end
 
   def privacy
-    # Action pour afficher les règles de confidentialité
+    # Code pour la page des politiques de confidentialité
   end
 
   def terms
-    # Action pour afficher les conditions d'utilisation
-  end
-
-  private
-
-  def set_current_path
-    @current_path = case request.path
-                    when authenticated_root_path
-                      "Home"
-                    when new_objet_path
-                      "Créer un objet"
-                    else
-                      "Autre"
-                    end
-  end
-  def public
-    # Code pour ta page publique
+    # Code pour la page des termes et conditions
   end
 end
