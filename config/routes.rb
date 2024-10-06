@@ -13,12 +13,6 @@ Rails.application.routes.draw do
     omniauth_callbacks: 'users/omniauth_callbacks'
   }
 
-  # Si tu veux activer l'inscription des utilisateurs via Devise
-  as :user do
-    get 'users/sign_up', to: 'devise/registrations#new', as: :new_user_registration
-    post 'users', to: 'devise/registrations#create', as: :user_registration
-  end
-
   get 'public', to: 'pages#public'
   get '/privacy', to: 'pages#privacy'
   get '/terms', to: 'pages#terms'
