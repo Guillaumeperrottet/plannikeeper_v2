@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_10_04_204740) do
+ActiveRecord::Schema[7.1].define(version: 2024_10_06_124445) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -59,6 +59,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_10_04_204740) do
     t.string "secteur"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "user_id", null: false
+    t.index ["user_id"], name: "index_objets_on_user_id"
   end
 
   create_table "secteurs", force: :cascade do |t|
@@ -116,6 +118,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_10_04_204740) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "articles", "objets"
+  add_foreign_key "objets", "users"
   add_foreign_key "secteurs", "objets"
   add_foreign_key "tasks", "articles"
 end

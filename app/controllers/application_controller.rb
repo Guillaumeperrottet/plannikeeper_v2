@@ -1,14 +1,21 @@
 class ApplicationController < ActionController::Base
   before_action :set_current_path
-  before_action :authenticate_user!, except: [:public]
-    # Exclure Devise
-    before_action :authenticate_user!, unless: :devise_controller?
+  before_action :authenticate_user!, unless: :devise_or_public?
+
+  include Rails.application.routes.url_helpers # Ajout pour inclure les helpers de routes
 
   private
 
+  def devise_or_public?
+    devise_controller? || action_name == "public"
+  end
+
   def set_current_path
+    # Accès au helper root_path
+    root_url = main_app.root_url rescue nil
+
     @current_path = case request.path
-                    when root_path
+                    when root_url
                       "Home"
                     when new_objet_path
                       "Créer un objet"

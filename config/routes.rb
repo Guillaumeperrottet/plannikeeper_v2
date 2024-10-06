@@ -1,30 +1,25 @@
 Rails.application.routes.draw do
+  devise_scope :user do
+    authenticated :user do
+      root to: 'dashboard#dashboard', as: :authenticated_root
+    end
+
+    unauthenticated do
+      root to: 'devise/sessions#new', as: :unauthenticated_root
+    end
+  end
+
   devise_for :users, controllers: {
     omniauth_callbacks: 'users/omniauth_callbacks'
   }
 
-  # Redirection conditionnelle selon si l'utilisateur est authentifié ou non
-  authenticated :user do
-    root to: 'pages#home', as: :authenticated_root
-  end
-
-  unauthenticated do
-    root to: 'devise/sessions#new', as: :unauthenticated_root
-  end
-
   get 'public', to: 'pages#public'
   get '/privacy', to: 'pages#privacy'
   get '/terms', to: 'pages#terms'
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
+  get '/home', to: 'pages#home' # Nouvelle route pour la page Home
 
   # Page de santé
   get "up" => "rails/health#show", as: :rails_health_check
-  get 'public', to: 'pages#public'
-
-
-  root 'pages#home'
-  # Route pour le profil utilisateur
-  resource :profile, only: [:show]
 
   # Route pour le profil utilisateur
   resource :profile, only: [:show]

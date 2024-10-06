@@ -1,0 +1,49 @@
+<div class="dashboard-page" data-controller="task">
+  <div class="header">
+    <%# <h1 class="main-title">Vos objets</h1> %>
+    <ul class="object-list">
+      <% @objets.each do |objet| %>
+        <li>
+          <span class="object-bullet"></span>
+          <%= link_to "#{objet.nom} - #{objet.adresse}", objet_path(objet), class: "object-link" %>
+        </li>
+      <% end %>
+    </ul>
+
+    <a href="<%= new_objet_path %>" class="create-object">
+      <span class="icon">+</span> Créer un objet
+    </a>
+  </div>
+
+  <div class="spacer"></div>
+
+  <div class="agenda-section">
+    <div class="agenda-header">
+      <h2>Agenda todo list</h2>
+      <div class="select-objet">
+        <select id="object-selector" class="form-select" data-action="change->task#loadTasks">
+          <option value="">Sélectionner un objet</option>
+          <% @objets.each do |objet| %>
+            <option value="<%= objet.id %>"><%= objet.nom %></option>
+          <% end %>
+        </select>
+      </div>
+    </div>
+
+    <div class="tasks-display">
+      <div class="task-group this-week">
+        <h3>Cette semaine</h3>
+        <ul id="this-week-tasks" data-task-target="thisWeekTasks">
+          <li>Aucune tâche cette semaine.</li>
+        </ul>
+      </div>
+
+      <div class="task-group upcoming">
+        <h3>A venir</h3>
+        <ul id="upcoming-tasks" data-task-target="upcomingTasks">
+          <li>Aucune tâche à venir.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

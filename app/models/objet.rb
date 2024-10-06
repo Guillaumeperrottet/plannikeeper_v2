@@ -1,4 +1,5 @@
 class Objet < ApplicationRecord
+  belongs_to :user
   has_one_attached :image
   has_many :secteurs, dependent: :destroy
   has_many :articles, dependent: :destroy

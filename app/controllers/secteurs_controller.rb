@@ -40,7 +40,7 @@ class SecteursController < ApplicationController
   end
 
   def set_breadcrumbs
-    add_breadcrumb "Vos objets", root_path
+    add_breadcrumb "Vos objets", authenticated_root_path
     if @objet
       add_breadcrumb @objet.nom, objet_path(@objet)
     end
@@ -60,6 +60,6 @@ class SecteursController < ApplicationController
   end
 
   def secteur_params
-    params.require(:secteur).permit(:nom)
+    params.require(:secteur).permit(:nom, :image) # Ajoute :image ici
   end
 end
