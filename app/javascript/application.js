@@ -2,9 +2,6 @@ import { Application } from "@hotwired/stimulus"
 import { eagerLoadControllersFrom } from "@hotwired/stimulus-loading"
 import "bootstrap"
 import "@popperjs/core"
-import Rails from "@rails/ujs"
-Rails.start()
-
 
 const application = Application.start()
 application.debug = false
