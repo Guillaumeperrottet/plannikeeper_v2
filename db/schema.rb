@@ -10,7 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
+<<<<<<< HEAD
 ActiveRecord::Schema[7.1].define(version: 2024_10_08_123609) do
+=======
+ActiveRecord::Schema[7.1].define(version: 2024_10_06_150004) do
+>>>>>>> a95497a43f4de4240e4846efa001832231f7c649
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -105,9 +109,12 @@ ActiveRecord::Schema[7.1].define(version: 2024_10_08_123609) do
     t.datetime "confirmed_at"
     t.datetime "confirmation_sent_at"
     t.string "unconfirmed_email"
+<<<<<<< HEAD
     t.string "provider"
     t.string "uid"
     t.string "name"
+=======
+>>>>>>> a95497a43f4de4240e4846efa001832231f7c649
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
