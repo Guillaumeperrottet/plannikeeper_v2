@@ -63,10 +63,12 @@
                 <% end %>
               </td>
               <td style="white-space: nowrap;"><%= task.cfc %></td>
-              <td><%= task.task_type.capitalize %></td>
+              <td>
+                <span class="type-badge <%= task.task_type.downcase %>"><%= task.task_type.present? ? task.task_type.capitalize : "Non défini" %></span>
+              </td>
               <td><%= task.executant %></td>
               <td>
-                <span class="status-label <%= task.task_type.downcase %>"><%= task.status.present? ? task.status.capitalize : "Non défini" %></span>
+                <span class="status-badge <%= task.status.downcase %>"><%= task.status.present? ? task.status.capitalize : "Non défini" %></span>
               </td>
               <td>
                 <div class="icon-container">
