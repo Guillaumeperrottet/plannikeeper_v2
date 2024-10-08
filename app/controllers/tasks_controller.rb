@@ -192,7 +192,7 @@ class TasksController < ApplicationController
   logger.debug "Objet: #{@objet}, Secteur: #{@secteur}, Article: #{@article}"
 
     if @objet && @secteur && @article
-      add_breadcrumb "Vos objets", root_path
+      add_breadcrumb "Vos objets", authenticated_root_path
       add_breadcrumb @objet.nom, objet_path(@objet)
       add_breadcrumb @secteur.nom, objet_secteur_path(@objet, @secteur)
       add_breadcrumb "Todo", objet_secteur_article_path(@objet, @secteur, @article)
