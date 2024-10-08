@@ -21,6 +21,13 @@
                 hint: "we need your current password to confirm your changes",
                 required: true,
                 input_html: { autocomplete: "current-password" } %>
+
+    <%= f.input :avatar, as: :file, label: "Upload a new profile picture" %>
+      <% if resource.avatar.attached? %>
+        <div>
+          <%= image_tag resource.avatar.variant(resize_to_limit: [150, 150]), alt: "Profile Picture", class: "profile-picture" %>
+        </div>
+      <% end %>
   </div>
 
   <div class="form-actions">
