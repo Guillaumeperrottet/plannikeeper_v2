@@ -1,0 +1,57 @@
+<div class="spacer"></div>
+<div class="container-fluid p-0">
+  <div class="d-flex justify-content-between align-items-center mb-3 px-4">
+    <h1>Historique des tâches archivées</h1>
+  </div>
+
+  <div class="filters">
+    <form method="get" class="d-flex px-4">
+      <select name="sort_by" class="form-select me-2">
+        <option value="name_asc" <%= 'selected' if params[:sort_by] == 'name_asc' %>>Trier par nom (A-Z)</option>
+        <option value="name_desc" <%= 'selected' if params[:sort_by] == 'name_desc' %>>Trier par nom (Z-A)</option>
+        <option value="date_asc" <%= 'selected' if params[:sort_by] == 'date_asc' %>>Trier par date de création (Ancien - Récent)</option>
+        <option value="date_desc" <%= 'selected' if params[:sort_by] == 'date_desc' %>>Trier par date de création (Récent - Ancien)</option>
+      </select>
+      <button type="submit" class="btn btn-primary">Trier</button>
+    </form>
+  </div>
+
+  <div class="scrollable-content">
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th>Tâche</th>
+          <th>Date de création</th>
+          <th>Exécutant</th>
+          <th>CFC</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if @archived_tasks.present? %>
+          <% @archived_tasks.each do |task| %>
+            <tr class="task-row" data-link="<%= edit_objet_secteur_article_task_path(@objet, @secteur, @article, task) %>">
+              <td><%= task.name %></td>
+              <td><%= task.created_at.strftime('%d - %m - %Y') %></td>
+              <td><%= task.executant %></td>
+              <td><%= task.cfc %></td>
+            </tr>
+          <% end %>
+        <% else %>
+          <tr>
+            <td colspan="4">Aucune tâche archivée disponible.</td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.task-row').forEach(row => {
+      row.addEventListener('click', function() {
+        window.location.href = this.dataset.link;
+      });
+    });
+  });
+</script>

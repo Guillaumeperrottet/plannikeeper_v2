@@ -4,29 +4,29 @@
   <%= form_with model: @task, url: objet_secteur_article_task_path(@objet, @secteur, @article, @task), local: true, html: { multipart: true } do |f| %>
     <div class="task-form-group">
       <%= f.label :name, "Intitulé" %>
-      <%= f.text_field :name, class: "form-control" %>
+      <%= f.text_field :name, class: "form-control", readonly: @task.status == 'fermee' %>
     </div>
 
     <div class="task-form-group">
       <%= f.label :description, "Description" %>
-      <%= f.text_area :description, class: "form-control" %>
+      <%= f.text_area :description, class: "form-control", readonly: @task.status == 'fermee' %>
     </div>
 
     <div class="task-form-group">
       <%= f.label :task_type, "Type de tâche" %>
-      <%= f.select :task_type, ['réparations', 'entretiens', 'récurrence'], { prompt: "Sélectionnez un type" }, { id: "task-type-select", class: "form-control" } %>
+      <%= f.select :task_type, ['réparations', 'entretiens', 'récurrence'], { prompt: "Sélectionnez un type" }, { id: "task-type-select", class: "form-control", disabled: @task.status == 'fermee' } %>
     </div>
 
     <!-- Options de récurrence (période + date de début spécifique) -->
     <div id="recurring-options" style="display:none;">
       <div class="task-form-group">
         <%= f.label :period, "Période de récurrence" %>
-        <%= f.select :period, ['Hebdomadaire', 'Mensuelle', 'Trimestrielle', 'Annuelle'], { prompt: "Sélectionnez une période" }, class: "form-control" %>
+        <%= f.select :period, ['Hebdomadaire', 'Mensuelle', 'Trimestrielle', 'Annuelle'], { prompt: "Sélectionnez une période" }, class: "form-control", disabled: @task.status == 'fermee' %>
       </div>
 
       <div class="task-form-group">
         <%= f.label :recurrence_start_date, "Date de début de la récurrence" %>
-        <%= f.date_field :recurrence_start_date, class: "form-control" %>
+        <%= f.date_field :recurrence_start_date, class: "form-control", readonly: @task.status == 'fermee' %>
       </div>
     </div>
 
@@ -34,33 +34,33 @@
     <div id="non-recurring-options">
       <div class="task-form-group">
         <%= f.label :realisation_date, "Date de début de réalisation" %>
-        <%= f.date_field :realisation_date, class: "form-control" %>
+        <%= f.date_field :realisation_date, class: "form-control", readonly: @task.status == 'fermee' %>
       </div>
 
       <div class="task-form-group">
         <%= f.label :end_date, "Date de fin" %>
-        <%= f.date_field :end_date, class: "form-control" %>
+        <%= f.date_field :end_date, class: "form-control", readonly: @task.status == 'fermee' %>
       </div>
     </div>
 
     <div class="task-form-group">
       <%= f.label :cfc, "Numéro CFC" %>
-      <%= f.text_field :cfc, class: "form-control" %>
+      <%= f.text_field :cfc, class: "form-control", readonly: @task.status == 'fermee' %>
     </div>
 
     <div class="task-form-group">
       <%= f.label :executant, "Exécutant" %>
-      <%= f.select :executant, ['interne', 'sous-traitant'], { prompt: "Sélectionnez un exécutant" }, class: "form-control" %>
+      <%= f.select :executant, ['interne', 'sous-traitant'], { prompt: "Sélectionnez un exécutant" }, class: "form-control", disabled: @task.status == 'fermee' %>
     </div>
 
     <div class="task-form-group">
       <%= f.label :executant_comment, "Commentaire sur l'exécutant" %>
-      <%= f.text_area :executant_comment, class: "form-control" %>
+      <%= f.text_area :executant_comment, class: "form-control", readonly: @task.status == 'fermee' %>
     </div>
 
     <div class="task-form-group">
       <%= f.label :image, "Charger des documents" %>
-      <%= f.file_field :image, class: "form-control", id: "task-image-input" %>
+      <%= f.file_field :image, class: "form-control", id: "task-image-input", disabled: @task.status == 'fermee' %>
     </div>
 
     <!-- Image Preview Section -->
@@ -69,9 +69,11 @@
       <img id="image-preview" src="<%= @task.image.attached? ? url_for(@task.image) : '' %>" alt="Prévisualisation" style="max-width: 100%; height: auto; margin-top: 10px;">
     </div>
 
-    <div class="task-form-actions">
-      <%= f.submit "Mettre à jour", class: "btn btn-primary" %>
-    </div>
+    <% unless @task.status == 'fermee' %>
+      <div class="task-form-actions">
+        <%= f.submit "Mettre à jour", class: "btn btn-primary" %>
+      </div>
+    <% end %>
   <% end %>
 </div>
 
@@ -91,18 +93,15 @@
       }
     });
 
-    // Affiche les bonnes options si la page est chargée avec une tâche de type récurrence
     if (taskTypeSelect.value === 'récurrence') {
       recurringOptions.style.display = 'block';
       nonRecurringOptions.style.display = 'none';
     }
 
-    // Prévisualisation d'image
     const imageInput = document.getElementById('task-image-input');
     const imagePreviewContainer = document.getElementById('image-preview-container');
     const imagePreview = document.getElementById('image-preview');
 
-    // Affiche la prévisualisation si une image est déjà attachée (cas d'édition)
     if (imagePreview.src) {
       imagePreviewContainer.style.display = 'block';
     }
@@ -113,11 +112,11 @@
         const reader = new FileReader();
         reader.onload = function(e) {
           imagePreview.src = e.target.result;
-          imagePreviewContainer.style.display = 'block'; // Afficher la div contenant l'image
+          imagePreviewContainer.style.display = 'block';
         }
-        reader.readAsDataURL(file); // Lire le fichier comme URL pour l'afficher
+        reader.readAsDataURL(file);
       } else {
-        imagePreviewContainer.style.display = 'none'; // Cacher la div si aucun fichier sélectionné
+        imagePreviewContainer.style.display = 'none';
       }
     });
   });

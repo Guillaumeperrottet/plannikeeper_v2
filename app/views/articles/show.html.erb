@@ -6,13 +6,10 @@
       <%= link_to new_objet_secteur_article_task_path(@objet, @secteur, @article), class: 'btn-link action-button me-3' do %>
         + ajouter une tâche
       <% end %>
-      <%= link_to '#', class: 'btn-link action-button me-3' do %>
-        Calendrier
-      <% end %>
-      <%= link_to '#', class: 'btn-link action-button' do %>
+      <%= link_to historique_objet_secteur_article_tasks_path(@objet, @secteur, @article), class: 'btn-link action-button' do %>
         Historique
       <% end %>
-    </div>
+      </div>
   </div>
 
   <div class="filters">
@@ -75,8 +72,10 @@
               </td>
               <td>
                 <div class="icon-container">
-                  <%= link_to archive_objet_secteur_article_task_path(@objet, @secteur, @article, task), method: :patch, data: { confirm: 'Êtes-vous sûr de vouloir archiver cette tâche ?' }, class: 'btn btn-sm btn-secondary' do %>
-                    <i class="fa-solid fa-box-archive"></i>
+                  <%= form_with url: archive_objet_secteur_article_task_path(@objet, @secteur, @article, task), method: :patch, class: "d-inline" do %>
+                    <button type="submit" class="btn btn-sm btn-secondary" data-confirm="Êtes-vous sûr de vouloir archiver cette tâche ?">
+                      <i class="fa-solid fa-box-archive"></i>
+                    </button>
                   <% end %>
 
                   <%= form_with url: objet_secteur_article_task_path(@objet, @secteur, @article, task), method: :delete, class: "d-inline" do %>
@@ -86,6 +85,7 @@
                   <% end %>
                 </div>
               </td>
+
             </tr>
           <% end %>
         <% else %>

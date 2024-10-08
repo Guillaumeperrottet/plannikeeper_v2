@@ -35,8 +35,8 @@ class ArticlesController < ApplicationController
       # Gérer le cas où l'article n'existe pas
       redirect_to root_path, alert: "L'article n'existe pas"
     else
-      # Tri des tâches par date de fin ou de réalisation (urgente en premier) avec Arel.sql
-      @tasks = @article.tasks.order(Arel.sql('COALESCE(end_date, realisation_date) ASC'))
+      # Exclure les tâches fermées pour n'afficher que les tâches ouvertes
+      @tasks = @article.tasks.where.not(status: 'fermee').order(Arel.sql('COALESCE(end_date, realisation_date) ASC'))
 
       # Application des filtres si nécessaire
       if params[:executant_filter].present?

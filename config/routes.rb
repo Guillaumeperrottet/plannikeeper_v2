@@ -41,6 +41,9 @@ Rails.application.routes.draw do
           member do
             patch 'archive', to: 'tasks#archive'
           end
+              collection do
+                get 'historique', to: 'tasks#historique'
+            end
         end
       end
     end
