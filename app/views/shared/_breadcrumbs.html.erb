@@ -8,10 +8,22 @@
         <%= link_to @objet.nom, objet_path(@objet) %>
       </li>
     <% end %>
-    <% if @article %>
-      <li class="breadcrumb-item active">
-        Todo
+    <% if @secteur %>
+      <li class="breadcrumb-item">
+        <%= link_to @secteur.nom, objet_path(@objet) %>
       </li>
+    <% end %>
+    <% if @article %>
+      <li class="breadcrumb-item">
+        <%= link_to "Todo", objet_secteur_article_path(@objet, @secteur, @article) %>
+      </li>
+    <% end %>
+    <% if action_name == 'historique' %>
+      <li class="breadcrumb-item active">Historique</li>
+    <% elsif action_name == 'new' %>
+      <li class="breadcrumb-item active">Création de tâche</li>
+    <% elsif action_name == 'edit' %>
+      <li class="breadcrumb-item active">Modifier la tâche</li>
     <% end %>
   </ol>
 </nav>

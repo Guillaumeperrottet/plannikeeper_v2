@@ -58,7 +58,7 @@ class TasksController < ApplicationController
 
   def show
     @article = Article.find(params[:id])
-    @tasks = @article.tasks
+    @tasks = @article.tasks.where.not(status: 'fermée')
 
     # Initialiser les variables avec des valeurs par défaut
     @executants = []
@@ -91,8 +91,32 @@ class TasksController < ApplicationController
     end
   end
 
+  def historique
+    @objet = Objet.find(params[:objet_id])
+    @secteur = Secteur.find(params[:secteur_id])
+    @article = Article.find(params[:article_id])
+
+    # Récupérer les tâches avec le statut "fermée"
+    @archived_tasks = @article.tasks.where(status: 'fermee')
+
+    # Appliquer le tri selon les paramètres reçus
+    @archived_tasks = case params[:sort_by]
+                      when 'name_asc'
+                        @archived_tasks.order(name: :asc)
+                      when 'name_desc'
+                        @archived_tasks.order(name: :desc)
+                      when 'date_asc'
+                        @archived_tasks.order(created_at: :asc)
+                      when 'date_desc'
+                        @archived_tasks.order(created_at: :desc)
+                      else
+                        @archived_tasks.order(name: :asc) # Tri par défaut si aucun paramètre n'est spécifié
+                      end
+  end
+
+
   def archive
-    if @task.update(status: "fermée")
+    if @task.update(status: "fermee")
       flash[:notice] = "Tâche archivée avec succès."
       redirect_to objet_secteur_article_path(@objet, @secteur, @article)
     else
@@ -164,6 +188,7 @@ class TasksController < ApplicationController
 
   def edit
     @task = @article.tasks.find(params[:id])
+    @read_only = @task.status == 'fermée'
   end
 
   def this_week
@@ -189,17 +214,28 @@ class TasksController < ApplicationController
 
   def set_breadcrumbs
     logger.debug "---- Entrée dans la méthode 'set_breadcrumbs' ----"
-  logger.debug "Objet: #{@objet}, Secteur: #{@secteur}, Article: #{@article}"
+    logger.debug "Objet: #{@objet}, Secteur: #{@secteur}, Article: #{@article}"
 
     if @objet && @secteur && @article
       add_breadcrumb "Vos objets", authenticated_root_path
       add_breadcrumb @objet.nom, objet_path(@objet)
       add_breadcrumb @secteur.nom, objet_secteur_path(@objet, @secteur)
       add_breadcrumb "Todo", objet_secteur_article_path(@objet, @secteur, @article)
+
+      # Ajouter le texte de breadcrumb pour les actions spécifiques
+      case action_name
+      when 'historique'
+        add_breadcrumb "Historique", historique_objet_secteur_article_tasks_path(@objet, @secteur, @article)
+      when 'new'
+        add_breadcrumb "Création de tâche", new_objet_secteur_article_task_path(@objet, @secteur, @article)
+      when 'edit'
+        add_breadcrumb "Modifier la tâche", edit_objet_secteur_article_task_path(@objet, @secteur, @article, @task)
+      end
     else
       logger.debug "Une ou plusieurs variables d'instance sont manquantes !"
     end
   end
+
 
   private
 
@@ -260,6 +296,8 @@ end
       @page_title = 'Édition de tâche'
     when 'show'
       @page_title = 'Détails de la tâche'
+    when 'historique'
+      @page_title = 'Historique des tâches archivées'
     else
       @page_title = 'Plannikeeper'
     end
