@@ -15,7 +15,7 @@ Rails.application.routes.draw do
   devise_for :users, controllers: {
     omniauth_callbacks: 'users/omniauth_callbacks'
   }
-
+  #comm
   get 'public', to: 'pages#public'
   get '/privacy', to: 'pages#privacy'
   get '/terms', to: 'pages#terms'
