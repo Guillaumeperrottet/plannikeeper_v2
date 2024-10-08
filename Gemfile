@@ -20,14 +20,13 @@ gem "autoprefixer-rails"
 gem 'breadcrumbs_on_rails'
 gem 'paper_trail'
 gem 'devise'
-gem 'omniauth-google-oauth2'
+gem 'omniauth', '~> 1.9'
+gem 'omniauth-google-oauth2', '~> 0.8'
 
 # Use PostgreSQL as the database for Active Record in production
 group :production do
   gem 'pg', '~> 1.1'
 end
-
-gem 'devise'
 
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 # gem "image_processing", "~> 1.2"

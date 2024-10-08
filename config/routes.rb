@@ -1,13 +1,8 @@
 Rails.application.routes.draw do
-  devise_for :users, controllers: {
-    omniauth_callbacks: 'users/omniauth_callbacks'
-  }, skip: [:omniauth_callbacks]
-
-  as :user do
-    get 'users/auth/:provider', to: 'users/omniauth_callbacks#google_oauth2', as: :user_omniauth_authorize
-  end
-
   devise_scope :user do
+    get 'users/auth/google_oauth2', to: 'users/omniauth_callbacks#google_oauth2'
+    get 'users/auth/google_oauth2/callback', to: 'users/omniauth_callbacks#google_oauth2'
+
     authenticated :user do
       root to: 'dashboard#dashboard', as: :authenticated_root
     end
@@ -16,6 +11,10 @@ Rails.application.routes.draw do
       root to: 'devise/sessions#new', as: :unauthenticated_root
     end
   end
+
+  devise_for :users, controllers: {
+    omniauth_callbacks: 'users/omniauth_callbacks'
+  }
 
   get 'public', to: 'pages#public'
   get '/privacy', to: 'pages#privacy'
