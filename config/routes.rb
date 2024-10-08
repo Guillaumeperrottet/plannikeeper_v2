@@ -8,7 +8,7 @@ Rails.application.routes.draw do
     end
 
     unauthenticated do
-      root to: 'devise/sessions#new', as: :unauthenticated_root
+      root to: 'pages#home', as: :unauthenticated_root
     end
   end
 
@@ -16,11 +16,11 @@ Rails.application.routes.draw do
     registrations: 'users/registrations',
     omniauth_callbacks: 'users/omniauth_callbacks'
   }
-  #comm
+
+  # Pages supplémentaires
   get 'public', to: 'pages#public'
   get '/privacy', to: 'pages#privacy'
   get '/terms', to: 'pages#terms'
-  get '/home', to: 'pages#home' # Nouvelle route pour la page Home
 
   # Page de santé
   get "up" => "rails/health#show", as: :rails_health_check
@@ -41,9 +41,9 @@ Rails.application.routes.draw do
           member do
             patch 'archive', to: 'tasks#archive'
           end
-              collection do
-                get 'historique', to: 'tasks#historique'
-            end
+          collection do
+            get 'historique', to: 'tasks#historique'
+          end
         end
       end
     end
