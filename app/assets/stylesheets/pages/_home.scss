@@ -31,3 +31,56 @@
   background: #EDEDED;
   color: #333;
 }
+.demo-section {
+  padding: 3rem 0;
+  background-color: #f7f7f8; /* Couleur de fond légère */
+}
+
+.demo-container {
+  max-width: 1200px;
+  margin: auto;
+  padding: 0 1.5rem;
+}
+
+.demo-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.demo-text {
+  padding: 2rem;
+}
+
+.demo-text h2 {
+  font-size: 2.5rem;
+  color: #4a154b; /* Couleur principale de Slack */
+}
+
+.demo-text p {
+  font-size: 1.2rem;
+  color: #333;
+  margin-top: 1rem;
+}
+
+.demo-video {
+  display: flex;
+  justify-content: center;
+}
+
+.demo-video-element {
+  width: 100%;
+  max-width: 500px; /* Vous pouvez ajuster cette valeur */
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+.demo-text, .demo-video {
+  opacity: 0;
+  transform: translateY(50px);
+  transition: all 0.8s ease-in-out;
+}
+
+.demo-section.in-view .demo-text, .demo-section.in-view .demo-video {
+  opacity: 1;
+  transform: translateY(0);
+}
