@@ -116,7 +116,7 @@ export default class extends Controller {
       top: this.startY,
       width: 0,
       height: 0,
-      fill: 'rgba(0, 255, 0, 0.5)',
+      fill: 'rgba(128, 128, 128, 0.1)',
       stroke: 'green',
       strokeWidth: 2,
       selectable: false,
@@ -281,9 +281,9 @@ export default class extends Controller {
             top: top,
             width: width,
             height: height,
-            fill: 'rgba(0, 255, 0, 0.1)', // Transparence pour l'article
-            stroke: 'transparent', // Pas de bordure initiale
-            strokeWidth: 0, // Pas de bordure
+            fill: 'rgba(128, 128, 128, 0.1)', // Transparence pour l'article
+            stroke: 'rgba(0, 0, 0, 0.2)', // Contour gris léger (0.2 pour la transparence)
+            strokeWidth: 1, // contour très léger
             selectable: false,
             evented: true,
             hoverCursor: 'pointer', // Change le curseur en main au survol
@@ -312,7 +312,7 @@ export default class extends Controller {
                 offsetX: 5,
                 offsetY: 5
               },
-              fill: 'rgba(0, 255, 0, 0.15)' // Légèrement plus opaque au survol
+              fill: 'rgba(128, 128, 128, 0.1)' // Légèrement plus opaque au survol
             });
             this.canvas.renderAll();
           });

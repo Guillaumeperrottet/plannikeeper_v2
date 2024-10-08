@@ -176,8 +176,8 @@ export default class extends Controller {
               top: top,
               width: width,
               height: height,
-              fill: 'rgba(0, 255, 0, 0.5)',
-              stroke: 'green',
+              fill: 'transparent',
+              stroke: 'transparent',
               strokeWidth: 2,
             });
 
