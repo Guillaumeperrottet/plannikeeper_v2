@@ -229,7 +229,7 @@ class TasksController < ApplicationController
       when 'new'
         add_breadcrumb "Création de tâche", new_objet_secteur_article_task_path(@objet, @secteur, @article)
       when 'edit'
-        add_breadcrumb "Modifier la tâche", edit_objet_secteur_article_task_path(@objet, @secteur, @article, @task)
+        add_breadcrumb "Modifier la tâche", edit_objet_secteur_article_task_path(@objet, @secteur, @article, @task) if @task
       end
     else
       logger.debug "Une ou plusieurs variables d'instance sont manquantes !"

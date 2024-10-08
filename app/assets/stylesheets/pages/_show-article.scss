@@ -306,3 +306,27 @@ table.table td, table.table th {
   background-color: rgba(198, 166, 244, 0.3); /* Brun clair avec transparence */
   color: #553c9a;
 }
+
+.sort-arrow {
+  cursor: pointer; /* Change le curseur au survol */
+  padding-left: 5px; /* Espacement pour ne pas être collé au texte */
+  color: #999; /* Couleur des flèches */
+}
+
+.sort-arrow:hover {
+  color: #333; /* Change la couleur au survol pour un effet visuel */
+}
+
+.sort-arrow:after {
+  content: '';
+  display: inline-block;
+  width: 10px; /* Ajustez la largeur si nécessaire */
+  height: 10px; /* Ajustez la hauteur si nécessaire */
+  background-image: url('/assets/arrow-down.svg'); /* Chemin vers l'icône flèche vers le bas */
+  background-size: contain; /* Ajuste la taille de l'image */
+  background-repeat: no-repeat; /* Évite la répétition de l'image */
+}
+
+.sort-arrow.asc:after {
+  background-image: url('/assets/arrow-up.svg'); /* Chemin vers l'icône flèche vers le haut */
+}

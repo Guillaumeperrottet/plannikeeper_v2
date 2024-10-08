@@ -1,6 +1,7 @@
 class ArticlesController < ApplicationController
   before_action :set_page_title, only: [:new, :show] # Ajuste les actions où tu veux afficher ce titre
   before_action :set_breadcrumbs
+  helper_method :toggle_sort_direction, :sort_arrow
 
   def create
     @secteur = Secteur.find(params[:secteur_id])
@@ -32,11 +33,9 @@ class ArticlesController < ApplicationController
     @article = Article.find_by(id: params[:id])
 
     if @article.nil?
-      # Gérer le cas où l'article n'existe pas
       redirect_to root_path, alert: "L'article n'existe pas"
     else
-      # Exclure les tâches fermées pour n'afficher que les tâches ouvertes
-      @tasks = @article.tasks.where.not(status: 'fermee').order(Arel.sql('COALESCE(end_date, realisation_date) ASC'))
+      @tasks = @article.tasks.where.not(status: 'fermee')
 
       # Application des filtres si nécessaire
       if params[:executant_filter].present?
@@ -46,8 +45,16 @@ class ArticlesController < ApplicationController
       if params[:cfc_filter].present?
         @tasks = @tasks.where(cfc: params[:cfc_filter])
       end
+
+      # Application du tri si les paramètres sont présents
+      if params[:sort].present? && params[:direction].present?
+        @tasks = @tasks.order("#{params[:sort]} #{params[:direction]}")
+      else
+        @tasks = @tasks.order(Arel.sql('COALESCE(end_date, realisation_date) ASC')) # Tri par défaut
+      end
     end
   end
+
 
   def set_breadcrumbs
     add_breadcrumb "Vos objets", authenticated_root_path
@@ -75,4 +82,22 @@ class ArticlesController < ApplicationController
       @page_title = 'Plannikeeper'
     end
   end
+
+  def toggle_sort_direction(column)
+    if params[:sort] == column && params[:direction] == 'asc'
+      'desc'
+    else
+      'asc'
+    end
+  end
+
+  def sort_arrow(column)
+    if params[:sort] == column
+      direction_class = params[:direction] == 'asc' ? 'asc' : 'desc'
+      return "<span class='sort-arrow #{direction_class}'></span>".html_safe
+    else
+      return "<span class='sort-arrow'></span>".html_safe
+    end
+  end
+
 end
