@@ -72,9 +72,16 @@ class ObjetsController < ApplicationController
 
   def set_breadcrumbs
     add_breadcrumb "Vos objets", authenticated_root_path
+
     if @objet.present?
-      add_breadcrumb @objet.nom, objet_path(@objet)
+      add_breadcrumb "Modifier l'objet", edit_objet_path(@objet) if action_name == 'edit'
+      add_breadcrumb @objet.nom, objet_path(@objet) unless action_name == 'edit'
     end
-    add_breadcrumb "Todo", article_path(@article) if @article.present?
+
+    if @article.present?
+      add_breadcrumb "Todo", article_path(@article)
+    end
   end
+
+
 end

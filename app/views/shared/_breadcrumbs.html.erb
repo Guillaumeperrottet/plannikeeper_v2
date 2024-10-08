@@ -4,9 +4,17 @@
       <%= link_to 'Vos objets', objets_path %>
     </li>
     <% if @objet && @objet.id.present? %>
-      <li class="breadcrumb-item">
-        <%= link_to @objet.nom, objet_path(@objet) %>
-      </li>
+      <% if action_name == 'edit' && controller_name == 'objets' %>
+        <li class="breadcrumb-item">
+          <%= link_to "Modifier l'objet", edit_objet_path(@objet) %>
+        </li>
+      <% else %>
+        <li class="breadcrumb-item">
+          <%= link_to @objet.nom, objet_path(@objet) %>
+        </li>
+      <% end %>
+    <% elsif action_name == 'new' && controller_name == 'objets' %>
+      <li class="breadcrumb-item active">Création d'un objet</li>
     <% end %>
     <% if @secteur %>
       <li class="breadcrumb-item">
@@ -20,9 +28,9 @@
     <% end %>
     <% if action_name == 'historique' %>
       <li class="breadcrumb-item active">Historique</li>
-    <% elsif action_name == 'new' %>
+    <% elsif action_name == 'new' && controller_name == 'tasks' %>
       <li class="breadcrumb-item active">Création de tâche</li>
-    <% elsif action_name == 'edit' %>
+    <% elsif action_name == 'edit' && controller_name == 'tasks' %>
       <li class="breadcrumb-item active">Modifier la tâche</li>
     <% end %>
   </ol>

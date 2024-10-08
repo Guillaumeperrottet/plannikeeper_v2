@@ -6,6 +6,9 @@
         <li>
           <span class="object-bullet"></span>
           <%= link_to "#{objet.nom} - #{objet.adresse}", objet_path(objet), class: "object-link" %>
+          <%= link_to edit_objet_path(objet), class: "edit-link", title: "Éditer #{objet.nom}" do %>
+            <i class="fas fa-edit"></i>
+          <% end %>
         </li>
       <% end %>
     </ul>

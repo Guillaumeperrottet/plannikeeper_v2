@@ -184,3 +184,14 @@
 #this-week-tasks li, #upcoming-tasks li {
   cursor: pointer; /* Cela change le curseur en main pour les tâches uniquement */
 }
+
+.object-list .edit-link {
+  font-size: 0.75rem; /* Ajuste la taille de l'icône ici */
+  margin-left: 10px;
+  color: #555; /* Couleur plus douce pour l'icône */
+  text-decoration: none;
+}
+
+.object-list .edit-link:hover {
+  color: #000; /* Couleur plus foncée au survol */
+}

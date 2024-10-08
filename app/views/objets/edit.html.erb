@@ -1,9 +1,10 @@
+<div class="spacer"></div>
 <h1>Modifier l'objet</h1>
 
 <%= form_with(model: @objet, local: true, html: { multipart: true }) do |form| %>
   <% if @objet.errors.any? %>
     <div id="error_explanation">
-      <h2><%= pluralize(@objet.errors.count, "error") %> prohibited this objet from being saved:</h2>
+      <h2><%= pluralize(@objet.errors.count, "error") %> ont empêché cet objet d'être enregistré :</h2>
       <ul>
         <% @objet.errors.full_messages.each do |message| %>
           <li><%= message %></li>
@@ -13,21 +14,21 @@
   <% end %>
 
   <div class="field">
-    <%= form.label :nom %>
-    <%= form.text_field :nom %>
+    <%= form.label :nom, "Nom de l'objet" %>
+    <%= form.text_field :nom, class: "form-control" %>
   </div>
 
   <div class="field">
-    <%= form.label :adresse %>
-    <%= form.text_field :adresse %>
+    <%= form.label :adresse, "Adresse de l'objet" %>
+    <%= form.text_field :adresse, class: "form-control" %>
   </div>
 
   <div class="field">
     <%= form.label :image, "Image de l'objet" %>
     <% if @objet.image.attached? %>
-      <%= image_tag @objet.image, alt: "Image de l'objet", class: "object-image" %>
+      <%= image_tag @objet.image, alt: "Image de l'objet", class: "object-image-preview" %>
     <% end %>
-    <%= form.file_field :image %>
+    <%= form.file_field :image, class: "form-control" %>
   </div>
 
   <h3>Secteurs</h3>
@@ -36,19 +37,17 @@
       <%= form.fields_for :secteurs do |secteur_form| %>
         <div class="field">
           <%= secteur_form.label :nom, "Nom du secteur" %>
-          <%= secteur_form.text_field :nom %>
+          <%= secteur_form.text_field :nom, class: "form-control" %>
           <%= secteur_form.hidden_field :_destroy %>
 
-          <!-- Remplacer "Image du secteur" par le nom du fichier -->
           <% if secteur_form.object.image.attached? %>
-            <p>Fichier : <%= secteur_form.object.image.filename.to_s %></p> <!-- Affiche le nom du fichier -->
+            <p>Fichier : <%= secteur_form.object.image.filename.to_s %></p>
           <% else %>
             <p>Aucune image associée.</p>
           <% end %>
 
-          <%= secteur_form.file_field :image %>
-
-          <%= link_to "Supprimer", '#', data: { action: "sector#removeSector" }, class: 'remove_fields' %>
+          <%= secteur_form.file_field :image, class: "form-control" %>
+          <%= link_to "Supprimer", '#', data: { action: "sector#removeSector" }, class: 'btn btn-danger btn-sm remove_fields' %>
         </div>
       <% end %>
     </div>
@@ -57,18 +56,22 @@
       <div class="field">
         <%= form.fields_for :secteurs, Secteur.new, child_index: "NEW_RECORD" do |secteur_form| %>
           <%= secteur_form.label :nom, "Nom du secteur" %>
-          <%= secteur_form.text_field :nom %>
+          <%= secteur_form.text_field :nom, class: "form-control" %>
           <%= secteur_form.hidden_field :_destroy %>
-          <%= secteur_form.file_field :image %>
-          <%= link_to "Supprimer", '#', data: { action: "sector#removeSector" }, class: 'remove_fields' %>
+          <%= secteur_form.file_field :image, class: "form-control" %>
+          <%= link_to "Supprimer", '#', data: { action: "sector#removeSector" }, class: 'btn btn-danger btn-sm remove_fields' %>
         </div>
       <% end %>
     </template>
 
-    <%= link_to "Ajouter un secteur", "#", data: { action: "sector#addSector" } %>
+    <%= link_to "Ajouter un secteur", "#", data: { action: "sector#addSector" }, class: 'btn btn-primary-objet btn-sm' %>
   </div>
 
-  <div class="actions">
-    <%= form.submit "Modifier l'objet" %>
-  </div>
+<div class="actions">
+  <%= form.submit "Modifier l'objet", class: "btn btn-success" %>
+
+  <%= form_with model: @objet, url: objet_path(@objet), method: :delete, local: true do |f| %>
+    <%= f.submit "Supprimer l'objet", class: "btn btn-danger-objet", data: { confirm: "Êtes-vous sûr de vouloir supprimer cet objet ?" } %>
+  <% end %>
+</div>
 <% end %>
