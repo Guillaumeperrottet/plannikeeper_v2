@@ -42,8 +42,8 @@ class ArticlesController < ApplicationController
         @tasks = @tasks.where(executant: params[:executant_filter])
       end
 
-      if params[:cfc_filter].present?
-        @tasks = @tasks.where(cfc: params[:cfc_filter])
+      if params[:cfc].present?
+        @tasks = @tasks.where(cfc: params[:cfc])
       end
 
       # Application du tri si les paramètres sont présents

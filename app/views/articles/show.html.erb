@@ -19,11 +19,11 @@
         <option value="sous-traitant" <%= 'selected' if params[:executant_filter] == 'sous-traitant' %>>Sous-traitant</option>
       </select>
 
-      <select name="cfc_filter" class="form-select me-2" onchange="this.form.submit()">
+      <select name="cfc" class="form-select me-2" onchange="this.form.submit()">
         <option value="">Tous les CFC</option>
         <% if @cfcs.present? %>
           <% @cfcs.each do |cfc| %>
-            <option value="<%= cfc %>" <%= 'selected' if params[:cfc_filter] == cfc %>><%= cfc %></option>
+            <option value="<%= cfc %>" <%= 'selected' if params[:cfc] == cfc %>><%= cfc %></option>
           <% end %>
         <% end %>
       </select>

@@ -76,8 +76,8 @@ class TasksController < ApplicationController
       @tasks = @tasks.where(executant: params[:executant_filter])
     end
 
-    if params[:cfc_filter].present?
-      @tasks = @tasks.where(cfc: params[:cfc_filter])
+    if params[:cfc].present?
+      @tasks = @tasks.where(cfc: params[:cfc])
     end
   end
 
@@ -153,8 +153,8 @@ class TasksController < ApplicationController
       @tasks = @tasks.where(executant: params[:executant_filter])
     end
 
-    if params[:cfc_filter].present? && params[:cfc_filter] != "Tous les CFC"
-      @tasks = @tasks.where(cfc: params[:cfc_filter])
+    if params[:cfc].present? && params[:cfc] != "Tous les CFC"
+      @tasks = @tasks.where(cfc: params[:cfc])
     end
 
     if params[:task_type_filter].present? && params[:task_type_filter] != "Tous les types"
@@ -308,6 +308,6 @@ end
   end
 
   def task_params
-    params.require(:task).permit(:name, :description, :realisation_date, :cfc, :executant, :executant_comment, :image, :task_type, :color, :end_date, :period)
+    params.require(:task).permit(:name, :description, :realisation_date, :cfc, :recurrence_reminder_date, :executant, :executant_comment, :image, :task_type, :color, :end_date, :period)
   end
 end
