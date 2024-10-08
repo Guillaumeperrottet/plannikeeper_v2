@@ -148,9 +148,19 @@ class TasksController < ApplicationController
     @executants = @tasks.pluck(:executant).uniq
     @cfcs = @tasks.pluck(:cfc).uniq
 
-    @tasks = @tasks.where(executant: params[:executant_filter]) if params[:executant_filter].present?
-    @tasks = @tasks.where(cfc: params[:cfc_filter]) if params[:cfc_filter].present?
-    @tasks = @tasks.where(status: params[:status_filter]) if params[:status_filter].present?
+    # Filtrage selon les paramètres
+    if params[:executant_filter].present? && params[:executant_filter] != "Tous les exécutants"
+      @tasks = @tasks.where(executant: params[:executant_filter])
+    end
+
+    if params[:cfc_filter].present? && params[:cfc_filter] != "Tous les CFC"
+      @tasks = @tasks.where(cfc: params[:cfc_filter])
+    end
+
+    if params[:task_type_filter].present? && params[:task_type_filter] != "Tous les types"
+      @tasks = @tasks.where(task_type: params[:task_type_filter])
+    end
+
     # Scopes ou méthodes pour les tâches de cette semaine et à venir
     this_week_tasks = @tasks.this_week
     upcoming_tasks = @tasks.upcoming
@@ -167,24 +177,14 @@ class TasksController < ApplicationController
       }
     end
 
-    # Construction des tâches avec ou sans image pour "à venir"
-    upcoming_tasks_with_images = upcoming_tasks.map do |task|
-      {
-        id: task.id,
-        name: task.name,
-        realisation_date: task.realisation_date.strftime("%d %b %Y"),
-        cfc: task.cfc,
-        description: task.description,
-        image_url: task.image.attached? ? url_for(task.image) : nil
-      }
-    end
-
-    # Retourne un JSON avec les tâches de cette semaine et les tâches à venir
+    # Renvoyer les tâches filtrées en JSON
     render json: {
       this_week_tasks: this_week_tasks_with_images,
-      upcoming_tasks: upcoming_tasks_with_images
+      upcoming_tasks: upcoming_tasks # Vous pouvez également le construire ici si nécessaire
     }
   end
+
+
 
   def edit
     @task = @article.tasks.find(params[:id])
@@ -229,7 +229,7 @@ class TasksController < ApplicationController
       when 'new'
         add_breadcrumb "Création de tâche", new_objet_secteur_article_task_path(@objet, @secteur, @article)
       when 'edit'
-        add_breadcrumb "Modifier la tâche", edit_objet_secteur_article_task_path(@objet, @secteur, @article, @task)
+        add_breadcrumb "Modifier la tâche", edit_objet_secteur_article_task_path(@objet, @secteur, @article, @task) if @task
       end
     else
       logger.debug "Une ou plusieurs variables d'instance sont manquantes !"

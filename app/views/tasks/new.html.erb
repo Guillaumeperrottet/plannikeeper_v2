@@ -45,7 +45,16 @@
 
     <div class="task-form-group">
       <%= f.label :cfc, "Numéro CFC" %>
-      <%= f.text_field :cfc, class: "form-control" %>
+      <%= f.select :cfc_filter, [
+        ['CFC 230 – Alimentation électrique', 'CFC 230'],
+        ['CFC 211 – Installations sanitaires', 'CFC 211'],
+        ['CFC 214 – Chauffage', 'CFC 214'],
+        ['CFC 221 – Appareils de cuisine', 'CFC 221'],
+        ['CFC 273 – Vitres et vitrages', 'CFC 273'],
+        ['CFC 261 – Peinture intérieure', 'CFC 261'],
+        ['CFC 222 – Appareils de buanderie', 'CFC 222'],
+        ['CFC ... - Divers', 'CFC ...']
+      ], { prompt: "Sélectionnez un CFC" }, class: "form-control" %>
     </div>
 
     <div class="task-form-group">
@@ -54,8 +63,8 @@
     </div>
 
     <div class="task-form-group">
-      <%= f.label :executant_comment, "Commentaire sur l'exécutant" %>
-      <%= f.text_area :executant_comment, class: "form-control" %>
+      <%= f.label :executant_comment, "Nom de l'exécutant ou de l'entreprise" %>
+      <%= f.text_field :executant_comment, class: "form-control" %>
     </div>
 
     <div class="task-form-group">

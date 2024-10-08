@@ -11,16 +11,12 @@
       <% end %>
       </div>
   </div>
-
   <div class="filters">
     <form method="get" class="d-flex px-4" id="filters-form">
       <select name="executant_filter" class="form-select me-2" onchange="this.form.submit()">
         <option value="">Tous les exécutants</option>
-        <% if @executants.present? %>
-          <% @executants.each do |executant| %>
-            <option value="<%= executant %>" <%= 'selected' if params[:executant_filter] == executant %>><%= executant %></option>
-          <% end %>
-        <% end %>
+        <option value="interne" <%= 'selected' if params[:executant_filter] == 'interne' %>>Interne</option>
+        <option value="sous-traitant" <%= 'selected' if params[:executant_filter] == 'sous-traitant' %>>Sous-traitant</option>
       </select>
 
       <select name="cfc_filter" class="form-select me-2" onchange="this.form.submit()">
@@ -31,24 +27,46 @@
           <% end %>
         <% end %>
       </select>
+
+      <select name="task_type_filter" class="form-select me-2" onchange="this.form.submit()">
+        <option value="">Tous les types</option>
+        <option value="réparations" <%= 'selected' if params[:task_type_filter] == 'réparations' %>>Réparations</option>
+        <option value="récurrence" <%= 'selected' if params[:task_type_filter] == 'récurrence' %>>Récurrence</option>
+        <option value="entretiens" <%= 'selected' if params[:task_type_filter] == 'entretiens' %>>Entretiens</option>
+      </select>
     </form>
   </div>
+
 
   <!-- Conteneur défilant pour la partie des tâches -->
   <div class="scrollable-content">
     <table class="table table-hover">
-      <thead>
-        <tr>
-          <th>Tâche</th>
-          <th>Date de création</th>
-          <th>Date de fin ou Période</th>
-          <th>CFC</th>
-          <th>Type</th>
-          <th>Exécutant</th>
-          <th>Statut</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
+        <thead>
+          <tr>
+            <th>Nom</th>
+            <th>
+              <span>Date de création</span>
+              <%= link_to content_tag(:i, '', class: 'fas fa-sort', 'aria-hidden': 'true'), request.params.merge(sort: 'created_at', direction: toggle_sort_direction('created_at')), class: 'sort-arrow' %>
+            </th>
+            <th>
+              <span>Date de fin ou Période</span>
+              <%= link_to content_tag(:i, '', class: 'fas fa-sort', 'aria-hidden': 'true'), request.params.merge(sort: 'end_date', direction: toggle_sort_direction('end_date')), class: 'sort-arrow' %>
+            </th>
+            <th>
+              <span>CFC</span>
+            </th>
+            <th>
+              <span>Type</span>
+            </th>
+            <th>
+              <span>Exécutant</span>
+            </th>
+            <th>
+              <span>Statut</span>
+            </th>
+            <th>Actions</th>
+          </tr>
+        </thead>
       <tbody>
         <% if @tasks.present? %>
           <% @tasks.each do |task| %>
