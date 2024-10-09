@@ -11,6 +11,11 @@ class ObjetsController < ApplicationController
   def show
     @secteurs = @objet.secteurs.includes(:image_attachment)
     @selected_sector_id = params[:selected_sector_id]
+
+    # Assurez-vous de récupérer le secteur et l'article si fournis
+    @secteur = @secteurs.find_by(id: params[:secteur_id]) if params[:secteur_id].present?
+    @article = Article.find_by(id: params[:article_id]) if params[:article_id].present?
+
     set_article_and_tasks
 
     if browser.device.mobile?
@@ -59,6 +64,7 @@ class ObjetsController < ApplicationController
 
   def set_article_and_tasks
     @article = Article.find_by(id: params[:article_id])
+    @secteur = Secteur.find_by(id: params[:secteur_id])
     @tasks = @article.present? ? @article.tasks : []
   end
 
