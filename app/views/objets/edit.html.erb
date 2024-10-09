@@ -1,77 +1,81 @@
 <div class="spacer"></div>
-<h1>Modifier l'objet</h1>
+<div class="edit-object-page">
+  <%= form_with(model: @objet, local: true, html: { multipart: true }) do |form| %>
+    <div class="columns">
+      <div class="left-column object-form">
+        <h1 class="object-title">Modifier l'objet</h1>
 
-<%= form_with(model: @objet, local: true, html: { multipart: true }) do |form| %>
-  <% if @objet.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@objet.errors.count, "error") %> ont empêché cet objet d'être enregistré :</h2>
-      <ul>
-        <% @objet.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
+        <% if @objet.errors.any? %>
+          <div class="error-messages">
+            <h2><%= pluralize(@objet.errors.count, "error") %> ont empêché cet objet d'être enregistré :</h2>
+            <ul>
+              <% @objet.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+              <% end %>
+            </ul>
+          </div>
         <% end %>
-      </ul>
+
+        <div class="object-field">
+          <%= form.label :nom, "Nom de l'objet", class: "object-label" %>
+          <%= form.text_field :nom, class: "form-control object-input" %>
+        </div>
+
+        <div class="object-field">
+          <%= form.label :adresse, "Adresse de l'objet", class: "object-label" %>
+          <%= form.text_field :adresse, class: "form-control object-input" %>
+        </div>
+      </div>
+
+      <div class="right-column sectors-form">
+        <h3 class="sectors-title">Secteurs</h3>
+        <div data-controller="sector">
+          <div data-sector-target="fields" id="secteurs-fields">
+            <%= form.fields_for :secteurs do |secteur_form| %>
+              <div class="sector-field">
+                <%= secteur_form.label :nom, "Nom du secteur", class: "sector-label" %>
+                <%= secteur_form.text_field :nom, class: "form-control sector-input" %>
+                <%= secteur_form.hidden_field :_destroy %>
+
+                <% if secteur_form.object.image.attached? %>
+                  <p class="sector-file-name">Fichier : <%= secteur_form.object.image.filename.to_s %></p>
+                <% else %>
+                  <p class="sector-file-name">Aucune image associée.</p>
+                <% end %>
+
+                <%= secteur_form.file_field :image, class: "form-control sector-file-input" %>
+
+                <%= link_to "Supprimer", "#", class: "btn-simple btn-danger sector-remove-btn", data: { action: "sector#removeSector" } %>
+              </div>
+            <% end %>
+          </div>
+
+          <template data-sector-target="template">
+            <div class="sector-field">
+              <%= form.fields_for :secteurs, Secteur.new, child_index: "NEW_RECORD" do |secteur_form| %>
+                <%= secteur_form.label :nom, "Nom du secteur", class: "sector-label" %>
+                <%= secteur_form.text_field :nom, class: "form-control sector-input" %>
+                <%= secteur_form.hidden_field :_destroy %>
+                <%= secteur_form.file_field :image, class: "form-control sector-file-input" %>
+
+                <%= link_to "Supprimer", "#", class: "btn-simple btn-danger sector-remove-btn", data: { action: "sector#removeSector" } %>
+              <% end %>
+            </div>
+          </template>
+
+          <%= link_to "Ajouter un secteur", "#", data: { action: "sector#addSector" }, class: 'btn-simple btn-primary add-sector-btn' %>
+        </div>
+      </div>
+    </div>
+
+    <div class="actions-center">
+      <%= form.submit "Modifier l'objet", class: "btn-simple btn-success modify-object-btn" %>
     </div>
   <% end %>
 
-  <div class="field">
-    <%= form.label :nom, "Nom de l'objet" %>
-    <%= form.text_field :nom, class: "form-control" %>
-  </div>
-
-  <div class="field">
-    <%= form.label :adresse, "Adresse de l'objet" %>
-    <%= form.text_field :adresse, class: "form-control" %>
-  </div>
-
-  <div class="field">
-    <%= form.label :image, "Image de l'objet" %>
-    <% if @objet.image.attached? %>
-      <%= image_tag @objet.image, alt: "Image de l'objet", class: "object-image-preview" %>
+  <div class="actions delete-object">
+    <%= form_with model: @objet, url: objet_path(@objet), method: :delete, local: true do |f| %>
+      <%= f.submit "Supprimer l'objet", class: "btn-simple btn-danger delete-object-btn", data: { confirm: "Êtes-vous sûr de vouloir supprimer cet objet ?" } %>
     <% end %>
-    <%= form.file_field :image, class: "form-control" %>
   </div>
-
-  <h3>Secteurs</h3>
-  <div data-controller="sector">
-    <div data-sector-target="fields" id="secteurs-fields">
-      <%= form.fields_for :secteurs do |secteur_form| %>
-        <div class="field">
-          <%= secteur_form.label :nom, "Nom du secteur" %>
-          <%= secteur_form.text_field :nom, class: "form-control" %>
-          <%= secteur_form.hidden_field :_destroy %>
-
-          <% if secteur_form.object.image.attached? %>
-            <p>Fichier : <%= secteur_form.object.image.filename.to_s %></p>
-          <% else %>
-            <p>Aucune image associée.</p>
-          <% end %>
-
-          <%= secteur_form.file_field :image, class: "form-control" %>
-          <%= link_to "Supprimer", '#', data: { action: "sector#removeSector" }, class: 'btn btn-danger btn-sm remove_fields' %>
-        </div>
-      <% end %>
-    </div>
-
-    <template data-sector-target="template">
-      <div class="field">
-        <%= form.fields_for :secteurs, Secteur.new, child_index: "NEW_RECORD" do |secteur_form| %>
-          <%= secteur_form.label :nom, "Nom du secteur" %>
-          <%= secteur_form.text_field :nom, class: "form-control" %>
-          <%= secteur_form.hidden_field :_destroy %>
-          <%= secteur_form.file_field :image, class: "form-control" %>
-          <%= link_to "Supprimer", '#', data: { action: "sector#removeSector" }, class: 'btn btn-danger btn-sm remove_fields' %>
-        </div>
-      <% end %>
-    </template>
-
-    <%= link_to "Ajouter un secteur", "#", data: { action: "sector#addSector" }, class: 'btn btn-primary-objet btn-sm' %>
-  </div>
-
-<div class="actions">
-  <%= form.submit "Modifier l'objet", class: "btn btn-success" %>
-
-  <%= form_with model: @objet, url: objet_path(@objet), method: :delete, local: true do |f| %>
-    <%= f.submit "Supprimer l'objet", class: "btn btn-danger-objet", data: { confirm: "Êtes-vous sûr de vouloir supprimer cet objet ?" } %>
-  <% end %>
 </div>
-<% end %>
