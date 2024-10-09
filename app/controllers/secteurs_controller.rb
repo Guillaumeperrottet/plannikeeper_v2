@@ -1,6 +1,6 @@
 class SecteursController < ApplicationController
   before_action :set_objet
-  before_action :set_secteur, only: [:new, :create, :edit, :update, :image]
+  before_action :set_secteur, only: [:new, :create, :edit, :update, :image, :destroy]
   before_action :set_breadcrumbs
 
   def new
@@ -15,6 +15,13 @@ class SecteursController < ApplicationController
       render :new
     end
   end
+
+  def destroy
+     puts "Deleting sector with params: #{params.inspect}"
+    @secteur.destroy
+    redirect_to edit_objet_path(@objet), notice: 'Secteur supprimé avec succès.'
+  end
+
 
   def image
     @objet = Objet.find(params[:objet_id])

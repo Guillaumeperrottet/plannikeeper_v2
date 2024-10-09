@@ -31,7 +31,7 @@ Rails.application.routes.draw do
   resources :objets do
     get 'tasks', to: 'tasks#index_for_objet'
 
-    resources :secteurs, only: [:edit, :update] do
+    resources :secteurs, only: [:edit, :update, :destroy] do
       member do
         get 'image', to: 'secteurs#image'
       end
