@@ -1,0 +1,14 @@
+<div class="object-mobile-show">
+  <h1><%= @objet.nom %></h1>
+  <h2>Articles</h2>
+
+  <ul class="article-list">
+    <% @objet.articles.each do |article| %>
+      <li>
+        <%= link_to article.title, [@objet, article.secteur, article], class: "article-link" %>
+      </li>
+    <% end %>
+  </ul>
+
+  <%= link_to "Retour", objets_path, class: "btn btn-secondary" %>
+</div>

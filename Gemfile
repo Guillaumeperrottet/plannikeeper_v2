@@ -24,6 +24,7 @@ gem 'omniauth', '~> 1.9'
 gem 'omniauth-google-oauth2', '~> 0.8'
 gem 'dotenv-rails', groups: [:development, :test]
 gem 'image_processing', '~> 1.2'
+gem 'browser'
 
 # Use PostgreSQL as the database for Active Record in production
 group :production do

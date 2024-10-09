@@ -90,6 +90,7 @@ GEM
       popper_js (>= 2.11.8, < 3)
     breadcrumbs_on_rails (4.1.0)
       railties (>= 5.0)
+    browser (5.3.1)
     builder (3.3.0)
     capybara (3.40.0)
       addressable
@@ -354,6 +355,7 @@ DEPENDENCIES
   bootsnap
   bootstrap (~> 5.2)
   breadcrumbs_on_rails
+  browser
   capybara
   debug
   devise
