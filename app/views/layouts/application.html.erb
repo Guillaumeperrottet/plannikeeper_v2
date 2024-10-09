@@ -8,18 +8,19 @@
 
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
-  </head>
 
-<script>
-  document.addEventListener("DOMContentLoaded", function() {
-    setTimeout(function() {
-      const notice = document.getElementById('flash-notice');
-      const alert = document.getElementById('flash-alert');
-      if (notice) notice.style.display = 'none';
-      if (alert) alert.style.display = 'none';
-    }, 5000); // Masquer après 5 secondes
-  });
-</script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function() {
+        setTimeout(function() {
+          const notice = document.getElementById('flash-notice');
+          const alert = document.getElementById('flash-alert');
+          if (notice) notice.style.display = 'none';
+          if (alert) alert.style.display = 'none';
+        }, 5000); // Masquer après 5 secondes
+      });
+    </script>
+
+  </head>
 
   <body>
     <% unless devise_controller? %>

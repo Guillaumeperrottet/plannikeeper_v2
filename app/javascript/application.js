@@ -1,4 +1,4 @@
-import "rails-ujs"; // Charge le fichier que nous avons créé
+import "rails-ujs";
 
 import { Application } from "@hotwired/stimulus"
 import { eagerLoadControllersFrom } from "@hotwired/stimulus-loading"

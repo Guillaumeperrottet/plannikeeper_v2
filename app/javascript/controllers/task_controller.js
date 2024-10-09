@@ -48,9 +48,9 @@ export default class extends Controller {
       : '<li>Aucune tâche à venir.</li>';
 
       console.log("Tâches 'Cette semaine':", data.this_week_tasks);
-console.log("Tâches 'À venir':", data.upcoming_tasks);
-console.log("This Week Target:", this.thisWeekTasksTarget);
-console.log("Upcoming Target:", this.upcomingTasksTarget);
+      console.log("Tâches 'À venir':", data.upcoming_tasks);
+      console.log("This Week Target:", this.thisWeekTasksTarget);
+      console.log("Upcoming Target:", this.upcomingTasksTarget);
 
     // Ajoute un écouteur d'événement sur chaque tâche pour rediriger lors du clic
     document.querySelectorAll('[data-task-url]').forEach(taskElement => {
