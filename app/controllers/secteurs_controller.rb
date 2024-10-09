@@ -17,7 +17,6 @@ class SecteursController < ApplicationController
   end
 
   def destroy
-     puts "Deleting sector with params: #{params.inspect}"
     @secteur.destroy
     redirect_to edit_objet_path(@objet), notice: 'Secteur supprimé avec succès.'
   end

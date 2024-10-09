@@ -25,14 +25,6 @@
           <%= form.label :adresse, "Adresse de l'objet", class: "object-label" %>
           <%= form.text_field :adresse, class: "form-control object-input" %>
         </div>
-
-        <div class="object-field">
-          <%= form.label :image, "Image de l'objet", class: "object-label" %>
-          <% if @objet.image.attached? %>
-            <%= image_tag @objet.image, alt: "Image de l'objet", class: "object-image-preview" %>
-          <% end %>
-          <%= form.file_field :image, class: "form-control object-file-input" %>
-        </div>
       </div>
 
       <div class="right-column sectors-form">
@@ -53,13 +45,7 @@
 
                 <%= secteur_form.file_field :image, class: "form-control sector-file-input" %>
 
-<% if secteur_form.object.persisted? %>
-  <%= link_to "Supprimer",
-              objet_secteur_path(@objet, secteur_form.object),
-              method: :delete,
-              data: { confirm: "Êtes-vous sûr de vouloir supprimer ce secteur ?" },
-              class: 'btn-simple btn-danger sector-remove-btn' %>
-<% end %>
+                <%= link_to "Supprimer", "#", class: "btn-simple btn-danger sector-remove-btn", data: { action: "sector#removeSector" } %>
               </div>
             <% end %>
           </div>
@@ -71,6 +57,8 @@
                 <%= secteur_form.text_field :nom, class: "form-control sector-input" %>
                 <%= secteur_form.hidden_field :_destroy %>
                 <%= secteur_form.file_field :image, class: "form-control sector-file-input" %>
+
+                <%= link_to "Supprimer", "#", class: "btn-simple btn-danger sector-remove-btn", data: { action: "sector#removeSector" } %>
               <% end %>
             </div>
           </template>
