@@ -52,8 +52,14 @@ class ArticlesController < ApplicationController
       else
         @tasks = @tasks.order(Arel.sql('COALESCE(end_date, realisation_date) ASC')) # Tri par défaut
       end
+
+      # Vérifier si l'appareil est mobile et rendre la vue correspondante
+      if browser.device.mobile?
+        render 'articles/mobile/mobile_show'
+      end
     end
   end
+
 
 
   def set_breadcrumbs

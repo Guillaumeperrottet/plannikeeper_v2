@@ -1,0 +1,129 @@
+.article-mobile-show {
+  padding: 20px;
+}
+
+.article-title {
+  font-size: 24px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.add-task-container {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.task-list {
+  margin-bottom: 20px;
+}
+
+.task-list-items {
+  list-style: none;
+  padding: 0;
+}
+
+.task-item {
+  background-color: #f9f9f9;
+  margin-bottom: 10px;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start; /* Aligne le contenu en haut */
+}
+
+.task-details {
+  flex: 1; /* Prend tout l'espace disponible */
+  margin-right: 10px; /* Espacement avec les icônes */
+}
+.task-name {
+  font-size: 18px;
+  margin-bottom: 5px;
+}
+
+.task-meta {
+  font-size: 14px;
+  color: #666;
+}
+
+.status-badge {
+  background-color: #e0e0e0;
+  color: #333;
+  padding: 5px;
+  border-radius: 5px;
+  display: inline-block;
+  margin-top: 5px;
+}
+
+.task-actions {
+  display: flex;
+  flex-direction: column; /* Affiche les boutons l'un sous l'autre */
+  gap: 5px; /* Espace entre les boutons */
+  align-self: flex-end; /* Aligne les boutons en bas à droite */
+}
+
+.task-actions .btn {
+  font-size: 14px;
+  padding: 5px;
+  border-radius: 5px;
+  width: 35px; /* Largeur fixe pour les boutons */
+  height: 35px; /* Hauteur fixe pour un aspect carré */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.task-link {
+  text-decoration: none;
+  color: inherit; /* Garder la couleur par défaut du texte */
+  display: block; /* Rendre tout le bloc cliquable */
+  padding: 10px;
+  border-radius: 10px;
+  background-color: #f9f9f9;
+  transition: background-color 0.2s ease;
+}
+
+.task-link:hover {
+  background-color: #e0e0e0; /* Changer le fond au survol pour indiquer que c'est cliquable */
+}
+
+.article-mobile-show .btn-sm {
+  font-size: 14px;
+  padding: 5px 10px;
+  border-radius: 5px;
+}
+
+.article-mobile-show .fa-clock-rotate-left {
+  margin-right: 5px; /* Espace entre l'icône et le texte */
+}
+
+
+@media (max-width: 768px) {
+  .task-name {
+    font-size: 16px;
+  }
+
+  .task-meta {
+    font-size: 12px;
+  }
+
+  .task-actions .btn {
+    font-size: 12px;
+    padding: 5px;
+  }
+}
+
+@media (max-width: 480px) {
+  .article-title {
+    font-size: 20px;
+  }
+
+  .task-name {
+    font-size: 14px;
+  }
+
+  .task-meta {
+    font-size: 10px;
+  }
+}

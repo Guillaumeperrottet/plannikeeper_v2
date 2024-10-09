@@ -12,6 +12,13 @@ class ObjetsController < ApplicationController
     @secteurs = @objet.secteurs.includes(:image_attachment)
     @selected_sector_id = params[:selected_sector_id]
     set_article_and_tasks
+
+    if browser.device.mobile?
+      render 'objets/mobile/mobile_show'
+    else
+      # Vue par défaut pour les écrans non mobiles
+      render 'objets/show'
+    end
   end
 
   def new

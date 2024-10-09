@@ -64,3 +64,58 @@
   height: 40px;
   object-fit: cover;
   }
+
+  @media (max-width: 768px) {
+    .navbar-lewagon {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .navbar-toggler {
+      display: block; /* Affiche le bouton de la navbar sur les petits écrans */
+      margin-left: auto;
+    }
+
+    .collapse.navbar-collapse {
+      width: 100%;
+    }
+
+    .navbar-nav {
+      flex-direction: column; /* Pour aligner les éléments verticalement */
+    }
+
+    .navbar-center {
+      display: none; /* Masquer le centre de la navbar pour gagner de la place */
+    }
+
+    .nav-item.dropdown {
+      position: relative; /* Pour que le dropdown-menu soit positionné par rapport à son parent */
+    }
+
+    .dropdown-menu {
+      display: none;
+      position: absolute;
+      right: 0; /* Aligne le menu à droite */
+      top: 100%; /* Place le menu juste en dessous de l'avatar */
+      background-color: white;
+      border: 1px solid #ccc;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      width: 200px;
+      z-index: 1000; /* S'assure que le menu s'affiche au-dessus des autres éléments */
+    }
+
+    .dropdown-menu.show {
+      display: block;
+    }
+
+    .avatar {
+      cursor: pointer;
+      width: 40px;
+      height: 40px;
+      object-fit: cover;
+      border-radius: 50%;
+      margin: 0 1rem; /* Ajuster les marges si nécessaire */
+    }
+  }
