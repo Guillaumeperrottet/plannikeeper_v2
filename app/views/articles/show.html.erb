@@ -1,72 +1,77 @@
 <div class="spacer"></div>
 <div class="container-fluid p-0">
-  <div class="d-flex justify-content-between align-items-center mb-3 px-4">
-    <h1><%= @article.title %></h1>
-    <div class="action-buttons">
-      <%= link_to new_objet_secteur_article_task_path(@objet, @secteur, @article), class: 'btn-link action-button me-3' do %>
-        + ajouter une tâche
-      <% end %>
-      <%= link_to historique_objet_secteur_article_tasks_path(@objet, @secteur, @article), class: 'btn-link action-button' do %>
-        Historique
-      <% end %>
-      </div>
-  </div>
-  <div class="filters">
-    <form method="get" class="d-flex px-4" id="filters-form">
-      <select name="executant_filter" class="form-select me-2" onchange="this.form.submit()">
-        <option value="">Tous les exécutants</option>
-        <option value="interne" <%= 'selected' if params[:executant_filter] == 'interne' %>>Interne</option>
-        <option value="sous-traitant" <%= 'selected' if params[:executant_filter] == 'sous-traitant' %>>Sous-traitant</option>
-      </select>
-
-      <select name="cfc" class="form-select me-2" onchange="this.form.submit()">
-        <option value="">Tous les CFC</option>
-        <% if @cfcs.present? %>
-          <% @cfcs.each do |cfc| %>
-            <option value="<%= cfc %>" <%= 'selected' if params[:cfc] == cfc %>><%= cfc %></option>
-          <% end %>
+  <!-- Partie fixe contenant le titre, les boutons d'action, et les filtres -->
+  <div class="sticky-header">
+    <div class="d-flex justify-content-between align-items-center mb-3 px-4">
+      <h1><%= @article.title %></h1>
+      <div class="action-buttons">
+        <%= link_to new_objet_secteur_article_task_path(@objet, @secteur, @article), class: 'btn-link action-button me-3' do %>
+          + ajouter une tâche
         <% end %>
-      </select>
+        <%= link_to historique_objet_secteur_article_tasks_path(@objet, @secteur, @article), class: 'btn-link action-button' do %>
+          Historique
+        <% end %>
+        <button onclick="window.print()" class="btn btn-secondary print-button">
+          <i class="fas fa-print"></i> Imprimer
+        </button>
+      </div>
+    </div>
+    <div class="filters">
+      <form method="get" class="d-flex px-4" id="filters-form">
+        <select name="executant_filter" class="form-select me-2" onchange="this.form.submit()">
+          <option value="">Tous les exécutants</option>
+          <option value="interne" <%= 'selected' if params[:executant_filter] == 'interne' %>>Interne</option>
+          <option value="sous-traitant" <%= 'selected' if params[:executant_filter] == 'sous-traitant' %>>Sous-traitant</option>
+        </select>
 
-      <select name="task_type_filter" class="form-select me-2" onchange="this.form.submit()">
-        <option value="">Tous les types</option>
-        <option value="réparations" <%= 'selected' if params[:task_type_filter] == 'réparations' %>>Réparations</option>
-        <option value="récurrence" <%= 'selected' if params[:task_type_filter] == 'récurrence' %>>Récurrence</option>
-        <option value="entretiens" <%= 'selected' if params[:task_type_filter] == 'entretiens' %>>Entretiens</option>
-      </select>
-    </form>
+        <select name="cfc" class="form-select me-2" onchange="this.form.submit()">
+          <option value="">Tous les CFC</option>
+          <% if @cfcs.present? %>
+            <% @cfcs.each do |cfc| %>
+              <option value="<%= cfc %>" <%= 'selected' if params[:cfc] == cfc %>><%= cfc %></option>
+            <% end %>
+          <% end %>
+        </select>
+
+        <select name="task_type_filter" class="form-select me-2" onchange="this.form.submit()">
+          <option value="">Tous les types</option>
+          <option value="réparations" <%= 'selected' if params[:task_type_filter] == 'réparations' %>>Réparations</option>
+          <option value="récurrence" <%= 'selected' if params[:task_type_filter] == 'récurrence' %>>Récurrence</option>
+          <option value="entretiens" <%= 'selected' if params[:task_type_filter] == 'entretiens' %>>Entretiens</option>
+        </select>
+      </form>
+    </div>
   </div>
-
 
   <!-- Conteneur défilant pour la partie des tâches -->
   <div class="scrollable-content">
     <table class="table table-hover">
-        <thead>
-          <tr>
-            <th>Nom</th>
-            <th>
-              <span>Date de création</span>
-              <%= link_to content_tag(:i, '', class: 'fas fa-sort', 'aria-hidden': 'true'), request.params.merge(sort: 'created_at', direction: toggle_sort_direction('created_at')), class: 'sort-arrow' %>
-            </th>
-            <th>
-              <span>Date de fin ou Période</span>
-              <%= link_to content_tag(:i, '', class: 'fas fa-sort', 'aria-hidden': 'true'), request.params.merge(sort: 'end_date', direction: toggle_sort_direction('end_date')), class: 'sort-arrow' %>
-            </th>
-            <th>
-              <span>CFC</span>
-            </th>
-            <th>
-              <span>Type</span>
-            </th>
-            <th>
-              <span>Exécutant</span>
-            </th>
-            <th>
-              <span>Statut</span>
-            </th>
-            <th>Actions</th>
-          </tr>
-        </thead>
+      <thead class="sticky-thead">
+        <tr>
+          <th>Nom</th>
+          <th>
+            <span>Date de création</span>
+            <%= link_to content_tag(:i, '', class: 'fas fa-sort', 'aria-hidden': 'true'), request.params.merge(sort: 'created_at', direction: toggle_sort_direction('created_at')), class: 'sort-arrow' %>
+          </th>
+          <th>
+            <span>Date de fin ou Période</span>
+            <%= link_to content_tag(:i, '', class: 'fas fa-sort', 'aria-hidden': 'true'), request.params.merge(sort: 'end_date', direction: toggle_sort_direction('end_date')), class: 'sort-arrow' %>
+          </th>
+          <th>
+            <span>CFC</span>
+          </th>
+          <th>
+            <span>Type</span>
+          </th>
+          <th>
+            <span>Exécutant</span>
+          </th>
+          <th>
+            <span>Statut</span>
+          </th>
+          <th>Actions</th>
+        </tr>
+      </thead>
       <tbody>
         <% if @tasks.present? %>
           <% @tasks.each do |task| %>
@@ -103,7 +108,6 @@
                   <% end %>
                 </div>
               </td>
-
             </tr>
           <% end %>
         <% else %>
@@ -114,10 +118,6 @@
       </tbody>
     </table>
   </div>
-  <button onclick="window.print()" class="btn btn-secondary">
-  <i class="fas fa-print"></i> Imprimer
-  </button>
-
 </div>
 
 <script>
