@@ -2,7 +2,7 @@ class DashboardController < ApplicationController
   before_action :set_current_path
 
   def dashboard
-    @objets = Objet.all
+    @objets = current_user.objets
     selected_objet = Objet.find(params[:objet_id]) if params[:objet_id].present?
 
     # Initialiser les tâches de la semaine et à venir
