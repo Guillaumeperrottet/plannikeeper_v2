@@ -212,8 +212,6 @@ table.table td, table.table th {
 .sticky-header {
   position: sticky;
   top: 0;
-  z-index: 1000;
-  background-color: #f8f9fa; /* Assure un fond */
   padding: 10px 0;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
