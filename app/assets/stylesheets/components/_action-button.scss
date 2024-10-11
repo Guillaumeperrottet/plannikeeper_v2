@@ -1,0 +1,17 @@
+.action-buttons .action-button {
+  color: black; /* Couleur du texte */
+  font-size: 16px;
+  font-weight: 500; /* Pour un style légèrement plus gras */
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px; /* Pour espacer l'icône du texte */
+}
+
+.action-buttons .action-button:hover {
+  text-decoration: underline; /* L'effet hover pour un visuel distinct */
+}
+
+.action-buttons .action-button i {
+  font-size: 20px; /* Ajuster la taille de l'icône si nécessaire */
+}
