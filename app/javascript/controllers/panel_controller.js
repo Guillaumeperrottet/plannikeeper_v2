@@ -5,11 +5,10 @@ export default class extends Controller {
 
   connect() {
     console.log("Panel controller connected.");
-    // if (this.hasTitleTarget) {
-    //   console.log("Title target:", this.titleTarget);
-    // } else {
-    //   console.warn("Title target is missing at connect time.");
-    // }
+    window.addEventListener("resize", this.resizeImageContainer.bind(this));
+  }
+  disconnect() {
+    window.removeEventListener("resize", this.resizeImageContainer.bind(this));
   }
 
   openPanel(article) {
@@ -128,10 +127,13 @@ export default class extends Controller {
 
   resizeImageContainer(reset = false) {
     const sectorImageContainer = this.sectorImageContainerTarget;
+    const panel = document.getElementById("article-panel");
+
     if (reset) {
       sectorImageContainer.style.width = "100%";
     } else {
-      sectorImageContainer.style.width = "calc(100% - 1325px)";
+      const panelWidth = panel ? panel.offsetWidth : 0;
+      sectorImageContainer.style.width = `calc(100% - ${panelWidth}px)`;
     }
   }
 
