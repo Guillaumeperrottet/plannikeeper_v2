@@ -5,10 +5,10 @@ export default class extends Controller {
 
   connect() {
     console.log("Panel controller connected.");
-    window.addEventListener("resize", this.resizeImageContainer.bind(this));
+    window.addEventListener("resize", this.resizeImageContainerNew.bind(this));
   }
   disconnect() {
-    window.removeEventListener("resize", this.resizeImageContainer.bind(this));
+    window.removeEventListener("resize", this.resizeImageContainerNew.bind(this));
   }
 
   openPanel(article) {
@@ -106,7 +106,7 @@ export default class extends Controller {
       const imageContainer = document.getElementById("sector-image-container");
       imageContainer.classList.add("with-panel");
 
-      this.resizeImageContainer();
+      this.resizeImageContainerNew();
       console.log("Panel opened");
     } else {
       console.error("Panel element not found.");
@@ -125,7 +125,8 @@ export default class extends Controller {
     }, 300);
   }
 
-  resizeImageContainer(reset = false) {
+  resizeImageContainerNew(reset = false) {
+    console.log("resizeImageContainerNew called, reset:", reset);
     const sectorImageContainer = this.sectorImageContainerTarget;
     const panel = document.getElementById("article-panel");
 

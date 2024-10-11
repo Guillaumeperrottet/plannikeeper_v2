@@ -21,4 +21,24 @@
   .select-objet {
     margin: 10px 0;
   }
+
+  @media (max-width: 768px) {
+    .hide-on-mobile {
+      display: none;
+    }
+
+    .dashboard-page .agenda-section {
+      margin-top: 0;
+    }
+
+    .navbar-lewagon {
+      font-size: 14px; /* Ajuste la taille de la police pour réduire la taille globale */
+      padding: 5px 10px; /* Réduit l'espace intérieur pour gagner de la place */
+    }
+
+    .navbar-brand img {
+      width: 30px; /* Réduit la taille du logo */
+    }
+  }
+
 }
