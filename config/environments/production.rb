@@ -96,4 +96,16 @@ Rails.application.configure do
   # config.host_authorization = { exclude: ->(request) { request.path == "/up" } }
   config.active_storage.service = :cloudinary
 
+  config.action_mailer.default_url_options = { host: 'www.plannikeeper.com' }
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.smtp_settings = {
+    address: "smtp.gmail.com",
+    port: 587,
+    domain: "example.com",
+    user_name: ENV['EMAIL_USER_NAME'],
+    password: ENV['EMAIL_PASSWORD'],
+    authentication: "plain",
+    enable_starttls_auto: true
+  }
+
 end

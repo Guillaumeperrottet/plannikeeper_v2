@@ -189,6 +189,9 @@ Devise.setup do |config|
   # to give user feedback and not to assert the e-mail validity.
   config.email_regexp = /\A[^@\s]+@[^@\s]+\z/
 
+  # Lorsqu'un utilisateur crée un mot de passe ou se connecte, Devise combine le mot de passe de l'utilisateur avec la valeur de pepper et d'autres donnée
+  config.pepper = 'jkvdiosdf0923i2obv3049vjpè1302!!$àéà1§'
+
   # ==> Configuration for :timeoutable
   # The time you want to timeout the user session without activity. After this
   # time the user will be asked for credentials again. Default is 30 minutes.

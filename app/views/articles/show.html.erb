@@ -44,20 +44,13 @@
   </div>
 
   <!-- Conteneur défilant pour la partie des tâches -->
-
   <div class="scrollable-content">
   <table class="table table-hover">
     <thead class="sticky-thead">
       <tr>
         <th class="text-left">Nom</th>
-            <th>
-              <span>Date de création</span>
-              <%= link_to content_tag(:i, '', class: 'fas fa-sort', 'aria-hidden': 'true'), request.params.merge(sort: 'created_at', direction: toggle_sort_direction('created_at')), class: 'sort-arrow' %>
-            </th>
-            <th>
-              <span>Date de fin ou Période</span>
-              <%= link_to content_tag(:i, '', class: 'fas fa-sort', 'aria-hidden': 'true'), request.params.merge(sort: 'end_date', direction: toggle_sort_direction('end_date')), class: 'sort-arrow' %>
-            </th>
+        <th class="text-center">Date de création</th>
+        <th class="text-center">Date de fin ou Période</th>
         <th class="text-left">CFC</th>
         <th class="text-center">Type</th>
         <th class="text-left">Exécutant</th>
