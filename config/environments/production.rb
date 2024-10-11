@@ -96,4 +96,7 @@ Rails.application.configure do
   # config.host_authorization = { exclude: ->(request) { request.path == "/up" } }
   config.active_storage.service = :cloudinary
 
+  config.assets.debug = true
+
+
 end
