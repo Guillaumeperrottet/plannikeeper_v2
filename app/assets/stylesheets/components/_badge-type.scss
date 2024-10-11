@@ -1,0 +1,38 @@
+.status-badge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem; /* Ajustez les marges internes pour la taille souhaitée */
+  font-size: 0.875rem; /* Ajustez la taille de la police si nécessaire */
+  font-weight: 500;
+  color: #1b754f; /* Couleur du texte */
+  background-color: #cdeddb; /* Couleur de fond par défaut */
+  border-radius: 12px; /* Pour arrondir les bords */
+  text-align: center;
+  white-space: nowrap; /* Empêche le texte de se couper sur plusieurs lignes */
+}
+
+.type-badge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem; /* Ajustez les marges internes pour la taille souhaitée */
+  font-size: 0.875rem; /* Ajustez la taille de la police si nécessaire */
+  font-weight: 500;
+  color: #ffffff; /* Couleur du texte */
+  background-color: #e2e8f0; /* Couleur de fond par défaut */
+  border-radius: 12px; /* Pour arrondir les bords */
+  text-align: center;
+  white-space: nowrap; /* Empêche le texte de se couper sur plusieurs lignes */
+}
+
+.type-badge.réparations {
+  background-color: rgba(246, 173, 85, 0.3); /* Orange clair avec transparence */
+  color: #9c4221;
+}
+
+.type-badge.entretiens {
+  background-color: rgba(144, 205, 244, 0.3); /* Bleu clair avec transparence */
+  color: #2c5282;
+}
+
+.type-badge.récurrence {
+  background-color: rgba(198, 166, 244, 0.3); /* Brun clair avec transparence */
+  color: #553c9a;
+}

@@ -1,0 +1,19 @@
+.print-button {
+  position: fixed !important;
+  right: 20px !important;
+  bottom: 20px !important;
+  z-index: 9999; /* Assure que le bouton est au-dessus de tous les autres éléments */
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  border-radius: 50px;
+  padding: 10px 20px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  gap: 5px; /* Espace entre l'icône et le texte */
+}
+
+.print-button:hover {
+  background-color: #e0e0e0;
+  cursor: pointer;
+}

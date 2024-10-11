@@ -1,0 +1,49 @@
+.filters select {
+  appearance: none; /* Supprime l'apparence native du select */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  padding-right: 30px; /* Ajoute un padding à droite pour éviter que la flèche ne se superpose */
+  background-color: #f0f0f0;
+  border-radius: 20px;
+  padding: 10px 20px;
+  font-size: 14px;
+  color: #333;
+  border: 1px solid #ccc;
+  white-space: normal;
+  background-image: none; /* Supprime la flèche par défaut de Bootstrap */
+
+}
+
+.filters select::-ms-expand {
+  display: none; /* Supprime la flèche par défaut dans Internet Explorer */
+}
+
+.filters {
+  position: relative; /* Pour positionner correctement la flèche */
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 10px; /* Réduit l'espacement sous les boutons */
+  width: 100%;
+}
+
+.filters select::after {
+  content: '▾'; /* Utilisation d'une flèche personnalisée */
+  position: absolute;
+  right: 10px; /* Positionne la flèche à droite */
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none; /* La flèche ne doit pas interagir avec la souris */
+}
+
+.filters button {
+  background-color: #f0f0f0;
+  border-radius: 20px;
+  padding: 10px 20px;
+  font-size: 14px;
+  color: #333;
+  border: 1px solid #ccc;
+  white-space: nowrap;
+  padding: 10px 15px; /* Réduit la taille du bouton "Filtrer" */
+  flex-grow: 0; /* Empêche le bouton de prendre trop d'espace */
+}

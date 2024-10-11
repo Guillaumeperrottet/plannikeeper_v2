@@ -10,7 +10,6 @@
         </ul>
       </div>
     <% end %>
-
     <div class="field">
       <%= form.label :nom %>
       <%= form.text_field :nom %>
@@ -36,7 +35,7 @@
             <% end %>
             <%= secteur_form.file_field :image %>
 
-            <%= link_to "Supprimer", '#', data: { action: "sector#removeSector" }, class: 'remove_fields' %>
+            <%= link_to "Supprimer le secteur", '#', data: { action: "sector#removeSector" }, class: 'remove_fields' %>
           </div>
         <% end %>
       </div>
