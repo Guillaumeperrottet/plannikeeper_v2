@@ -1,0 +1,18 @@
+.sort-arrow {
+  cursor: pointer; /* Change le curseur au survol */
+  padding-left: 5px; /* Espacement pour ne pas être collé au texte */
+  color: #999; /* Couleur des flèches */
+}
+
+.sort-arrow:hover {
+  color: #333; /* Change la couleur au survol pour un effet visuel */
+}
+
+.sort-arrow:after {
+  content: '';
+  display: inline-block;
+  width: 10px; /* Ajustez la largeur si nécessaire */
+  height: 10px; /* Ajustez la hauteur si nécessaire */
+  background-size: contain; /* Ajuste la taille de l'image */
+  background-repeat: no-repeat; /* Évite la répétition de l'image */
+}
