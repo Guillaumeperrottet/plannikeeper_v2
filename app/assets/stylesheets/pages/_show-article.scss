@@ -48,7 +48,7 @@
   font-weight: bold;
   color: #333;
   white-space: nowrap; /* Empêche les en-têtes de se casser sur plusieurs lignes */
-    background-color: transparent; /* Fond transparent pour les titres */
+  background-color: transparent; /* Fond transparent pour les titres */
   border: none; /* Pas de bordure pour les titres */
   font-weight: bold;
 }
@@ -155,19 +155,21 @@ body {
 }
 
 table.table td, table.table th {
-  background-color: transparent !important;
+  background-color: transparent;
   box-shadow: none !important;
 }
 
-/* Style des badges de statut */
 .status-badge {
   display: inline-block;
-  padding: 5px 10px;
-  border-radius: 50px; /* Forme arrondie */
-  color: white;
+  padding: 0.25rem 0.75rem; /* Ajustez les marges internes pour la taille souhaitée */
+  font-size: 0.875rem; /* Ajustez la taille de la police si nécessaire */
   font-weight: bold;
-  text-transform: capitalize;
+  background-color: #cce1c4; /* Couleur du texte */
+  border-radius: 50px; /* Pour arrondir les bords */
+  text-align: center;
+  white-space: nowrap; /* Empêche le texte de se couper sur plusieurs lignes */
 }
+
 
 .scrollable-content {
   max-height: calc(100vh - 200px); /* Ajustez selon le reste de la mise en page */
