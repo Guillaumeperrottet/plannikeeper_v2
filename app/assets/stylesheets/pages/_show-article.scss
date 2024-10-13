@@ -38,7 +38,6 @@
 .table {
   width: 100%;
   table-layout: auto; /* Laisse les colonnes s'ajuster automatiquement */
-  border-collapse: separate;
   border-spacing: 0 15px; /* Espacement entre les lignes */
 }
 
@@ -48,7 +47,7 @@
   font-weight: bold;
   color: #333;
   white-space: nowrap; /* Empêche les en-têtes de se casser sur plusieurs lignes */
-  background-color: transparent; /* Fond transparent pour les titres */
+  background-color: #F4F4F4 !important; /* Fond transparent pour les titres */
   border: none; /* Pas de bordure pour les titres */
   font-weight: bold;
 }
@@ -174,7 +173,6 @@ table.table td, table.table th {
 .scrollable-content {
   max-height: calc(100vh - 200px); /* Ajustez selon le reste de la mise en page */
   overflow-y: auto; /* Ajoute un défilement vertical si le contenu dépasse la hauteur */
-  padding-right: 15px; /* Pour éviter que la barre de défilement ne cache le contenu */
 }
 
 .icon-container {
