@@ -71,6 +71,10 @@
       align-items: stretch;
     }
 
+    .navbar-lewagon .container-fluid {
+      flex-wrap: nowrap; /* Désactive le flex-wrap */
+    }
+
     .navbar-toggler {
       display: block; /* Affiche le bouton de la navbar sur les petits écrans */
       margin-left: auto;
@@ -94,7 +98,7 @@
 
     .dropdown-menu {
       display: none;
-      position: absolute;
+      position: absolute !important;
       right: 0; /* Aligne le menu à droite */
       top: 100%; /* Place le menu juste en dessous de l'avatar */
       background-color: white;
