@@ -282,6 +282,7 @@ export default class extends Controller {
             width: width,
             height: height,
             fill: 'rgba(128, 128, 128, 0.1)', // Transparence pour l'article
+            // stroke: 'rgba(0, 0, 0, 0.2)', // Contour gris léger (0.2 pour la transparence)
             stroke: 'rgba(0, 0, 0, 0.2)', // Contour gris léger (0.2 pour la transparence)
             strokeWidth: 1, // contour très léger
             selectable: false,
