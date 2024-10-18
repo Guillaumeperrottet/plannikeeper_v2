@@ -14,6 +14,8 @@ export default class extends Controller {
     this.startX = 0;
     this.startY = 0;
 
+    this.tooltip = null; // Stocke la référence à l'encadré d'information
+
     console.log("Initial canvas dimensions:", this.canvas.width, this.canvas.height);
 
     this.canvas.on('mouse:down', this.startDrawing.bind(this));
@@ -31,6 +33,44 @@ export default class extends Controller {
       console.log("Window resized, adjusting canvas and articles.");
       this.adjustCanvasSize(document.querySelector('img[data-sector-select-target="sectorImage"]'));
     });
+  }
+
+  // Fonction pour afficher l'encadré avec titre et description
+  showTooltip(event, article) {
+    console.log("Showing tooltip for article:", article);
+    if (this.tooltip) {
+      this.tooltip.remove();
+    }
+
+    this.tooltip = document.createElement('div');
+    this.tooltip.classList.add('tooltip');
+    this.tooltip.style.position = 'absolute';
+    this.tooltip.style.background = 'white';
+    this.tooltip.style.border = '1px solid black';
+    this.tooltip.style.padding = '5px';
+    this.tooltip.style.zIndex = '1000';
+    this.tooltip.innerHTML = `<strong>${article.title}</strong><br>${article.description}`;
+
+    document.body.appendChild(this.tooltip);
+
+    this.positionTooltip(event);
+  }
+
+  // Positionne l'encadré d'information à la position du curseur
+  positionTooltip(event) {
+    if (this.tooltip) {
+      this.tooltip.style.left = `${event.pointer.x + 10}px`;
+      this.tooltip.style.top = `${event.pointer.y + 10}px`;
+    }
+  }
+
+  // Cache l'encadré d'information
+  hideTooltip() {
+    console.log("Hiding tooltip");
+    if (this.tooltip) {
+      this.tooltip.remove();
+      this.tooltip = null;
+    }
   }
 
   adjustCanvasSize(imgElement) {
@@ -303,6 +343,22 @@ export default class extends Controller {
             console.log("Article clicked:", article);
             this.openPanelWithArticleData(article); // Ouvre le panneau avec les données de l'article
           });
+
+           // Survol - Afficher l'encadré d'information
+          rect.on('mouseover', (event) => {
+            this.showTooltip(event, article);
+          });
+
+          // Mise à jour de la position de l'encadré
+          rect.on('mousemove', (event) => {
+            this.positionTooltip(event);
+          });
+
+          // Enlever l'encadré lorsque la souris quitte la zone de l'article
+          rect.on('mouseout', () => {
+            this.hideTooltip();
+          });
+
 
           // Survol - Ajout d'une ombre discrète au survol
           rect.on('mouseover', () => {

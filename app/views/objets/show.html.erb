@@ -7,7 +7,18 @@
     <% end %>
 
     <canvas id="canvasId" data-fabric-target="canvas" class="fabric-canvas"></canvas>
-    <button id="add-article" class="btn btn-secondary" style="position: absolute; top: 10px; right: 10px;" data-action="click->fabric#activateDrawing">+ Ajouter un article</button>
+    <button id="add-article" class="btn btn-secondary" data-action="click->fabric#activateDrawing">+ Ajouter un article</button>
+
+        <!-- Sélecteur d'articles -->
+    <select id="article-selector" class="btn btn-secondary" data-controller="article-select"
+      data-article-select-objet-id-value="<%= @objet.id %>"
+      data-article-select-secteur-id-value="<%= @selected_sector&.id %>"
+      data-action="change->article-select#selectArticle">
+      <option value="">Sélectionnez un article</option>
+      <% @articles.each do |article| %>
+        <option value="<%= article.id %>"><%= article.title %></option>
+      <% end %>
+    </select>
   </div>
 </div>
 
