@@ -1,34 +1,36 @@
 <div class="spacer"></div>
-<div class="article-mobile-show">
-  <div class="d-flex justify-content-between align-items-center mb-3">
-    <h1 class="article-title"><%= @article.title %></h1>
-    <%= link_to historique_objet_secteur_article_tasks_path(@objet, @secteur, @article), class: 'btn btn-secondary btn-sm' do %>
+<div class="article-mobile-show-custom">
+  <!-- Titre et boutons d'action -->
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h1 class="article-title-mobile-custom"><%= @article.title %></h1>
+  <div class="d-flex align-items-center">
+    <%= link_to new_objet_secteur_article_task_path(@objet, @secteur, @article), class: 'btn btn-secondary btn-sm add-task-link-mobile-custom ms-2' do %>
+      + tâche
+    <% end %>
+
+    <%= link_to historique_objet_secteur_article_tasks_path(@objet, @secteur, @article), class: 'btn btn-secondary btn-sm ' do %>
       <i class="fa-solid fa-clock-rotate-left"></i> Historique
     <% end %>
   </div>
+</div>
 
-  <div class="add-task-container">
-    <%= link_to new_objet_secteur_article_task_path(@objet, @secteur, @article), class: 'btn btn-primary' do %>
-      + Ajouter une tâche
-    <% end %>
-  </div>
 
-  <!-- Reste du code pour afficher les tâches -->
-  <div class="task-list">
+  <!-- Liste des tâches -->
+  <div class="task-list-mobile-custom">
     <h2>Tâches en cours</h2>
     <% if @tasks.present? %>
-      <ul class="task-list-items">
+      <ul class="task-list-items-mobile-custom">
         <% @tasks.each do |task| %>
-          <li class="task-item <%= task.status.downcase %>">
-            <%= link_to edit_objet_secteur_article_task_path(@objet, @secteur, @article, task), class: 'task-link' do %>
-              <div class="task-details">
-                <h3 class="task-name"><%= task.name %></h3>
-                <p class="task-meta">Fin: <%= task.end_date.present? ? task.end_date.strftime('%d/%m/%Y') : "N/A" %></p>
-                <p class="task-meta">CFC: <%= task.cfc %> | Type: <%= task.task_type %></p>
-                <p class="task-meta">Exécutant: <%= task.executant %></p>
+          <li class="task-item-mobile-custom <%= task.status.downcase %>">
+            <%= link_to edit_objet_secteur_article_task_path(@objet, @secteur, @article, task), class: 'task-link-mobile-custom' do %>
+              <div class="task-details-mobile-custom">
+                <h3 class="task-name-mobile-custom"><%= task.name %></h3>
+                <p class="task-meta-mobile-custom">Fin: <%= task.end_date.present? ? task.end_date.strftime('%d/%m/%Y') : "N/A" %></p>
+                <p class="task-meta-mobile-custom">CFC: <%= task.cfc %> | Type: <%= task.task_type %></p>
+                <p class="task-meta-mobile-custom">Exécutant: <%= task.executant %></p>
               </div>
             <% end %>
-            <div class="task-actions">
+            <div class="task-actions-mobile-custom">
               <%= form_with url: archive_objet_secteur_article_task_path(@objet, @secteur, @article, task), method: :patch, class: "d-inline" do %>
                 <button type="submit" class="btn btn-sm btn-warning" title="Archiver" data-confirm="Êtes-vous sûr de vouloir archiver cette tâche ?">
                   <i class="fa-solid fa-box-archive"></i>
@@ -49,5 +51,5 @@
     <% end %>
   </div>
 
-  <%= link_to "Retour", objet_path(@objet), class: "btn btn-secondary" %>
+  <%= link_to "Retour", objet_path(@objet), class: "btn btn-secondary btn-block-mobile-custom mt-3" %>
 </div>
