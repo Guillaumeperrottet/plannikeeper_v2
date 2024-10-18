@@ -46,15 +46,15 @@ export default class extends Controller {
     this.tooltip = document.createElement('div');
     this.tooltip.classList.add('tooltip');
 
-    this.tooltip.style.left = `100px`; // Une position fixe pour tester l'affichage
-this.tooltip.style.top = `100px`;
-    this.tooltip.style.zIndex = '9999';
-    this.tooltip.style.position = 'fixed';
-    this.tooltip.style.background = 'white';
-    this.tooltip.style.border = '1px solid black';
-    this.tooltip.style.padding = '5px';
-    this.tooltip.style.color = 'black';
-    this.tooltip.style.fontSize = '14px';
+    this.tooltip.style.zIndex = '9999 !important';
+    this.tooltip.style.position = 'absolute !important';
+    this.tooltip.style.background = 'white !important';
+    this.tooltip.style.border = '1px solid black !important';
+    this.tooltip.style.padding = '5px !important';
+    this.tooltip.style.color = 'black !important';
+    this.tooltip.style.fontSize = '14px !important';
+    this.tooltip.style.display = 'block !important';
+    this.tooltip.style.visibility = 'visible !important';
     this.tooltip.innerHTML = `<strong>${article.title}</strong><br>${article.description}`;
 
     document.body.appendChild(this.tooltip);
