@@ -11,7 +11,7 @@ class Secteur < ApplicationRecord
     return unless image.attached?
 
     unless image.content_type.in?(%w[image/jpeg image/png image/gif image/webp])
-      errors.add(:image, "doit être un JPEG, PNG, GIF, ou WebP")
+      errors.add(:image, "doit être un JPEG, JPG, PNG, GIF, ou WebP / Modifie le format gratuitement sur ce site : https://tools.pdf24.org/fr ")
     end
 
     if image.byte_size > 5.megabytes

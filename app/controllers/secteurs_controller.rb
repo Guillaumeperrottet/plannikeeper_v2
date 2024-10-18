@@ -39,7 +39,7 @@ class SecteursController < ApplicationController
 
   def update
     if @secteur.update(secteur_params)
-      redirect_to @objet, notice: 'Secteur was successfully updated.'
+      redirect_to @objet, notice: 'Secteur mis à jour'
     else
       render :edit
     end
@@ -66,6 +66,6 @@ class SecteursController < ApplicationController
   end
 
   def secteur_params
-    params.require(:secteur).permit(:nom, :image) # Ajoute :image ici
+    params.require(:secteur).permit(:nom, :image)
   end
 end
