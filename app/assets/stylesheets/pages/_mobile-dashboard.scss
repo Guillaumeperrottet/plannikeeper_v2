@@ -1,44 +1,88 @@
-.dashboard-page.mobile {
-  .header {
-    padding: 10px;
-    font-size: 18px;
+.dashboard-page-mobile {
+  display: flex;
+  flex-direction: column;
+  height: 100vh; /* Prend toute la hauteur de l'écran */
+
+  .split-container-mobile {
+    display: flex;
+    flex-direction: column;
+    height: 100%; /* Prend toute la hauteur disponible */
   }
 
-  .object-list {
+  .object-section-mobile {
+    flex: 1;
+    overflow-y: auto;
+    padding: 10px;
+    background-color: #f0f0f0;
+    text-align: left;
+  }
+
+  .object-list-mobile {
+    padding-left: 0;
+    list-style-type: none;
+    margin-left: 0;
     font-size: 14px;
   }
 
-  .create-object {
-    display: block;
-    margin: 10px auto;
-    text-align: center;
+  .object-list-mobile li {
+    margin-bottom: 10px;
   }
 
-  .tasks-display {
+  .object-link-mobile,
+  .create-object-mobile {
+    text-align: left;
+    display: block;
+  }
+
+  .agenda-section-mobile {
+    flex: 1;
+    background-color: #dcdada; /* Fond gris léger */
+    padding: 10px 20px;
+    margin-top: 0;
+    position: relative;
+    flex-direction: column; /* Colonne pour aligner le titre et les sections de tâches */
+    align-items: flex-start;
+    justify-content: center;
+  }
+
+  .tasks-display-mobile {
+    display: flex;
+    justify-content: space-between; /* Espace entre les deux colonnes */
+    width: 100%;
+    position: relative;
+    padding: 10px 0;
+  }
+
+  .task-group-mobile {
+    width: 48%; /* Assure que les colonnes prennent environ la moitié de l'espace */
+    text-align: left;
     padding: 10px;
   }
 
-  .select-objet {
-    margin: 10px 0;
+  .tasks-display-mobile::before {
+    content: '';
+    position: absolute;
+    left: 50%; /* Place le trait au milieu */
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background-color: #ccc; /* Couleur du trait séparateur */
   }
 
-  @media (max-width: 768px) {
-    .hide-on-mobile {
-      display: none;
-    }
-
-    .dashboard-page .agenda-section {
-      margin-top: 0;
-    }
-
-    .navbar-lewagon {
-      font-size: 14px; /* Ajuste la taille de la police pour réduire la taille globale */
-      padding: 5px 10px; /* Réduit l'espace intérieur pour gagner de la place */
-    }
-
-    .navbar-brand img {
-      width: 30px; /* Réduit la taille du logo */
-    }
+  .task-group-mobile ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    max-height: 200px; /* Ajuste selon la taille de la section */
+    overflow-y: auto; /* Permet le défilement si le contenu dépasse */
   }
 
+  .task-group-mobile h3 {
+    font-size: 1.2rem; /* Ajuster la taille si nécessaire */
+    text-align: center;
+  }
+
+  #this-week-tasks-mobile li, #upcoming-tasks-mobile li {
+    cursor: pointer; /* Rend les tâches interactives */
+  }
 }
