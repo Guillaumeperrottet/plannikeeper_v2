@@ -45,6 +45,13 @@
   z-index: 10;
 }
 
+#article-selector {
+  position: absolute;
+  top: 10px;
+  right: 170px;
+  z-index: 10;
+}
+
 /* Panneau latéral */
 #article-panel {
   position: fixed;
@@ -70,4 +77,13 @@
 
 .cursor-plus {
   cursor: crosshair !important; /* Le curseur croisé ressemble à un "+" */
+}
+
+.tooltip {
+  background-color: #fff;
+  border: 1px solid #000;
+  padding: 5px;
+  font-size: 12px;
+  z-index: 1000;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }

@@ -16,6 +16,9 @@ class ObjetsController < ApplicationController
     @secteur = @secteurs.find_by(id: params[:secteur_id]) if params[:secteur_id].present?
     @article = Article.find_by(id: params[:article_id]) if params[:article_id].present?
 
+    # Si un secteur est sélectionné, récupérer ses articles
+    @articles = @secteur ? @secteur.articles : []
+
     set_article_and_tasks
 
     if browser.device.mobile?

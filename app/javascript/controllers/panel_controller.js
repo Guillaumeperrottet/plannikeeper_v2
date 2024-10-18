@@ -14,8 +14,20 @@ export default class extends Controller {
   openPanel(article) {
     console.log("Opening panel with article:", article);
 
+    // Vérifier si le panneau est déjà ouvert avec cet article
+    const selectedArticleId = localStorage.getItem('selectedArticleId');
+    if (selectedArticleId == article.id) {
+      // Si c'est le même article, fermer le panneau
+      this.closePanel();
+      localStorage.removeItem('selectedArticleId'); // Supprime l'article sélectionné
+      console.log("Closing panel because the same article was clicked.");
+      return; // Ne pas continuer à ouvrir le panneau
+    }
+
+    // Mettre à jour l'article sélectionné dans localStorage
     localStorage.setItem('selectedArticleId', article.id);
 
+    // Mettre à jour le titre de l'article dans le panneau
     if (this.titleTarget) {
       this.titleTarget.innerHTML = `<a href="#" data-action="click->panel#redirectToArticle">${article.title}</a>`;
       this.titleTarget.dataset.articleId = article.id;
@@ -25,7 +37,7 @@ export default class extends Controller {
     }
 
     this.loadTasks(article.id);
-    this.showPanel();
+    this.showPanel(); // Ouvrir le panneau
   }
 
   loadTasks(articleId) {
