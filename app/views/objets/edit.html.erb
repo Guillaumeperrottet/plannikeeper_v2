@@ -45,7 +45,7 @@
 
                 <%= secteur_form.file_field :image, class: "form-control sector-file-input" %>
 
-                <%= link_to "Supprimer", "#", class: "btn-simple btn-danger sector-remove-btn", data: { action: "sector#removeSector" } %>
+                <%= link_to "Supprimer", "#", class: "btn-simple btn-danger sector-remove-btn", data: { action: "sector#removeSector submit->delete-confirm#confirm", controller: "delete-confirm", "delete-confirm-message-value": "Êtes-vous sûr de vouloir supprimer ce secteur ?" } %>
               </div>
             <% end %>
           </div>
@@ -58,7 +58,7 @@
                 <%= secteur_form.hidden_field :_destroy %>
                 <%= secteur_form.file_field :image, class: "form-control sector-file-input" %>
 
-                <%= link_to "Supprimer", "#", class: "btn-simple btn-danger sector-remove-btn", data: { action: "sector#removeSector" } %>
+                <%= link_to "Supprimer", "#", class: "btn-simple btn-danger sector-remove-btn", data: { action: "sector#removeSector submit->delete-confirm#confirm", controller: "delete-confirm", "delete-confirm-message-value": "Êtes-vous sûr de vouloir supprimer ce secteur ?" } %>
               <% end %>
             </div>
           </template>
@@ -74,8 +74,9 @@
   <% end %>
 
   <div class="actions delete-object">
-    <%= form_with model: @objet, url: objet_path(@objet), method: :delete, local: true do |f| %>
-      <%= f.submit "Supprimer l'objet", class: "btn-simple btn-danger delete-object-btn", data: { confirm: "Êtes-vous sûr de vouloir supprimer cet objet ?" } %>
+    <%= form_with model: @objet, url: objet_path(@objet), method: :delete, local: true, data: { controller: "delete-confirm", action: "submit->delete-confirm#confirm", "delete-confirm-message-value": "Êtes-vous sûr de vouloir supprimer cet objet ?" } do |f| %>
+      <%= f.submit "Supprimer l'objet", class: "btn-simple btn-danger delete-object-btn" %>
     <% end %>
   </div>
+
 </div>
