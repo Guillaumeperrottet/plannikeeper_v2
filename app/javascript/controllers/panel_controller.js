@@ -133,7 +133,7 @@ export default class extends Controller {
 
     setTimeout(() => {
       imageContainer.classList.remove("with-panel");
-      this.resizeImageContainer(true);
+      this.resizeImageContainerNew(true);
     }, 300);
   }
 

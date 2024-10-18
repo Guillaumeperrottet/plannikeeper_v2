@@ -38,31 +38,47 @@ export default class extends Controller {
   // Fonction pour afficher l'encadré avec titre et description
   showTooltip(event, article) {
     console.log("Showing tooltip for article:", article);
+
     if (this.tooltip) {
       this.tooltip.remove();
     }
 
     this.tooltip = document.createElement('div');
     this.tooltip.classList.add('tooltip');
-    this.tooltip.style.position = 'absolute';
+
+    this.tooltip.style.left = `100px`; // Une position fixe pour tester l'affichage
+this.tooltip.style.top = `100px`;
+    this.tooltip.style.zIndex = '9999';
+    this.tooltip.style.position = 'fixed';
     this.tooltip.style.background = 'white';
     this.tooltip.style.border = '1px solid black';
     this.tooltip.style.padding = '5px';
-    this.tooltip.style.zIndex = '1000';
+    this.tooltip.style.color = 'black';
+    this.tooltip.style.fontSize = '14px';
     this.tooltip.innerHTML = `<strong>${article.title}</strong><br>${article.description}`;
 
     document.body.appendChild(this.tooltip);
+    console.log('Tooltip added to the DOM:', this.tooltip);
+
+    // Vérifie si le tooltip est effectivement ajouté
+    console.log("Tooltip DOM element:", document.querySelector('.tooltip'));
+    console.log('Contenu du tooltip:', this.tooltip.outerHTML);
 
     this.positionTooltip(event);
   }
 
-  // Positionne l'encadré d'information à la position du curseur
   positionTooltip(event) {
     if (this.tooltip) {
-      this.tooltip.style.left = `${event.pointer.x + 10}px`;
-      this.tooltip.style.top = `${event.pointer.y + 10}px`;
+      const canvasRect = this.canvas.upperCanvasEl.getBoundingClientRect(); // Obtenir la position du canvas dans la page
+
+      // Ajuster la position du tooltip relativement à l'écran
+      this.tooltip.style.left = `${event.e.clientX + canvasRect.left + 10}px`;
+      this.tooltip.style.top = `${event.e.clientY + canvasRect.top + 10}px`;
+
+      console.log(`Tooltip position: left=${event.e.clientX + 10}, top=${event.e.clientY + 10}`);
     }
   }
+
 
   // Cache l'encadré d'information
   hideTooltip() {
