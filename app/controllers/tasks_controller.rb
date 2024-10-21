@@ -10,8 +10,15 @@ class TasksController < ApplicationController
     @objet = Objet.find(params[:objet_id])
     @secteur = Secteur.find(params[:secteur_id])
     @article = Article.find(params[:article_id])
-    add_breadcrumb "Création de tâche", new_objet_secteur_article_task_path(@objet, @secteur, @article) # Ajout direct ici
+    add_breadcrumb "Création de tâche", new_objet_secteur_article_task_path(@objet, @secteur, @article)
     @task = @article.tasks.new
+
+    if browser.device.mobile?
+      render 'tasks/mobile/mobile_new'
+    else
+      # Vue par défaut pour les écrans non mobiles
+      render 'tasks/new'
+    end
   end
 
   def create
@@ -189,6 +196,12 @@ class TasksController < ApplicationController
   def edit
     @task = @article.tasks.find(params[:id])
     @read_only = @task.status == 'fermée'
+    if browser.device.mobile?
+      render 'tasks/mobile/mobile_edit'
+    else
+      # Vue par défaut pour les écrans non mobiles
+      render 'tasks/edit'
+    end
   end
 
   def this_week
