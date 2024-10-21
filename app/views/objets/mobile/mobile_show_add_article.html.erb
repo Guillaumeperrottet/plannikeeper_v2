@@ -1,16 +1,16 @@
 <div class="object-show" data-controller="fabric sector-select panel" data-objet-id="<%= @objet.id %>" data-sector-select-objet-id="<%= @objet.id %>" data-selected-sector-id="<%= params[:selected_sector_id] || @selected_sector&.id %>">
-  <div id="sector-image-container" data-panel-target="sectorImageContainer" style="position: relative;">
+  <div id="sector-image-container" data-controller="pinch-zoom" data-pinch-zoom-target="imageContainer" data-panel-target="sectorImageContainer" style="position: relative;">
     <% if @selected_sector && @selected_sector.image.attached? %>
       <%= image_tag @selected_sector.image, alt: "Image du secteur", class: "sector-image", data: { sector_select_target: 'sectorImage' }, style: "width: 100%; height: auto;", draggable: "false" %>
     <% else %>
-      <%= image_tag '', alt: "Image du secteur sélectionné", data: { sector_select_target: 'sectorImage' }, style: "display: none;", draggable: "false" %>
+      <%= image_tag '', alt: "Image du secteur sélectionné", data: { sector_select_target: 'sectorImage', pinch_zoom_target: 'image' }, style: "display: none;", draggable: "false" %>
     <% end %>
 
     <canvas id="canvasId" data-fabric-target="canvas" class="fabric-canvas"></canvas>
-    <button id="add-article-mobile" class="btn btn-secondary" data-action="click->fabric#activateDrawing">+ Ajouter un article</button>
+    <button id="add-article" class="btn btn-secondary" data-action="click->fabric#activateDrawing">+ Ajouter un article</button>
 
         <!-- Sélecteur d'articles -->
-    <select id="article-selector-mobile" class="btn btn-secondary" data-controller="article-select"
+    <select id="article-selector" class="btn btn-secondary" data-controller="article-select"
       data-article-select-objet-id-value="<%= @objet.id %>"
       data-article-select-secteur-id-value="<%= @selected_sector&.id %>"
       data-action="change->article-select#selectArticle">

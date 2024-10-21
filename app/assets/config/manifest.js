@@ -5,3 +5,4 @@
 //= link popper.js
 //= link bootstrap.min.js
 //= link rails-ujs.js
+//= link lib/pinch-zoom.js
