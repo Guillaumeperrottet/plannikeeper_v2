@@ -7,11 +7,9 @@ export default class extends Controller {
 
     this.sectorSelectTarget = document.querySelector('[data-sector-select-target="sectorSelect"]');
     this.sectorImageTarget = document.querySelector('[data-sector-select-target="sectorImage"]');
-    this.canvasContainerTarget = document.querySelector('[data-fabric-target="canvas"]');
 
     console.log('Sector Select Target:', this.sectorSelectTarget);
     console.log('Sector Image Target:', this.sectorImageTarget);
-    console.log('Canvas Target:', this.canvasContainerTarget);
 
     if (this.sectorSelectTarget) {
       this.sectorSelectTarget.addEventListener('change', (event) => this.handleSectorChange(event));
@@ -27,32 +25,6 @@ export default class extends Controller {
         this.loadArticles(sectorId);
       }
     });
-  }
-
-  initializePinchZoom(imageElement) {
-    console.log("Initializing PinchZoom for", imageElement);
-
-    const pinchZoom = new PinchZoom(imageElement, {
-      draggableUnzoomed: true,
-      minZoom: 1,
-      maxZoom: 5,
-      tapZoomFactor: 2,
-      zoomOutFactor: 1.5,
-      animationDuration: 300
-    });
-
-    pinchZoom.on('zoomupdate', (event) => {
-      const zoomFactor = event.zoomFactor;
-      this.applyCanvasZoom(zoomFactor);
-    });
-  }
-
-  applyCanvasZoom(zoomFactor) {
-    if (window.canvas) {
-      // Applique le zoom au canevas pour correspondre au zoom de l'image
-      window.canvas.setZoom(zoomFactor);
-      window.canvas.renderAll(); // Redessiner le canevas avec le facteur de zoom
-    }
   }
 
   handleSectorChange(event) {
@@ -151,94 +123,79 @@ export default class extends Controller {
     }
   }
 
-    // Méthode pour initialiser PinchZoom
-    initializePinchZoom(imageElement) {
-      console.log("Initializing PinchZoom for", imageElement);
 
-      new PinchZoom(imageElement, {
-        draggableUnzoomed: true,
-        minZoom: 1,
-        maxZoom: 5,
-        tapZoomFactor: 2,
-        zoomOutFactor: 1.5,
-        animationDuration: 300
-      });
+  loadArticles(sectorId) {
+    const objetId = this.element.dataset.sectorSelectObjetId;
+    console.log("Loading articles for sector:", sectorId, "and object:", objetId);
+
+    if (!objetId || !sectorId) {
+      console.error("Objet ID or Sector ID is missing.");
+      return;
     }
 
-    loadArticles(sectorId) {
-      const objetId = this.element.dataset.sectorSelectObjetId;
-      console.log("Loading articles for sector:", sectorId, "and object:", objetId);
+    // Attendre que Fabric.js soit initialisé avant d'ajouter les articles
+    if (!window.canvas || !window.canvas.initialized) {
+      console.error("Canvas is not initialized. Waiting for 'canvasReady' event.");
+      return;
+    }
 
-      if (!objetId || !sectorId) {
-        console.error("Objet ID or Sector ID is missing.");
-        return;
-      }
+    const url = `/objets/${objetId}/secteurs/${sectorId}/articles`;
+    console.log("Fetching articles from URL:", url); // Log the URL for fetching articles
+    fetch(url)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then(data => {
+        console.log("Articles loaded from server:", data.articles); // Log received articles
 
-      // Attendre que Fabric.js soit initialisé avant d'ajouter les articles
-      if (!window.canvas || !window.canvas.initialized) {
-        console.error("Canvas is not initialized. Waiting for 'canvasReady' event.");
-        return;
-      }
+        if (!data.articles || data.articles.length === 0) {
+          console.log("No articles to load.");
+          return;
+        }
 
-      const url = `/objets/${objetId}/secteurs/${sectorId}/articles`;
-      console.log("Fetching articles from URL:", url); // Log the URL for fetching articles
-      fetch(url)
-        .then(response => {
-          if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+        // Récupère la taille actuelle du canevas
+        const canvasWidth = window.canvas.width;
+        const canvasHeight = window.canvas.height;
+
+        // Ajoute chaque article au canevas
+        data.articles.forEach(article => {
+          console.log("Adding article to canvas:", article);
+
+          // Log des dimensions de l'article pour vérifier
+          console.log(`Article dimensions: left=${article.position_x}, top=${article.position_y}, width=${article.width}, height=${article.height}`);
+
+          // Calculer les positions absolues à partir des coordonnées relatives
+          const left = parseFloat(article.position_x) * canvasWidth;
+          const top = parseFloat(article.position_y) * canvasHeight;
+          const width = parseFloat(article.width) * canvasWidth;
+          const height = parseFloat(article.height) * canvasHeight;
+
+          // Vérifie que les dimensions ne sont pas nulles
+          if (width > 0 && height > 0) {
+            console.log(`Calculated dimensions: left=${left}, top=${top}, width=${width}, height=${height}`);
+
+            const rect = new fabric.Rect({
+              left: left,
+              top: top,
+              width: width,
+              height: height,
+              fill: 'transparent',
+              stroke: 'transparent',
+              strokeWidth: 2,
+            });
+
+            window.canvas.add(rect); // Ajoute le rectangle au canevas
+            window.canvas.renderAll(); // Rafraîchir le canevas après ajout
+          } else {
+            console.warn(`Skipping article with invalid dimensions: left=${left}, top=${top}, width=${width}, height=${height}`);
           }
-          return response.json();
-        })
-        .then(data => {
-          console.log("Articles loaded from server:", data.articles); // Log received articles
-
-          if (!data.articles || data.articles.length === 0) {
-            console.log("No articles to load.");
-            return;
-          }
-
-          // Récupère la taille actuelle du canevas
-          const canvasWidth = window.canvas.getWidth();
-          const canvasHeight = window.canvas.getHeight();
-          const zoomFactor = window.canvas.getZoom();  // Récupérer le facteur de zoom actuel
-
-          // Ajoute chaque article au canevas
-          data.articles.forEach(article => {
-            console.log("Adding article to canvas:", article);
-
-            // Log des dimensions de l'article pour vérifier
-            console.log(`Article dimensions: left=${article.position_x}, top=${article.position_y}, width=${article.width}, height=${article.height}`);
-
-            // Calculer les positions absolues à partir des coordonnées relatives et du zoom
-            const left = parseFloat(article.position_x) * canvasWidth * zoomFactor;
-            const top = parseFloat(article.position_y) * canvasHeight * zoomFactor;
-            const width = parseFloat(article.width) * canvasWidth * zoomFactor;
-            const height = parseFloat(article.height) * canvasHeight * zoomFactor;
-
-            // Vérifie que les dimensions ne sont pas nulles
-            if (width > 0 && height > 0) {
-              console.log(`Calculated dimensions: left=${left}, top=${top}, width=${width}, height=${height}`);
-
-              const rect = new fabric.Rect({
-                left: left,
-                top: top,
-                width: width,
-                height: height,
-                fill: 'transparent',
-                stroke: 'transparent',
-                strokeWidth: 2,
-              });
-
-              window.canvas.add(rect); // Ajoute le rectangle au canevas
-              window.canvas.renderAll(); // Rafraîchir le canevas après ajout
-            } else {
-              console.warn(`Skipping article with invalid dimensions: left=${left}, top=${top}, width=${width}, height=${height}`);
-            }
-          });
-        })
-        .catch(error => {
-          console.error("Erreur lors du chargement des articles :", error);
         });
-    }
-
+      })
+      .catch(error => {
+        console.error("Erreur lors du chargement des articles :", error);
+      });
+  }
 }
