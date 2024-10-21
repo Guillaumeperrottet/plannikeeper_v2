@@ -46,7 +46,7 @@
 
     <div class="task-form-group">
       <%= f.label :cfc, "Numéro CFC" %>
-      <%= f.text_field :cfc, class: "form-control" %>
+      <%= f.select :cfc, ['CFC 241 - Menuiserie', 'CFC 251 - Sanitaire', 'CFC 261 - Électricité', 'CFC 999 - Divers'], { prompt: "Sélectionnez un numéro CFC" }, class: "form-control" %>
     </div>
 
     <div class="task-form-group">
