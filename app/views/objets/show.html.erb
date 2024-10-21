@@ -1,10 +1,14 @@
 <div class="object-show" data-controller="fabric sector-select panel" data-objet-id="<%= @objet.id %>" data-sector-select-objet-id="<%= @objet.id %>" data-selected-sector-id="<%= params[:selected_sector_id] || @selected_sector&.id %>">
   <div id="sector-image-container" data-panel-target="sectorImageContainer" style="position: relative;">
-    <% if @selected_sector && @selected_sector.image.attached? %>
-      <%= image_tag @selected_sector.image, alt: "Image du secteur", class: "sector-image", data: { sector_select_target: 'sectorImage' }, style: "width: 100%; height: auto;", draggable: "false" %>
-    <% else %>
-      <%= image_tag '', alt: "Image du secteur sélectionné", data: { sector_select_target: 'sectorImage' }, style: "display: none;", draggable: "false" %>
-    <% end %>
+      <% if @selected_sector && @selected_sector.image.attached? %>
+        <%= image_tag @selected_sector.image, alt: "Image du secteur", class: "sector-image", data: { sector_select_target: 'sectorImage' }, style: "width: 100%; height: auto;", draggable: "false",
+          srcset: "#{@selected_sector.image.variant(resize: '500x500')} 500w,
+                  #{@selected_sector.image.variant(resize: '1000x1000')} 1000w,
+                  #{@selected_sector.image.variant(resize: '2000x2000')} 2000w",
+          sizes: "(max-width: 600px) 500px, (max-width: 1200px) 1000px, 2000px" %>
+      <% else %>
+        <%= image_tag '', alt: "Image du secteur sélectionné", data: { sector_select_target: 'sectorImage' }, style: "display: none;", draggable: "false" %>
+      <% end %>
 
     <canvas id="canvasId" data-fabric-target="canvas" class="fabric-canvas"></canvas>
     <button id="add-article" class="btn btn-secondary" data-action="click->fabric#activateDrawing">+ Ajouter un article</button>
