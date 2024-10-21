@@ -21,10 +21,13 @@ class ObjetsController < ApplicationController
 
     set_article_and_tasks
 
-    if browser.device.mobile?
+    # Vérifier si l'utilisateur force l'affichage de la vue "mobile_show_add_article"
+    if params[:add_article]
+      render 'objets/mobile/mobile_show_add_article'
+    elsif browser.device.mobile? && !params[:force_desktop]
       render 'objets/mobile/mobile_show'
     else
-      # Vue par défaut pour les écrans non mobiles
+      # Vue par défaut pour les écrans non mobiles ou si 'force_desktop' est présent
       render 'objets/show'
     end
   end

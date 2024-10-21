@@ -1,0 +1,151 @@
+<div class="object-show" data-controller="fabric sector-select panel" data-objet-id="<%= @objet.id %>" data-sector-select-objet-id="<%= @objet.id %>" data-selected-sector-id="<%= params[:selected_sector_id] || @selected_sector&.id %>">
+  <div id="sector-image-container" data-panel-target="sectorImageContainer" style="position: relative;">
+    <% if @selected_sector && @selected_sector.image.attached? %>
+      <%= image_tag @selected_sector.image, alt: "Image du secteur", class: "sector-image", data: { sector_select_target: 'sectorImage' }, style: "width: 100%; height: auto;", draggable: "false" %>
+    <% else %>
+      <%= image_tag '', alt: "Image du secteur sélectionné", data: { sector_select_target: 'sectorImage' }, style: "display: none;", draggable: "false" %>
+    <% end %>
+
+    <canvas id="canvasId" data-fabric-target="canvas" class="fabric-canvas"></canvas>
+    <button id="add-article-mobile" class="btn btn-secondary" data-action="click->fabric#activateDrawing">+ Ajouter un article</button>
+
+        <!-- Sélecteur d'articles -->
+    <select id="article-selector-mobile" class="btn btn-secondary" data-controller="article-select"
+      data-article-select-objet-id-value="<%= @objet.id %>"
+      data-article-select-secteur-id-value="<%= @selected_sector&.id %>"
+      data-action="change->article-select#selectArticle">
+      <option value="">Sélectionnez un article</option>
+      <% @articles.each do |article| %>
+        <option value="<%= article.id %>"><%= article.title %></option>
+      <% end %>
+    </select>
+  </div>
+</div>
+
+<div id="article-panel" class="side-panel hidden" data-controller="panel panel-tab" data-panel-target="sectorImageContainer" data-panel-objet-id="<%= @objet.id %>" data-panel-selected-sector-id="<%= params[:selected_sector_id] || @selected_sector&.id %>">
+  <div class="side-panel-header">
+      <button id="close-panel" data-action="panel#closePanel">&#x2190;</button>
+      <h3 id="article-title" data-panel-target="title" data-article-id="">
+        <a href="#" data-action="click->panel#redirectToArticle">Titre de l'article</a>
+      </h3>
+  </div>
+
+  <!-- Menu des onglets -->
+  <div class="tab-menu">
+    <button class="tablinks active" data-action="panel-tab#openTab" data-tab="todo" data-panel-tab-target="tabLinks">TODO</button>
+    <button class="tablinks" data-action="panel-tab#openTab" data-tab="create-task" data-panel-tab-target="tabLinks">Créer tâche</button>
+  </div>
+
+  <!-- Contenu du tab "TODO" -->
+  <div id="todo" class="tabcontent" data-panel-tab-target="tabContent" data-tab-content="todo" style="display: block;">
+    <h4>Liste des tâches</h4>
+    <div id="task-list" class="task-list">
+      <!-- Tâches dynamiques ici -->
+    </div>
+  </div>
+
+  <div id="create-task" class="tabcontent" data-panel-tab-target="tabContent" data-tab-content="create-task" style="display: none;">
+    <h4>Créer une tâche</h4>
+    <div class="task-container">
+      ...work in progress les bg...
+      ...la création de tâche depuis ici arrive bientôt...
+      ...Pour l'instant clique sur le nom de l'article en dessus ^...
+    </div>
+  </div>
+</div>
+
+  <!-- Contenu du tab "Créer tâche" -->
+  <!-- <div id="create-task" class="tabcontent" data-panel-tab-target="tabContent" data-tab-content="create-task" style="display: none;">
+    <h4>Créer une tâche</h4>
+    <div class="task-container">
+      <h1 class="task-title">Créer une nouvelle tâche</h1>
+
+      <% if @secteur && @article %>
+        <%= form_with model: @task, url: objet_secteur_article_tasks_path(@objet, @secteur, @article), local: true, html: { multipart: true } do |f| %>
+          <div class="task-form-group">
+            <%= f.label :name, "Intitulé" %>
+            <%= f.text_field :name, class: "form-control" %>
+          </div>
+
+          <div class="task-form-group">
+            <%= f.label :description, "Description" %>
+            <%= f.text_area :description, class: "form-control" %>
+          </div>
+
+          <div class="task-form-group">
+            <%= f.label :task_type, "Type de tâche" %>
+            <%= f.select :task_type, ['réparations', 'entretiens', 'récurrence'], { prompt: "Sélectionnez un type" }, { id: "task-type-select", class: "form-control" } %>
+          </div>
+
+          <div id="recurring-options" style="display:none;">
+            <div class="task-form-group">
+              <%= f.label :period, "Période de récurrence" %>
+              <%= f.select :period, ['Hebdomadaire', 'Mensuelle', 'Trimestrielle', 'Annuelle'], { prompt: "Sélectionnez une période" }, class: "form-control" %>
+            </div>
+
+            <div class="task-form-group">
+              <%= f.label :recurrence_reminder_date, "Date de début de la récurrence" %>
+              <%= f.date_field :recurrence_reminder_date, class: "form-control" %>
+            </div>
+          </div>
+
+          <div id="non-recurring-options">
+            <div class="task-form-group">
+              <%= f.label :realisation_date, "Date de début de réalisation" %>
+              <%= f.date_field :realisation_date, class: "form-control" %>
+            </div>
+
+            <div class="task-form-group">
+              <%= f.label :end_date, "Date de fin" %>
+              <%= f.date_field :end_date, class: "form-control" %>
+            </div>
+          </div>
+
+          <div class="task-form-group">
+            <%= f.label :cfc, "Numéro CFC" %>
+            <%= f.text_field :cfc, class: "form-control" %>
+          </div>
+
+          <div class="task-form-group">
+            <%= f.label :executant, "Exécutant" %>
+            <%= f.select :executant, ['interne', 'sous-traitant'], { prompt: "Sélectionnez un exécutant" }, class: "form-control" %>
+          </div>
+
+          <div class="task-form-group">
+            <%= f.label :executant_comment, "Nom de l'exécutant ou de l'entreprise" %>
+            <%= f.text_field :executant_comment, class: "form-control" %>
+          </div>
+
+          <div class="task-form-group">
+            <%= f.label :image, "Charger des documents" %>
+            <%= f.file_field :image, class: "form-control" %>
+          </div>
+
+          <div class="task-form-actions">
+            <%= f.submit "Sauvegarder", class: "btn btn-primary" %>
+          </div>
+        <% end %>
+      <% else %>
+        <p>Veuillez sélectionner un secteur et un article pour créer une tâche.</p>
+      <% end %>
+    </div>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        const taskTypeSelect = document.getElementById('task-type-select');
+        const recurringOptions = document.getElementById('recurring-options');
+        const nonRecurringOptions = document.getElementById('non-recurring-options');
+
+        taskTypeSelect.addEventListener('change', function() {
+          if (taskTypeSelect.value === 'récurrence') {
+            recurringOptions.style.display = 'block';
+            nonRecurringOptions.style.display = 'none';
+          } else {
+            recurringOptions.style.display = 'none';
+            nonRecurringOptions.style.display = 'block';
+          }
+        });
+      });
+    </script>
+  </div>
+</div>-->
