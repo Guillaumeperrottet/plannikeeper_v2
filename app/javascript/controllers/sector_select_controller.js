@@ -1,4 +1,5 @@
 import { Controller } from "@hotwired/stimulus";
+import PinchZoom from "pinch-zoom";
 
 export default class extends Controller {
   connect() {
@@ -104,6 +105,10 @@ export default class extends Controller {
         console.log("Image loaded and displayed after delay");
         const event = new CustomEvent('imageLoaded', { detail: { imageElement: image } });
         window.dispatchEvent(event);
+
+        // Initialiser PinchZoom ici
+        this.initializePinchZoom(image); // Initialise PinchZoom après le chargement de l'image
+
       }, 500); // 500 ms de délai pour laisser l'image se charger
     } else {
       this.hideImage();
@@ -117,6 +122,20 @@ export default class extends Controller {
       console.error('sectorImageTarget est undefined, impossible de cacher l\'image.');
     }
   }
+
+    // Méthode pour initialiser PinchZoom
+    initializePinchZoom(imageElement) {
+      console.log("Initializing PinchZoom for", imageElement);
+
+      new PinchZoom(imageElement, {
+        draggableUnzoomed: true,
+        minZoom: 1,
+        maxZoom: 5,
+        tapZoomFactor: 2,
+        zoomOutFactor: 1.5,
+        animationDuration: 300
+      });
+    }
 
   loadArticles(sectorId) {
     const objetId = this.element.dataset.sectorSelectObjetId;
