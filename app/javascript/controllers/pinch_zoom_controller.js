@@ -35,7 +35,7 @@ export default class extends Controller {
       console.log("Initializing PinchZoom for", el);
 
       // Initialiser PinchZoom pour l'image sélectionnée
-      new PinchZoom(el, {
+      const pz = new PinchZoom(el, {
         draggableUnzoomed: true,
         minZoom: 1,
         maxZoom: 5,
@@ -43,6 +43,20 @@ export default class extends Controller {
         zoomOutFactor: 1.5,
         animationDuration: 300
       });
+
+      // Écouter l'événement de zoom pour empêcher le recentrage automatique
+      pz.on('zoomUpdate', (event) => {
+        const { scale, x, y } = event;
+
+        // Garder l'image centrée sur le point de zoom
+        console.log("Zoom updated:", scale, x, y);
+
+        // Empêcher le zoom excessif qui pourrait renvoyer l'image à l'origine
+        if (scale > pz.options.maxZoom) {
+          pz.zoomTo(pz.options.maxZoom);
+        }
+      });
+
     } else {
       console.error("Image element not found for PinchZoom!");
     }
