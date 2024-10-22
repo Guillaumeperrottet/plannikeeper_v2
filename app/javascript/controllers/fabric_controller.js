@@ -563,11 +563,6 @@ export default class extends Controller {
     } else {
       console.error("Panel controller not found.");
     }
-    // Logique pour la suppression depuis le panel
-    document.getElementById('delete-article-btn').addEventListener('click', () => {
-      this.deleteArticle(article.id);
-    });
-
   }
 
 }
