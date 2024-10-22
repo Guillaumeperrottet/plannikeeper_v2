@@ -25,6 +25,7 @@ export default class extends Controller {
     this.canvas.on('mouse:move', this.drawRectangle.bind(this));
     this.canvas.on('mouse:up', this.stopDrawing.bind(this));
 
+
     window.addEventListener('imageLoaded', (event) => {
       console.log("Event 'imageLoaded' captured");
       this.adjustCanvasSize(event.detail.imageElement);
@@ -546,5 +547,24 @@ export default class extends Controller {
     if (panelController) {
       panelController.openPanel(article);
     }
+  }
+
+  updateCanvasTransform(scale, offsetX, offsetY) {
+    // Met à jour le facteur de zoom du canvas
+    this.canvas.setZoom(scale);
+
+    // Applique les offsets de l'image à la position du canvas
+    this.canvas.absolutePan({ x: -offsetX, y: -offsetY });
+
+    // Met à jour les objets (articles) sur le canevas
+    this.canvas.getObjects().forEach((article) => {
+      article.scaleX = article.originalScaleX * scale;
+      article.scaleY = article.originalScaleY * scale;
+      article.left = article.originalLeft * scale + offsetX;
+      article.top = article.originalTop * scale + offsetY;
+      article.setCoords();  // Met à jour les coordonnées de l'objet
+    });
+
+    this.canvas.renderAll();  // Redessine le canvas
   }
 }
