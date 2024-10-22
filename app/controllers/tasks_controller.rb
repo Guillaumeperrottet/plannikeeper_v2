@@ -28,7 +28,7 @@ class TasksController < ApplicationController
 
     # Définir la couleur en fonction du type de tâche
     case @task.task_type
-    when 'réparations'
+    when 'construction'
       @task.color = 'orange'
       @task.recurring = false # Non récurrent
     when 'récurrence'
