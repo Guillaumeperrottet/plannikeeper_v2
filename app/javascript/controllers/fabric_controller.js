@@ -65,12 +65,21 @@ export default class extends Controller {
         }
       });
 
-      // Lorsque l'article est relâché, enregistre la nouvelle position
-      this.canvas.on('object:modified', () => {
-        if (this.isMoving && this.selectedArticle) {
-          this.deactivateMoveMode(); // Sauvegarde la position et arrête le mode de déplacement
-        }
-      });
+        // Lorsque l'article est modifié, sauvegarde la nouvelle position
+        this.canvas.on('object:modified', () => {
+          if (this.isMoving && this.selectedArticle) {
+            this.deactivateMoveMode(); // Sauvegarde la position et arrête le mode de déplacement
+          }
+        });
+
+        // Assure-toi que le mode déplacement se désactive aussi au relâchement de la souris
+        this.canvas.on('mouse:up', () => {
+          if (this.isMoving && this.selectedArticle) {
+            console.log("Mouse up, deactivating move mode");
+            this.deactivateMoveMode(); // Désactiver le mode déplacement au relâchement de la souris
+          }
+        });
+
 
       this.canvas.renderAll();  // Actualiser l'affichage du canvas
     }
