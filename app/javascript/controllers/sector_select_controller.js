@@ -112,6 +112,9 @@ export default class extends Controller {
       setTimeout(() => {
         console.log("Image loaded and displayed after delay");
 
+        // Initialisation de PinchZoom
+        this.initializePinchZoom(image);
+
         // Initialisation du canevas après le zoom
         const event = new CustomEvent('imageLoaded', { detail: { imageElement: image } });
         window.dispatchEvent(event);
