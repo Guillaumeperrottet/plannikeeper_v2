@@ -36,8 +36,8 @@ class Task < ApplicationRecord
   }
 
   scope :upcoming, -> {
-    where("(recurring = ? OR recurring IS NULL OR recurring = ?) AND end_date BETWEEN ? AND ?",
-          false, true, (Date.today + 8.days).beginning_of_day, (Date.today + 30.days).end_of_day)
+    where("(recurring = ? OR recurring IS NULL OR recurring = ?) AND end_date >= ?",
+          false, true, (Date.today + 8.days).beginning_of_day)
   }
 
   private
@@ -50,7 +50,7 @@ class Task < ApplicationRecord
 
   def set_default_color
     case self.task_type
-    when 'réparations'
+    when 'construction'
       self.color ||= 'orange'
     when 'récurrence'
       self.color ||= 'lightblue'

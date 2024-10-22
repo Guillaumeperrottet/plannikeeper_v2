@@ -35,7 +35,7 @@
 
         <select name="task_type_filter" class="form-select me-2" onchange="this.form.submit()">
           <option value="">Tous les types</option>
-          <option value="réparations" <%= 'selected' if params[:task_type_filter] == 'réparations' %>>Réparations</option>
+          <option value="construction" <%= 'selected' if params[:task_type_filter] == 'construction' %>>construction</option>
           <option value="récurrence" <%= 'selected' if params[:task_type_filter] == 'récurrence' %>>Récurrence</option>
           <option value="entretiens" <%= 'selected' if params[:task_type_filter] == 'entretiens' %>>Entretiens</option>
         </select>
