@@ -7,6 +7,7 @@ export default class extends Controller {
     console.log("Panel controller connected.");
     window.addEventListener("resize", this.resizeImageContainerNew.bind(this));
   }
+
   disconnect() {
     window.removeEventListener("resize", this.resizeImageContainerNew.bind(this));
   }
@@ -70,7 +71,6 @@ export default class extends Controller {
       });
   }
 
-
   displayTasks(tasksData) {
     const taskList = document.getElementById('task-list');
 
@@ -108,9 +108,6 @@ export default class extends Controller {
     console.log("All tasks displayed.");
   }
 
-
-
-
   showPanel() {
     const panel = document.getElementById("article-panel");
     if (panel) {
@@ -120,10 +117,12 @@ export default class extends Controller {
 
       this.resizeImageContainerNew();
       console.log("Panel opened");
+
     } else {
       console.error("Panel element not found.");
     }
   }
+
 
   closePanel() {
     const panel = document.getElementById("article-panel");
@@ -166,5 +165,4 @@ export default class extends Controller {
       console.error("Impossible de rediriger, Article ID, Objet ID ou Secteur ID manquant !");
     }
   }
-
 }

@@ -13,6 +13,11 @@ export default class extends Controller {
     this.currentRect = null;
     this.startX = 0;
     this.startY = 0;
+    this.isMoving = false; // Ajout pour le déplacement
+    this.selectedArticle = null; // Stocke l'article sélectionné
+
+    // Désactiver le mode dessin lors de l'initialisation pour éviter les conflits
+    this.canvas.isDrawingMode = false;
 
     this.tooltip = null; // Stocke la référence à l'encadré d'information
 
@@ -35,59 +40,181 @@ export default class extends Controller {
     });
   }
 
-  // Fonction pour afficher l'encadré avec titre et description
-  showTooltip(event, article) {
-    console.log("Showing tooltip for article:", article);
+    // Activer le mode déplacement
+    activateMoveMode() {
+      console.log("Activate move called");
+      this.isDrawing = false;  // Désactiver le mode dessin pendant le déplacement
+      this.isMoving = true;
 
-    if (this.tooltip) {
-      this.tooltip.remove();
+      const objects = this.canvas.getObjects();  // Obtenir tous les objets sur le canvas
+      console.log(`Total objects on canvas: ${objects.length}`);  // Afficher le nombre d'objets
+
+      // Rendre les articles déplaçables
+      objects.forEach((article) => {
+        article.selectable = true;
+        article.evented = true;
+        article.hasControls = true;  // Afficher les contrôles de l'article pour le déplacer
+        console.log("Article ready to move:", article);
+      });
+
+        // Lorsque l'article est déplacé, enregistre l'objet sélectionné
+      this.canvas.on('object:moving', (event) => {
+        if (this.isMoving) {
+          this.selectedArticle = event.target;
+          console.log("Moving article:", this.selectedArticle);
+        }
+      });
+
+      // Lorsque l'article est relâché, enregistre la nouvelle position
+      this.canvas.on('object:modified', () => {
+        if (this.isMoving && this.selectedArticle) {
+          this.deactivateMoveMode(); // Sauvegarde la position et arrête le mode de déplacement
+        }
+      });
+
+      this.canvas.renderAll();  // Actualiser l'affichage du canvas
     }
 
-    this.tooltip = document.createElement('div');
-    this.tooltip.classList.add('tooltip');
+  // Désactiver le mode déplacement et sauvegarder la nouvelle position
+  deactivateMoveMode() {
+    if (this.selectedArticle) {
+      console.log("Deactivating move mode and saving new position");
 
-    this.tooltip.style.zIndex = '9999 !important';
-    this.tooltip.style.position = 'absolute !important';
-    this.tooltip.style.background = 'white !important';
-    this.tooltip.style.border = '1px solid black !important';
-    this.tooltip.style.padding = '5px !important';
-    this.tooltip.style.color = 'black !important';
-    this.tooltip.style.fontSize = '14px !important';
-    this.tooltip.style.display = 'block !important';
-    this.tooltip.style.visibility = 'visible !important';
-    this.tooltip.innerHTML = `<strong>${article.title}</strong><br>${article.description}`;
+      const articleId = this.selectedArticle.articleId;
+      const canvasWidth = this.canvas.width;
+      const canvasHeight = this.canvas.height;
 
-    document.body.appendChild(this.tooltip);
-    console.log('Tooltip added to the DOM:', this.tooltip);
+      const newPositionX = this.selectedArticle.left / canvasWidth;
+      const newPositionY = this.selectedArticle.top / canvasHeight;
 
-    // Vérifie si le tooltip est effectivement ajouté
-    console.log("Tooltip DOM element:", document.querySelector('.tooltip'));
-    console.log('Contenu du tooltip:', this.tooltip.outerHTML);
+      const objetId = this.element.dataset.sectorSelectObjetId;
+      const sectorId = document.body.dataset.selectedSectorId || localStorage.getItem('selectedSectorId');
 
-    this.positionTooltip(event);
-  }
+      // Ajoute des logs pour voir les valeurs utilisées dans la requête PATCH
+      console.log("Objet ID:", objetId);
+      console.log("Sector ID:", sectorId);
+      console.log("Article ID:", articleId);
 
-  positionTooltip(event) {
-    if (this.tooltip) {
-      const canvasRect = this.canvas.upperCanvasEl.getBoundingClientRect(); // Obtenir la position du canvas dans la page
+      const data = {
+        article: {
+          position_x: newPositionX,
+          position_y: newPositionY
+        }
+      };
 
-      // Ajuster la position du tooltip relativement à l'écran
-      this.tooltip.style.left = `${event.e.clientX + canvasRect.left + 10}px`;
-      this.tooltip.style.top = `${event.e.clientY + canvasRect.top + 10}px`;
+      fetch(`/objets/${objetId}/secteurs/${sectorId}/articles/${articleId}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRF-Token': document.querySelector("[name='csrf-token']").content
+        },
+        body: JSON.stringify(data)
+      })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then(data => {
+        console.log("Article position updated successfully:", data);
+        this.selectedArticle = null; // Réinitialiser après la sauvegarde
+        this.isMoving = false; // Désactiver le mode déplacement
 
-      console.log(`Tooltip position: left=${event.e.clientX + 10}, top=${event.e.clientY + 10}`);
+        // Désactiver les contrôles après le déplacement
+        this.canvas.getObjects().forEach((article) => {
+          article.selectable = false;
+          article.hasControls = false;
+        });
+
+        this.canvas.renderAll();
+      })
+      .catch(error => {
+        console.error("Error updating article position:", error);
+      });
     }
   }
 
 
-  // Cache l'encadré d'information
-  hideTooltip() {
-    console.log("Hiding tooltip");
-    if (this.tooltip) {
-      this.tooltip.remove();
-      this.tooltip = null;
+    // Supprimer un article
+    deleteArticle(articleId) {
+      console.log("Deleting article with ID:", articleId);
+
+      const objetId = this.element.dataset.sectorSelectObjetId;
+      const sectorId = document.body.dataset.selectedSectorId || localStorage.getItem('selectedSectorId');
+
+      fetch(`/objets/${objetId}/secteurs/${sectorId}/articles/${articleId}`, {
+        method: 'DELETE',
+        headers: {
+          'X-CSRF-Token': document.querySelector("[name='csrf-token']").content
+        }
+      })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        console.log("Article deleted successfully.");
+        this.loadAndDisplayArticles(); // Recharger les articles après la suppression
+      })
+      .catch(error => {
+        console.error("Error deleting article:", error);
+      });
     }
-  }
+
+
+  // // Fonction pour afficher l'encadré avec titre et description
+  // showTooltip(event, article) {
+  //   console.log("Showing tooltip for article:", article);
+
+  //   if (this.tooltip) {
+  //     this.tooltip.remove();
+  //   }
+
+  //   this.tooltip = document.createElement('div');
+  //   this.tooltip.classList.add('tooltip');
+
+  //   this.tooltip.style.zIndex = '9999 !important';
+  //   this.tooltip.style.position = 'absolute !important';
+  //   this.tooltip.style.background = 'white !important';
+  //   this.tooltip.style.border = '1px solid black !important';
+  //   this.tooltip.style.padding = '5px !important';
+  //   this.tooltip.style.color = 'black !important';
+  //   this.tooltip.style.fontSize = '14px !important';
+  //   this.tooltip.style.display = 'block !important';
+  //   this.tooltip.style.visibility = 'visible !important';
+  //   this.tooltip.innerHTML = `<strong>${article.title}</strong><br>${article.description}`;
+
+  //   document.body.appendChild(this.tooltip);
+  //   console.log('Tooltip added to the DOM:', this.tooltip);
+
+  //   // Vérifie si le tooltip est effectivement ajouté
+  //   console.log("Tooltip DOM element:", document.querySelector('.tooltip'));
+  //   console.log('Contenu du tooltip:', this.tooltip.outerHTML);
+
+  //   this.positionTooltip(event);
+  // }
+
+  // positionTooltip(event) {
+  //   if (this.tooltip) {
+  //     const canvasRect = this.canvas.upperCanvasEl.getBoundingClientRect(); // Obtenir la position du canvas dans la page
+
+  //     // Ajuster la position du tooltip relativement à l'écran
+  //     this.tooltip.style.left = `${event.e.clientX + canvasRect.left + 10}px`;
+  //     this.tooltip.style.top = `${event.e.clientY + canvasRect.top + 10}px`;
+
+  //     console.log(`Tooltip position: left=${event.e.clientX + 10}, top=${event.e.clientY + 10}`);
+  //   }
+  // }
+
+
+  // // Cache l'encadré d'information
+  // hideTooltip() {
+  //   console.log("Hiding tooltip");
+  //   if (this.tooltip) {
+  //     this.tooltip.remove();
+  //     this.tooltip = null;
+  //   }
+  // }
 
   adjustCanvasSize(imgElement) {
     const canvasEl = this.canvasTarget;
@@ -354,26 +481,30 @@ export default class extends Controller {
 
           rect.articleId = article.id;
 
-          // Redirection au clic
-          rect.on('mousedown', () => {
-            console.log("Article clicked:", article);
-            this.openPanelWithArticleData(article); // Ouvre le panneau avec les données de l'article
+           // Redirection au clic, mais seulement si le mode déplacement n'est pas activé
+           rect.on('mousedown', () => {
+            if (!this.isMoving) {  // Vérifie si le mode déplacement est actif
+              console.log("Article clicked:", article);
+              this.openPanelWithArticleData(article); // Ouvre le panneau avec les données de l'article
+            } else {
+              console.log("Move mode is active, not opening the panel.");
+            }
           });
 
-           // Survol - Afficher l'encadré d'information
-          rect.on('mouseover', (event) => {
-            this.showTooltip(event, article);
-          });
+          //  // Survol - Afficher l'encadré d'information
+          // rect.on('mouseover', (event) => {
+          //   this.showTooltip(event, article);
+          // });
 
-          // Mise à jour de la position de l'encadré
-          rect.on('mousemove', (event) => {
-            this.positionTooltip(event);
-          });
+          // // Mise à jour de la position de l'encadré
+          // rect.on('mousemove', (event) => {
+          //   this.positionTooltip(event);
+          // });
 
-          // Enlever l'encadré lorsque la souris quitte la zone de l'article
-          rect.on('mouseout', () => {
-            this.hideTooltip();
-          });
+          // // Enlever l'encadré lorsque la souris quitte la zone de l'article
+          // rect.on('mouseout', () => {
+          //   this.hideTooltip();
+          // });
 
 
           // Survol - Ajout d'une ombre discrète au survol
@@ -423,6 +554,11 @@ export default class extends Controller {
     } else {
       console.error("Panel controller not found.");
     }
+    // Logique pour la suppression depuis le panel
+    document.getElementById('delete-article-btn').addEventListener('click', () => {
+      this.deleteArticle(article.id);
+    });
+
   }
 
 }

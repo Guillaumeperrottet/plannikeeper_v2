@@ -27,6 +27,18 @@ class ArticlesController < ApplicationController
     end
   end
 
+  def update
+    @secteur = Secteur.find(params[:secteur_id])
+    @article = @secteur.articles.find(params[:id])
+
+    if @article.update(article_params)
+      render json: { article: @article }, status: :ok
+    else
+      render json: { errors: @article.errors.full_messages }, status: :unprocessable_entity
+    end
+  end
+
+
   def show
     @objet = Objet.find(params[:objet_id])
     @secteur = Secteur.find(params[:secteur_id])
