@@ -44,14 +44,28 @@ export default class extends Controller {
   }
 
   restoreSelection() {
-    const selectedSectorId = localStorage.getItem('selectedSectorId') || this.data.get('selectedSectorId');
-    console.log('Restoring selection for Sector ID:', selectedSectorId);
+    let selectedSectorId = localStorage.getItem('selectedSectorId');
 
     if (selectedSectorId) {
+      // Restaure la sélection si elle existe dans le localStorage
+      console.log('Restoring selection for Sector ID:', selectedSectorId);
       this.sectorSelectTarget.value = selectedSectorId;
       this.loadImage(selectedSectorId);
     } else {
-      this.hideImage();
+      // Sélection automatique du premier secteur si aucune sélection précédente
+      const firstSectorOption = this.sectorSelectTarget.options[1]; // options[0] est généralement "Sélectionner un secteur", donc on prend options[1]
+
+      if (firstSectorOption) {
+        selectedSectorId = firstSectorOption.value;
+        console.log('Automatically selecting the first sector:', selectedSectorId);
+        this.sectorSelectTarget.value = selectedSectorId;
+        this.loadImage(selectedSectorId);
+
+        // Stocker la sélection automatique dans le localStorage pour la prochaine fois
+        localStorage.setItem('selectedSectorId', selectedSectorId);
+      } else {
+        this.hideImage(); // S'il n'y a pas de secteurs disponibles
+      }
     }
   }
 
