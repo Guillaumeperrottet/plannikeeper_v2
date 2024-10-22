@@ -112,9 +112,6 @@ export default class extends Controller {
       setTimeout(() => {
         console.log("Image loaded and displayed after delay");
 
-        // Initialisation de PinchZoom
-        this.initializePinchZoom(image);
-
         // Initialisation du canevas après le zoom
         const event = new CustomEvent('imageLoaded', { detail: { imageElement: image } });
         window.dispatchEvent(event);
@@ -193,39 +190,6 @@ export default class extends Controller {
         console.error("Erreur lors du chargement des articles :", error);
       });
   }
-
-  initializePinchZoom(imageElement) {
-    const pinchZoomInstance = new PinchZoom(imageElement, {
-      zoomOutFactor: 1.3,
-      minZoom: 0.8,
-      maxZoom: 3,
-      draggableUnzoomed: true
-    });
-
-    console.log("PinchZoom initialized", pinchZoomInstance);
-
-    // Mettre à jour le canevas lorsqu'il y a un changement de zoom ou de déplacement
-    imageElement.addEventListener('transform', () => {
-      const scale = pinchZoomInstance.zoomFactor;
-      const offsetX = pinchZoomInstance.offset.x;
-      const offsetY = pinchZoomInstance.offset.y;
-
-      console.log("Zoom factor updated:", scale);
-      console.log("Offset X and Y:", offsetX, offsetY);
-
-      // Appel à Fabric Controller pour appliquer les transformations sur le canvas
-      const fabricController = this.application.getControllerForElementAndIdentifier(
-        document.querySelector('[data-controller="fabric"]'),
-        'fabric'
-      );
-
-      if (fabricController) {
-        fabricController.updateCanvasTransform(scale, offsetX, offsetY);
-      }
-    });
-  }
-
-
 }
 
 
