@@ -3,7 +3,12 @@
   <!-- Partie fixe contenant le titre, les boutons d'action, et les filtres -->
   <div class="sticky-header">
     <div class="d-flex justify-content-between align-items-center mb-3 px-4">
-      <h1><%= @article.title %></h1>
+        <h1>
+          <%= @article.title %>
+          <%= link_to edit_objet_secteur_article_path(@objet, @secteur, @article), class: 'edit-icon' do %>
+            <i class="fas fa-pencil-alt"></i>
+          <% end %>
+        </h1>
       <div class="action-buttons">
         <%= link_to new_objet_secteur_article_task_path(@objet, @secteur, @article), class: 'btn-link action-button me-3' do %>
           + ajouter une tâche
