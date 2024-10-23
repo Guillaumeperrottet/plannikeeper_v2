@@ -150,8 +150,10 @@
   box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
   z-index: 1;
   right: 0;
-  max-height: 200px;  /* Limite la hauteur de la liste avec une scrollbar si nécessaire */
+  max-height: 300px;  /* Limite la hauteur de la liste avec une scrollbar si nécessaire */
   overflow-y: auto;
+  scrollbar-width: thin;  /* Rendre la barre de défilement plus fine */
+  scrollbar-color: #ccc #f0f0f0;  /* Personnaliser la couleur : la barre et son arrière-plan */
 }
 
 .dropdown-content .dropdown-item {

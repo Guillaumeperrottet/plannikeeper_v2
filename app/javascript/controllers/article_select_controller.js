@@ -105,20 +105,41 @@ export default class extends Controller {
     console.log(`highlightArticle appelé pour article ID ${articleId}, isHovered: ${isHovered}`);
     if (!articleId) return; // Ignorer si l'articleId est vide ou nul
     const articleCircle = window.canvas.getObjects().find(obj => obj.articleId === articleId);
+    // Trouver l'élément de l'article dans la liste
+    const articleItem = document.querySelector(`[data-article-id="${articleId}"]`);
+
+    if (articleItem) {
+      if (isHovered) {
+        // Agrandir et mettre en gras lors du survol
+        articleItem.style.fontWeight = 'normal';  // Met en gras
+        articleItem.style.transform = 'scale(1.02)';  // Agrandit légèrement l'article
+        articleItem.style.transition = 'transform 0.3s ease, font-weight 0.3s ease';  // Ajoute une transition
+      } else {
+        // Rétablir la taille et le poids normaux après le survol
+        articleItem.style.fontWeight = 'normal';  // Revenir à la police normale
+        articleItem.style.transform = 'scale(1)';  // Revenir à la taille normale
+      }
+    }
 
     if (articleCircle) {
       console.log("Article trouvé sur le canevas :", articleCircle);
       if (isHovered) {
         // Agrandit le cercle sur le survol
         articleCircle.set({
+          strokeWidth: 5,
           scaleX: 1.5,
-          scaleY: 1.5
+          scaleY: 1.5,
+          fill: 'rgba(0, 0, 0, 0.6)',  // Change la couleur de remplissage à une teinte plus foncée
+          stroke: '#000'  // Change la couleur du contour
         });
       } else {
         // Restaure la taille normale du cercle après le survol
         articleCircle.set({
+          strokeWidth: 2,
           scaleX: 1,
-          scaleY: 1
+          scaleY: 1,
+          fill: 'rgba(128, 128, 128, 0.1)',  // Restaure la couleur de remplissage initiale
+          stroke: 'rgba(0, 0, 0, 0.2)'  // Restaure la couleur du contour initiale
         });
       }
 
