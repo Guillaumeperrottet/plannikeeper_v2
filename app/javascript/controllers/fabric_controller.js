@@ -22,7 +22,7 @@ export default class extends Controller {
     console.log("Initial canvas dimensions:", this.canvas.width, this.canvas.height);
 
     this.canvas.on('mouse:down', this.startDrawing.bind(this));
-    this.canvas.on('mouse:move', this.drawRectangle.bind(this));
+    this.canvas.on('mouse:move', this.drawCircle.bind(this));
     this.canvas.on('mouse:up', this.stopDrawing.bind(this));
 
 
@@ -145,19 +145,16 @@ export default class extends Controller {
     });
   }
 
-  showTooltip(event, article, rect) {
+  showTooltip(event, article, circle) {
     if (this.tooltip) {
       this.tooltip.remove();
     }
 
+    // Contenu simplifié avec le style correspondant à l'image
     const tooltipHtml = `
-      <div id="article-tooltip" style="position: absolute; background: white; padding: 10px; border: 1px solid black; z-index: 1000;">
-        <label for="article-title-input">Nom de l'article :</label>
-        <input type="text" id="article-title-input" name="title" value="${article.title}" required><br>
-        <label for="article-description">Description :</label>
-        <textarea id="article-description" name="description" required>${article.description}</textarea><br>
-        <button id="save-article" class="tooltip-button">Enregistrer</button>
-        <button id="cancel-article" class="tooltip-button">Annuler</button>
+      <div id="article-tooltip" style="position: absolute; background: rgba(0, 0, 0, 0.75); color: white; padding: 8px 12px; border-radius: 4px; font-size: 12px; z-index: 1000; box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);">
+        ${article.title}<br>
+        <small>${article.description}</small>
       </div>
     `;
 
@@ -165,13 +162,13 @@ export default class extends Controller {
     this.tooltip = document.getElementById('article-tooltip');
 
     const canvasRect = this.canvas.upperCanvasEl.getBoundingClientRect();
-    const articleLeft = rect.left + canvasRect.left;
-    const articleTop = rect.top + canvasRect.top;
+    const articleLeft = circle.left + circle.radius + canvasRect.left;
+    const articleTop = circle.top + circle.radius + canvasRect.top;
 
-    this.tooltip.style.left = `${articleLeft + rect.width + 10}px`;
-    this.tooltip.style.top = `${articleTop}px`;
+    this.tooltip.style.left = `${articleLeft + 0}px`; // Positionner à droite du cercle
+    this.tooltip.style.top = `${articleTop}px`; // Positionner juste au-dessus du cercle
 
-    // Garder une trace de l'état de la souris sur l'article et le tooltip
+    // Garder une trace de l'état de la souris sur le cercle et le tooltip
     let isMouseOverTooltip = false;
     let isMouseOverArticle = true;
 
@@ -184,31 +181,14 @@ export default class extends Controller {
       this.checkTooltipHover(isMouseOverArticle, isMouseOverTooltip); // Vérifier si le tooltip doit être masqué
     });
 
-    // Gérer les boutons pour qu'ils n'interfèrent pas avec le survol
-    const buttons = this.tooltip.querySelectorAll('.tooltip-button');
-    buttons.forEach(button => {
-      button.addEventListener('mouseenter', (e) => {
-        e.stopPropagation(); // Empêche la propagation pour ne pas affecter le survol
-        isMouseOverTooltip = true;
-      });
-      button.addEventListener('mouseleave', (e) => {
-        e.stopPropagation();
-        isMouseOverTooltip = false;
-        this.checkTooltipHover(isMouseOverArticle, isMouseOverTooltip);
-      });
-    });
-
-    rect.on('mouseout', () => {
+    circle.on('mouseout', () => {
       isMouseOverArticle = false;
       this.checkTooltipHover(isMouseOverArticle, isMouseOverTooltip); // Vérifier si le tooltip doit être masqué
     });
 
-    rect.on('mouseover', () => {
+    circle.on('mouseover', () => {
       isMouseOverArticle = true; // Marquer que la souris est sur l'article
     });
-
-    document.getElementById('save-article').addEventListener('click', () => this.saveArticleChanges(article));
-    document.getElementById('cancel-article').addEventListener('click', this.hideTooltip.bind(this));
   }
 
   // Vérifier si le tooltip doit être masqué
@@ -331,47 +311,50 @@ export default class extends Controller {
     this.startX = pointer.x;
     this.startY = pointer.y;
 
-    this.currentRect = new fabric.Rect({
+    this.currentCircle = new fabric.Circle({
       left: this.startX,
       top: this.startY,
-      width: 0,
-      height: 0,
+      radius: 0,
       fill: 'rgba(128, 128, 128, 0.1)',
       stroke: 'green',
       strokeWidth: 2,
       selectable: false,
-      evented: false
+      evented: false,
+      originX: 'center',
+      originY: 'center'
     });
 
-    this.canvas.add(this.currentRect);
+    this.canvas.add(this.currentCircle);
   }
 
-  drawRectangle(options) {
-    if (!this.isDrawing || !this.currentRect) return;
+  drawCircle(options) {
+    if (!this.isDrawing || !this.currentCircle) return;
 
     const pointer = this.canvas.getPointer(options.e);
-    const width = pointer.x - this.startX;
-    const height = pointer.y - this.startY;
+    const radius = Math.sqrt(Math.pow(pointer.x - this.startX, 2) + Math.pow(pointer.y - this.startY, 2));
 
-    this.currentRect.set({
-      width: Math.abs(width),
-      height: Math.abs(height)
+    this.currentCircle.set({
+      radius: Math.abs(radius)
     });
-
-    if (width < 0) this.currentRect.set({ left: pointer.x });
-    if (height < 0) this.currentRect.set({ top: pointer.y });
 
     this.canvas.renderAll();
   }
 
   stopDrawing() {
-    if (!this.isDrawing || !this.currentRect) return;
+    if (!this.isDrawing || !this.currentCircle) return;
 
     document.body.classList.remove("cursor-plus");
     this.canvas.upperCanvasEl.classList.remove("cursor-plus");
 
     this.isDrawing = false;
-    this.showArticleForm();
+
+    // Vérification pour s'assurer que le cercle a bien été créé
+    if (this.currentCircle) {
+      console.log("Circle drawn successfully, showing the form.");
+      this.showArticleForm();  // Appelle le formulaire uniquement si le cercle existe
+    } else {
+      console.error("No circle found to show the form.");
+    }
   }
 
   showArticleForm() {
@@ -388,8 +371,39 @@ export default class extends Controller {
     document.body.insertAdjacentHTML('beforeend', formHtml);
 
     const form = document.getElementById('article-form');
-    form.style.left = `${this.currentRect.left + 20}px`;
-    form.style.top = `${this.currentRect.top + 20}px`;
+
+    // Position initiale du formulaire
+    let formLeft = this.currentCircle.left + 20;
+    let formTop = this.currentCircle.top + 20;
+
+    // Dimensions de la fenêtre et du formulaire
+    const formRect = form.getBoundingClientRect();
+    const viewportWidth = window.innerWidth;
+    const viewportHeight = window.innerHeight;
+
+    // Ajustement si le formulaire dépasse le bord droit de l'écran
+    if (formLeft + formRect.width > viewportWidth) {
+      formLeft = this.currentCircle.left - formRect.width - 20; // Positionner à gauche du cercle
+    }
+
+    // Ajustement si le formulaire dépasse le bord gauche de l'écran
+    if (formLeft < 0) {
+      formLeft = 10; // Positionner à 10px du bord gauche
+    }
+
+    // Ajustement si le formulaire dépasse le bas de l'écran
+    if (formTop + formRect.height > viewportHeight) {
+      formTop = viewportHeight - formRect.height - 10; // Positionner à 10px du bas de l'écran
+    }
+
+    // Ajustement si le formulaire dépasse le haut de l'écran
+    if (formTop < 0) {
+      formTop = 10; // Positionner à 10px du haut de l'écran
+    }
+
+    // Appliquer les positions ajustées
+    form.style.left = `${formLeft}px`;
+    form.style.top = `${formTop}px`;
 
     document.getElementById('save-article').addEventListener('click', this.saveArticle.bind(this));
     document.getElementById('cancel-article').addEventListener('click', this.cancelArticle.bind(this));
@@ -408,26 +422,25 @@ export default class extends Controller {
   }
 
   cancelArticle() {
-    this.canvas.remove(this.currentRect);
+    this.canvas.remove(this.currentCircle);
     this.currentRect = null;
     document.getElementById('article-form').remove();
   }
 
   saveZone(title, description) {
-    const obj = this.currentRect;
+    const circle = this.currentCircle;
 
-    if (!obj) {
-      console.error("No rectangle to save.");
+    if (!circle) {
+      console.error("No circle to save.");
       return;
     }
 
     const canvasWidth = this.canvas.width;
     const canvasHeight = this.canvas.height;
 
-    const relativeX = obj.left / canvasWidth;
-    const relativeY = obj.top / canvasHeight;
-    const relativeWidth = obj.width / canvasWidth;
-    const relativeHeight = obj.height / canvasHeight;
+    const relativeX = circle.left / canvasWidth;
+    const relativeY = circle.top / canvasHeight;
+    const relativeRadius = circle.radius / canvasWidth;  // Sauvegarde le rayon relatif au canevas
 
     const objetId = this.element.dataset.sectorSelectObjetId;
     const sectorId = document.body.dataset.selectedSectorId || localStorage.getItem('selectedSectorId');
@@ -436,8 +449,7 @@ export default class extends Controller {
       article: {
         position_x: relativeX,
         position_y: relativeY,
-        width: relativeWidth,
-        height: relativeHeight,
+        radius: relativeRadius,  // On enregistre le rayon du cercle
         title: title,
         description: description,
         secteur_id: sectorId,
@@ -477,60 +489,39 @@ export default class extends Controller {
         data.articles.forEach(article => {
           const left = article.position_x * this.canvas.width;
           const top = article.position_y * this.canvas.height;
-          const width = article.width * this.canvas.width;
-          const height = article.height * this.canvas.height;
+          const radius = article.radius * this.canvas.width;  // On récupère le rayon relatif
 
-          const rect = new fabric.Rect({
-            left, top, width, height,
+          const circle = new fabric.Circle({
+            left: left,
+            top: top,
+            radius: radius,
             fill: 'rgba(128, 128, 128, 0.1)',
             stroke: 'rgba(0, 0, 0, 0.2)',
             strokeWidth: 1,
             selectable: false,
             evented: true,
-            hoverCursor: 'pointer',
-            shadow: {
-              color: 'rgba(0, 0, 0, 0)',
-              blur: 0,
-              offsetX: 0,
-              offsetY: 0
-            }
+            originX: 'center',
+            originY: 'center',
+            hoverCursor: 'pointer'
           });
 
-          rect.articleId = article.id;
+          circle.articleId = article.id;
 
-          rect.on('mousedown', () => {
+          circle.on('mousedown', () => {
             if (!this.isMoving) {
               this.openPanelWithArticleData(article);
             }
           });
 
-          rect.on('mouseover', (event) => {
-            this.showTooltip(event, article, rect);
-            rect.set({
-              shadow: {
-                color: 'rgba(0, 0, 0, 0.4)',
-                blur: 10,
-                offsetX: 5,
-                offsetY: 5
-              },
-              fill: 'rgba(128, 128, 128, 0.1)'
-            });
-            this.canvas.renderAll();
+          circle.on('mouseover', (event) => {
+            this.showTooltip(event, article, circle);
           });
 
-          rect.on('mouseout', () => {
-            const tooltip = document.getElementById('article-tooltip');
-            if (tooltip && !tooltip.dataset.hovered) {
-              this.hideTooltip();
-            }
-
-            rect.set({
-              shadow: { color: 'rgba(0, 0, 0, 0)', blur: 0 }
-            });
-            this.canvas.renderAll();
+          circle.on('mouseout', () => {
+            this.hideTooltip();
           });
 
-          this.canvas.add(rect);
+          this.canvas.add(circle);
         });
 
         this.canvas.renderAll();

@@ -21,7 +21,7 @@ class ArticlesController < ApplicationController
     Rails.logger.info "Articles trouvés : #{@articles.inspect}"
 
     if @articles.any?
-      render json: { articles: @articles.as_json(only: [:id, :position_x, :position_y, :width, :height, :title, :description, :objet_id]) }, status: :ok
+      render json: { articles: @articles.as_json(only: [:id, :position_x, :position_y, :radius, :title, :description, :objet_id]) }, status: :ok
     else
       render json: { articles: [] }, status: :ok
     end
@@ -89,7 +89,7 @@ class ArticlesController < ApplicationController
   private
 
   def article_params
-    params.require(:article).permit(:title, :description, :position_x, :position_y, :width, :height, :secteur_id, :objet_id)
+    params.require(:article).permit(:title, :description, :position_x, :position_y, :radius, :width, :height, :secteur_id, :objet_id)
   end
 
   def set_page_title
