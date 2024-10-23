@@ -18,6 +18,10 @@ export default class extends Controller {
 
     // Ajoute l'écouteur d'événements pour fermer la liste au clic à l'extérieur
     document.addEventListener('click', this.closeDropdownOnOutsideClick.bind(this));
+
+    // Ajoute l'écouteur pour fermer la liste quand la souris quitte le dropdown
+    const dropdownContent = document.getElementById('article-list');
+    dropdownContent.addEventListener('mouseleave', this.closeDropdown.bind(this));
   }
 
   disconnect() {
@@ -81,6 +85,21 @@ export default class extends Controller {
       articleList.style.display = "block";
     }
   }
+
+  closeDropdown() {
+    const articleList = document.getElementById('article-list');
+    articleList.style.display = "none";
+  }
+
+  closeDropdownOnOutsideClick(event) {
+    const dropdownBtn = document.getElementById('article-dropdown');
+    const articleList = document.getElementById('article-list');
+
+    if (!dropdownBtn.contains(event.target) && !articleList.contains(event.target)) {
+      this.closeDropdown();
+    }
+  }
+
 
   highlightArticle(articleId, isHovered) {
     console.log(`highlightArticle appelé pour article ID ${articleId}, isHovered: ${isHovered}`);
