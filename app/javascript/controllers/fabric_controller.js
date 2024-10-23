@@ -16,6 +16,7 @@ export default class extends Controller {
     this.isMoving = false;
     this.selectedArticle = null;
 
+
     this.canvas.isDrawingMode = false;
     this.tooltip = null;
 
@@ -79,16 +80,20 @@ export default class extends Controller {
     if (this.selectedArticle) {
       console.log("Deactivating move mode and saving new position");
 
+      // Récupère l'ID de l'article, la largeur et la hauteur du canevas
       const articleId = this.selectedArticle.articleId;
       const canvasWidth = this.canvas.width;
       const canvasHeight = this.canvas.height;
 
+      // Calcule les nouvelles positions relatives sur le canevas
       const newPositionX = this.selectedArticle.left / canvasWidth;
       const newPositionY = this.selectedArticle.top / canvasHeight;
 
+      // Récupère l'ID de l'objet et du secteur
       const objetId = this.element.dataset.sectorSelectObjetId;
       const sectorId = document.body.dataset.selectedSectorId || localStorage.getItem('selectedSectorId');
 
+      // Prépare les données à envoyer
       const data = {
         article: {
           position_x: newPositionX,
@@ -96,6 +101,7 @@ export default class extends Controller {
         }
       };
 
+      // Effectue la requête PATCH pour mettre à jour la position de l'article
       fetch(`/objets/${objetId}/secteurs/${sectorId}/articles/${articleId}`, {
         method: 'PATCH',
         headers: {
@@ -107,15 +113,40 @@ export default class extends Controller {
       .then(response => response.ok ? response.json() : Promise.reject(response))
       .then(data => {
         console.log("Article position updated successfully:", data);
+
+        // Désactiver le déplacement
         this.selectedArticle = null;
         this.isMoving = false;
 
+        // Désactiver la sélection et les contrôles de tous les objets
         this.canvas.getObjects().forEach((article) => {
           article.selectable = false;
           article.hasControls = false;
+          article.evented = false;      // Empêche toute interaction supplémentaire
+
         });
 
+        // Forcer le rendu du canevas
         this.canvas.renderAll();
+        // Afficher le message de succès dans l'élément notification
+        const notification = document.getElementById('notification');
+        notification.innerText = 'L\'article a bien été déplacé.';
+        notification.style.display = 'block';
+
+        // Masquer la notification après quelques secondes (par exemple 3 secondes)
+        setTimeout(() => {
+          notification.style.display = 'none';
+
+          // Réactiver les événements après que le message a été masqué
+          this.canvas.getObjects().forEach((article) => {
+          article.evented = true; // Réactiver les événements après la notification
+        });
+
+        // Forcer à nouveau le rendu du canevas après réactivation
+        this.canvas.renderAll();
+
+        }, 3000);
+
       })
       .catch(error => {
         console.error("Error updating article position:", error);
