@@ -163,26 +163,28 @@ export default class extends Controller {
 
           const left = parseFloat(article.position_x) * canvasWidth;
           const top = parseFloat(article.position_y) * canvasHeight;
-          const width = parseFloat(article.width) * canvasWidth;
-          const height = parseFloat(article.height) * canvasHeight;
+          const radius = parseFloat(article.radius) * canvasWidth;  // Calcul du rayon relatif au canevas
 
-          if (width > 0 && height > 0) {
-            console.log(`Calculated dimensions: left=${left}, top=${top}, width=${width}, height=${height}`);
+          if (radius > 0) {
+            console.log(`Calculated dimensions: left=${left}, top=${top}, radius=${radius}`);
 
-            const rect = new fabric.Rect({
+            // Créer un cercle au lieu d'un rectangle
+            const circle = new fabric.Circle({
               left: left,
               top: top,
-              width: width,
-              height: height,
+              radius: radius,
               fill: 'transparent',
               stroke: 'transparent',
               strokeWidth: 2,
+              originX: 'center',  // Centrer le cercle sur sa position
+              originY: 'center',
+              hoverCursor: 'pointer'
             });
 
-            window.canvas.add(rect);
+            window.canvas.add(circle);
             window.canvas.renderAll();
           } else {
-            console.warn(`Skipping article with invalid dimensions: left=${left}, top=${top}, width=${width}, height=${height}`);
+            console.warn(`Skipping article with invalid radius: left=${left}, top=${top}, radius=${radius}`);
           }
         });
       })
