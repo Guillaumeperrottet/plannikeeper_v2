@@ -36,7 +36,7 @@ Rails.application.routes.draw do
         get 'image', to: 'secteurs#image'
       end
 
-      resources :articles, only: [:create, :index, :show, :update] do
+      resources :articles, only: [:create, :index, :show, :update, :edit, :destroy] do
         resources :tasks, only: [:new, :create, :edit, :update, :destroy, :index] do
           member do
             patch 'archive', to: 'tasks#archive'

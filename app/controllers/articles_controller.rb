@@ -15,6 +15,18 @@ class ArticlesController < ApplicationController
     end
   end
 
+  def destroy
+    @objet = Objet.find(params[:objet_id])
+    @secteur = Secteur.find(params[:secteur_id])
+    @article = Article.find(params[:id])
+
+    if @article.destroy
+      redirect_to objet_path(@objet), notice: 'Article supprimé avec succès.'
+    else
+      redirect_to objet_secteur_article_path(@objet, @secteur, @article), alert: 'Erreur lors de la suppression de l\'article.'
+    end
+  end
+
   def index
     @articles = Article.where(secteur_id: params[:secteur_id], objet_id: params[:objet_id])
 
@@ -28,16 +40,22 @@ class ArticlesController < ApplicationController
   end
 
   def update
+    @objet = Objet.find(params[:objet_id])
     @secteur = Secteur.find(params[:secteur_id])
     @article = @secteur.articles.find(params[:id])
 
     if @article.update(article_params)
-      render json: { article: @article }, status: :ok
+      redirect_to objet_secteur_article_path(@objet, @secteur, @article), notice: 'Article mis à jour avec succès.'
     else
-      render json: { errors: @article.errors.full_messages }, status: :unprocessable_entity
+      render :edit, alert: 'Une erreur est survenue lors de la mise à jour de l\'article.'
     end
   end
 
+  def edit
+    @objet = Objet.find(params[:objet_id])
+    @secteur = Secteur.find(params[:secteur_id])
+    @article = Article.find(params[:id])
+  end
 
   def show
     @objet = Objet.find(params[:objet_id])
