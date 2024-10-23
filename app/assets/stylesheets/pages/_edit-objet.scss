@@ -41,42 +41,56 @@
 }
 
 .actions-center {
-  display: flex;
   justify-content: center;
   margin-top: 20px;
 }
 
-.btn-simple {
-  background-color: #f0f0f0;
-  color: #333;
-  border: 1px solid #ccc;
+.sector-remove-btn, .add-sector-btn {
+  margin-top: 10px;
+}
+
+.custom-file-label {
+  display: inline-block;
   padding: 8px 16px;
   border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.3s;
-  font-size: 0.9rem;
 }
 
-.btn-simple:hover {
-  background-color: #e0e0e0;
+.sector-file-name {
+  font-size: 0.9rem; /* Taille de police plus petite */
+  color: #333; /* Couleur plus douce */
+  background-color: #f8f9fa; /* Arrière-plan léger pour bien distinguer */
+  padding: 5px 10px; /* Ajouter du padding pour l'espace */
+  border: 1px solid #ddd; /* Bordure légère */
+  border-radius: 4px; /* Bordures arrondies */
+  display: inline-block;
+  margin-top: 10px;
+
+  /* Icône stylisée si tu en ajoutes une */
+  i {
+    color: #6c757d; /* Couleur de l'icône */
+    margin-right: 5px; /* Espace entre l'icône et le texte */
+  }
+  &.file-attached {
+    background-color: #d4edda; /* Vert pâle pour signaler qu'un fichier est présent */
+    color: #155724; /* Couleur du texte associée */
+  }
+
+  &.file-missing {
+    background-color: #f8d7da; /* Rouge pâle pour signaler l'absence */
+    color: #721c24;
+  }
 }
 
-.sector-remove-btn, .add-sector-btn {
-  margin-top: 10px; /* Ajoute un espace au-dessus des boutons */
-  display: block;
+.sector-file-input{
+  margin-top: 10px;
 }
 
-.modify-object-btn {
-  margin-top: 20px;
-}
-
-.delete-object-btn {
+.error-messages {
   background-color: #f8d7da;
-  border: 1px solid #f5c6cb;
   color: #721c24;
-  display: block;
-  margin-top: 20px;
-  padding: 10px 20px;
+  padding: 10px;
   border-radius: 4px;
-  text-align: center;
+  border: 1px solid #f5c6cb;
 }
