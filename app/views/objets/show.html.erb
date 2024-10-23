@@ -20,12 +20,13 @@
 
 
           <!-- Sélecteur d'articles -->
-      <div class="dropdown-container">
-        <button id="article-dropdown" class="btn btn-secondary dropdown-btn">Sélectionnez un article</button>
+      <div class="dropdown-container" data-controller="article-select">
+        <button id="article-dropdown" class="btn btn-secondary dropdown-btn" data-article-select-target="dropdownBtn" data-action="click->article-select#toggleDropdown">Sélectionnez un article</button>
           <div id="article-list" class="dropdown-content" data-controller="article-select"
             data-article-select-objet-id-value="<%= @objet.id %>"
             data-article-select-secteur-id-value="<%= @selected_sector&.id %>"
-            data-action="change->article-select#selectArticle">
+            data-action="change->article-select#selectArticle"
+            data-article-select-target="dropdownContent">
             <% @articles.each do |article| %>
               <div class="article-item btn btn-secondary" data-article-id="<%= article.id %>">
                 <%= article.title %>

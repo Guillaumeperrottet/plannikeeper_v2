@@ -15,6 +15,14 @@ export default class extends Controller {
     // Écoute le clic sur le bouton du menu déroulant pour afficher/masquer la liste
     const dropdownBtn = document.getElementById('article-dropdown');
     dropdownBtn.addEventListener('click', this.toggleDropdown.bind(this));
+
+    // Ajoute l'écouteur d'événements pour fermer la liste au clic à l'extérieur
+    document.addEventListener('click', this.closeDropdownOnOutsideClick.bind(this));
+  }
+
+  disconnect() {
+    // Retire l'écouteur d'événements pour éviter les fuites de mémoire
+    document.removeEventListener('click', this.closeDropdownOnOutsideClick.bind(this));
   }
 
   loadArticlesForList() {
