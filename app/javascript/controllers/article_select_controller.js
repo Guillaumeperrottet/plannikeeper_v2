@@ -9,13 +9,17 @@ export default class extends Controller {
   connect() {
     console.log("ArticleSelectController connecté");
 
-    // Charge les articles dans le sélecteur dès que le contrôleur est connecté
-    this.loadArticlesForSelector();
+    // Charge les articles dans la liste dès que le contrôleur est connecté
+    this.loadArticlesForList();
+
+    // Écoute le clic sur le bouton du menu déroulant pour afficher/masquer la liste
+    const dropdownBtn = document.getElementById('article-dropdown');
+    dropdownBtn.addEventListener('click', this.toggleDropdown.bind(this));
   }
 
-  loadArticlesForSelector() {
-    const objetId = this.objetIdValue;  // Assure-toi que this.objetIdValue est défini
-    const sectorId = this.secteurIdValue || localStorage.getItem('selectedSectorId');  // Priorité à secteurId dans Stimulus
+  loadArticlesForList() {
+    const objetId = this.objetIdValue;
+    const sectorId = this.secteurIdValue || localStorage.getItem('selectedSectorId');
 
     if (!objetId || !sectorId) {
       console.error("Objet ID ou Secteur ID manquant.");
@@ -25,36 +29,81 @@ export default class extends Controller {
     const url = `/objets/${objetId}/secteurs/${sectorId}/articles`;
 
     fetch(url)
-      .then(response => {
-        if (!response.ok) {
-          throw new Error(`Erreur HTTP ! statut : ${response.status}`);
-        }
-        return response.json();
-      })
+      .then(response => response.ok ? response.json() : Promise.reject(response))
       .then(data => {
-        const articleSelector = document.getElementById('article-selector');
-        articleSelector.innerHTML = '<option value="">Sélectionnez un article</option>';
+        const articleList = document.getElementById('article-list');
+        articleList.innerHTML = '';  // Vide la liste des articles précédents
 
         data.articles.forEach(article => {
-          const option = document.createElement('option');
-          option.value = article.id;
-          option.textContent = article.title;
-          articleSelector.appendChild(option);
+          const articleItem = document.createElement('div');
+          articleItem.className = 'dropdown-item';  // Utilise la classe dropdown-item pour le style
+          articleItem.textContent = article.title;
+          articleItem.dataset.articleId = article.id;
+
+          // Ajoute des événements de survol pour chaque article
+          articleItem.addEventListener('mouseenter', () => {
+            console.log(`Mouse entered on article ID ${article.id}`);
+            this.highlightArticle(article.id, true);
+          });
+          articleItem.addEventListener('mouseleave', () => {
+            console.log(`Mouse left article ID ${article.id}`);
+            this.highlightArticle(article.id, false);
+          });
+
+          articleItem.addEventListener('click', () => {
+            this.selectArticle(article.id);
+          });
+
+          articleList.appendChild(articleItem);
         });
 
-        console.log("Articles chargés dans le sélecteur :", data.articles);
+        console.log("Articles chargés :", data.articles);
       })
       .catch(error => {
         console.error("Erreur lors du chargement des articles :", error);
+        alert("Une erreur s'est produite lors du chargement des articles. Veuillez réessayer.");
       });
   }
 
-  selectArticle(event) {
-    event.preventDefault(); // Empêche le comportement par défaut du sélecteur
+  toggleDropdown() {
+    const articleList = document.getElementById('article-list');
+    if (articleList.style.display === "block") {
+      articleList.style.display = "none";
+    } else {
+      articleList.style.display = "block";
+    }
+  }
 
-    const articleId = event.target.value;
-    const objetId = this.objetIdValue || this.data.get('objetId');  // Priorité à objetIdValue
-    const secteurId = this.secteurIdValue || localStorage.getItem('selectedSectorId');  // Priorité à secteurIdValue
+  highlightArticle(articleId, isHovered) {
+    console.log(`highlightArticle appelé pour article ID ${articleId}, isHovered: ${isHovered}`);
+    if (!articleId) return; // Ignorer si l'articleId est vide ou nul
+    const articleCircle = window.canvas.getObjects().find(obj => obj.articleId === articleId);
+
+    if (articleCircle) {
+      console.log("Article trouvé sur le canevas :", articleCircle);
+      if (isHovered) {
+        // Agrandit le cercle sur le survol
+        articleCircle.set({
+          scaleX: 1.5,
+          scaleY: 1.5
+        });
+      } else {
+        // Restaure la taille normale du cercle après le survol
+        articleCircle.set({
+          scaleX: 1,
+          scaleY: 1
+        });
+      }
+
+      window.canvas.renderAll();  // Met à jour le canevas
+    } else {
+      console.warn(`Article avec ID ${articleId} non trouvé sur le canevas.`);
+    }
+  }
+
+  selectArticle(articleId) {
+    const objetId = this.objetIdValue || this.data.get('objetId');
+    const secteurId = this.secteurIdValue || localStorage.getItem('selectedSectorId');
 
     console.log("Article ID:", articleId);
     console.log("Objet ID:", objetId);
