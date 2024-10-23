@@ -45,9 +45,11 @@ class ArticlesController < ApplicationController
     @article = @secteur.articles.find(params[:id])
 
     if @article.update(article_params)
-      redirect_to objet_secteur_article_path(@objet, @secteur, @article), notice: 'Article mis à jour avec succès.'
+      # Renvoyer la réponse JSON pour éviter une redirection
+      render json: { article: @article, message: flash[:notice] }, status: :ok
     else
-      render :edit, alert: 'Une erreur est survenue lors de la mise à jour de l\'article.'
+      # En cas d'erreur, renvoyer les erreurs en JSON sans redirection
+      render json: { errors: @article.errors.full_messages }, status: :unprocessable_entity
     end
   end
 
