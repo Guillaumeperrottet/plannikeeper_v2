@@ -99,11 +99,6 @@
   font-size: 14px;
 }
 
-.btn-danger {
-  background-color: #dc3545;
-  border: none;
-}
-
 .btn-warning:hover, .btn-danger:hover {
   opacity: 0.8;
 }
@@ -184,12 +179,6 @@ table.table td, table.table th {
 .icon-container i {
   font-size: 20px; /* Ajuster la taille des icônes si nécessaire */
   cursor: pointer; /* Change le curseur au survol */
-}
-
-.btn {
-  background-color: transparent; /* Rendre les boutons transparents pour un aspect épuré */
-  border: none; /* Supprime la bordure */
-  padding: 0; /* Supprime le padding */
 }
 
 .sticky-thead {

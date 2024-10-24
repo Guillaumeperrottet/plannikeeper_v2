@@ -7,7 +7,7 @@
 
         <% if @objet.errors.any? %>
           <div class="error-messages">
-            <h2><%= pluralize(@objet.errors.count, "error") %> ont empêché cet objet d'être enregistré :</h2>
+            <h2> Erreur(s)</h2>
             <ul>
               <% @objet.errors.full_messages.each do |message| %>
                 <li><%= message %></li>
@@ -38,14 +38,21 @@
                 <%= secteur_form.hidden_field :_destroy %>
 
                 <% if secteur_form.object.image.attached? %>
-                  <p class="sector-file-name">Fichier : <%= secteur_form.object.image.filename.to_s %></p>
+                  <p class="sector-file-name file-attached">
+                    <i class="fa fa-file"></i> Fichier : <%= secteur_form.object.image.filename.to_s %>
+                  </p>
                 <% else %>
-                  <p class="sector-file-name">Aucune image associée.</p>
+                  <p class="sector-file-name file-missing">
+                    <i class="fa fa-exclamation-circle"></i> Aucune image associée.
+                  </p>
                 <% end %>
 
-                <%= secteur_form.file_field :image, class: "form-control sector-file-input" %>
-
-                <%= link_to "Supprimer", "#", class: "btn-simple btn-danger sector-remove-btn", data: { action: "sector#removeSector submit->delete-confirm#confirm", controller: "delete-confirm", "delete-confirm-message-value": "Êtes-vous sûr de vouloir supprimer ce secteur ?" } %>
+                <%= secteur_form.file_field :image, class: "form-control sector-file-input", style: "display: none;", id: "file-upload"  %>
+                  <!-- Bouton personnalisé pour remplacer le champ d'image -->
+                  <label for="file-upload" class="custom-file-label btn btn--simple">
+                    Choisir un fichier
+                  </label>
+                <%= link_to "Supprimer", "#", class: "btn btn--danger sector-remove-btn", data: { action: "sector#removeSector submit->delete-confirm#confirm", controller: "delete-confirm", "delete-confirm-message-value": "Êtes-vous sûr de vouloir supprimer ce secteur ?" } %>
               </div>
             <% end %>
           </div>
@@ -58,25 +65,23 @@
                 <%= secteur_form.hidden_field :_destroy %>
                 <%= secteur_form.file_field :image, class: "form-control sector-file-input" %>
 
-                <%= link_to "Supprimer", "#", class: "btn-simple btn-danger sector-remove-btn", data: { action: "sector#removeSector submit->delete-confirm#confirm", controller: "delete-confirm", "delete-confirm-message-value": "Êtes-vous sûr de vouloir supprimer ce secteur ?" } %>
+                <%= link_to "Supprimer", "#", class: "btn btn--danger sector-remove-btn", data: { action: "sector#removeSector submit->delete-confirm#confirm", controller: "delete-confirm", "delete-confirm-message-value": "Êtes-vous sûr de vouloir supprimer ce secteur ?" } %>
               <% end %>
             </div>
           </template>
 
-          <%= link_to "Ajouter un secteur", "#", data: { action: "sector#addSector" }, class: 'btn-simple btn-primary add-sector-btn' %>
+          <%= link_to "Ajouter un secteur", "#", data: { action: "sector#addSector" }, class: 'btn btn--simple add-sector-btn' %>
         </div>
       </div>
     </div>
 
-    <div class="actions-center">
-      <%= form.submit "Modifier l'objet", class: "btn-simple btn-success modify-object-btn" %>
-    </div>
-  <% end %>
-
-  <div class="actions delete-object">
-    <%= form_with model: @objet, url: objet_path(@objet), method: :delete, local: true, data: { controller: "delete-confirm", action: "submit->delete-confirm#confirm", "delete-confirm-message-value": "Êtes-vous sûr de vouloir supprimer cet objet ?" } do |f| %>
-      <%= f.submit "Supprimer l'objet", class: "btn-simple btn-danger delete-object-btn" %>
+      <div class="actions-center">
+        <%= form.submit "Sauvegarder", class: "btn btn--success modify-object-btn" %>
+      </div>
     <% end %>
+      <div class="actions-center">
+      <%= form_with model: @objet, url: objet_path(@objet), method: :delete, local: true, data: { controller: "delete-confirm", action: "submit->delete-confirm#confirm", "delete-confirm-message-value": "Êtes-vous sûr de vouloir supprimer cet objet ?" } do |f| %>
+        <%= f.submit "Supprimer l'objet", class: "btn btn--danger delete-object-btn" %>
+      <% end %>
   </div>
-
 </div>
