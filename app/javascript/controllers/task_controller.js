@@ -38,14 +38,24 @@ export default class extends Controller {
     console.log("Tâches 'À venir':", data.upcoming_tasks);
 
     // Met à jour la liste des tâches pour cette semaine avec la bonne redirection vers l'article
-    this.thisWeekTasksTarget.innerHTML = data.this_week_tasks.length > 0
-      ? data.this_week_tasks.map(task => `<li data-task-url="/objets/${task.objet_id}/secteurs/${task.secteur_id}/articles/${task.article_id}">${task.end_date} - ${task.name} - ${task.article_title}</li>`).join('')
-      : '<li>Aucune tâche cette semaine.</li>';
+  this.thisWeekTasksTarget.innerHTML = data.this_week_tasks.length > 0
+  ? data.this_week_tasks.map(task => `
+      <li data-task-url="/objets/${task.objet_id}/secteurs/${task.secteur_id}/articles/${task.article_id}">
+        ${task.end_date} - ${task.name} - ${task.article_title}
+        <span class="task-description">${task.description || ""}</span> <!-- Enlever style display: none -->
+      </li>
+    `).join('')
+  : '<li>Aucune tâche cette semaine.</li>';
 
-    // Met à jour la liste des tâches à venir
-    this.upcomingTasksTarget.innerHTML = data.upcoming_tasks.length > 0
-      ? data.upcoming_tasks.map(task => `<li data-task-url="/objets/${task.objet_id}/secteurs/${task.secteur_id}/articles/${task.article_id}">${task.end_date} - ${task.name} - ${task.article_title}</li>`).join('')
-      : '<li>Aucune tâche à venir.</li>';
+// Met à jour la liste des tâches à venir
+this.upcomingTasksTarget.innerHTML = data.upcoming_tasks.length > 0
+  ? data.upcoming_tasks.map(task => `
+      <li data-task-url="/objets/${task.objet_id}/secteurs/${task.secteur_id}/articles/${task.article_id}">
+        ${task.end_date} - ${task.name} - ${task.article_title}
+        <span class="task-description">${task.description || ""}</span> <!-- Enlever style display: none -->
+      </li>
+    `).join('')
+  : '<li>Aucune tâche à venir.</li>';
 
       console.log("Tâches 'Cette semaine':", data.this_week_tasks);
       console.log("Tâches 'À venir':", data.upcoming_tasks);
