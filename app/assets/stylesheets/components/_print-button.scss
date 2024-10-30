@@ -1,6 +1,7 @@
 .print-button {
   z-index: 9999; /* Assure que le bouton est au-dessus de tous les autres éléments */
   background-color: #f0f0f0;
+  color: #333; /* Couleur du texte du bouton (gris foncé) */
   border: 1px solid #ccc;
   border-radius: 50px;
   padding: 10px 20px;
@@ -10,4 +11,37 @@
 .print-button:hover {
   background-color: #e0e0e0;
   cursor: pointer;
+}
+
+/* Masque les descriptions en mode écran */
+.task-description {
+  display: none;
+}
+
+@media print {
+  /* Cache tous les éléments sauf l'agenda */
+  .dashboard-page > *:not(.agenda-section) {
+    display: none;
+  }
+
+  /* Cache la navbar */
+  .navbar {
+    display: none;
+  }
+
+
+  /* Assure que l'agenda prend toute la page imprimée */
+  .agenda-section {
+    display: block;
+    width: 100%;
+    height: auto;
+    background-color: white;
+  }
+
+  .task-description {
+    display: block; /* Montre la description en ligne avec le titre */
+    font-size: 0.9rem; /* Ajustez la taille si nécessaire */
+    color: #333; /* Couleur adaptée pour l'impression */
+    margin-left: 5px; /* Espace entre le titre et la description */
+  }
 }

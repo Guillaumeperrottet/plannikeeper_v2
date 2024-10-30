@@ -31,22 +31,34 @@
           <% end %>
         </select>
       </div>
+        <a href="javascript:void(0)" onclick="window.print()" class="print-button">
+          <i class="fas fa-print"></i>
+        </a>
     </div>
 
-    <div class="tasks-display">
-      <div class="task-group this-week">
-        <h3>Cette semaine</h3>
-        <ul id="this-week-tasks" data-task-target="thisWeekTasks">
-          <li>Aucune tâche cette semaine.</li>
-        </ul>
-      </div>
+  <div class="tasks-display">
+    <div class="task-group this-week">
+      <h3>Cette semaine</h3>
+      <ul id="this-week-tasks" data-task-target="thisWeekTasks">
+        <% @this_week_tasks.each do |task| %>
+          <li>
+            <span class="task-title"><%= task.name %></span>
+            <span class="task-description"><%= task.description %></span>
+          </li>
+        <% end %>
+      </ul>
+    </div>
 
-      <div class="task-group upcoming">
-        <h3>A venir</h3>
-        <ul id="upcoming-tasks" data-task-target="upcomingTasks">
-          <li>Aucune tâche à venir.</li>
-        </ul>
-      </div>
+    <div class="task-group upcoming">
+      <h3>A venir</h3>
+      <ul id="upcoming-tasks" data-task-target="upcomingTasks">
+        <% @upcoming_tasks.each do |task| %>
+          <li>
+            <span class="task-title"><%= task.name %></span>
+            <span class="task-description"><%= task.description %></span>
+          </li>
+        <% end %>
+      </ul>
     </div>
   </div>
 </div>

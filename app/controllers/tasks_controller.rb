@@ -279,7 +279,8 @@ end
         article_id: task.article.id,
         secteur_id: task.article.secteur.id, # Inclut l'ID du secteur
         objet_id: task.article.objet.id, # Inclut l'ID de l'objet
-        task_id: task.id
+        task_id: task.id,
+        description: task.description
       }
     end
   end

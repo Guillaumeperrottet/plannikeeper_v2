@@ -1,0 +1,27 @@
+<div class="print-tasks-page">
+  <h2>Agenda todo list - Imprimable</h2>
+
+  <div class="task-group">
+    <h3>Cette semaine</h3>
+    <ul>
+      <% @this_week_tasks.each do |task| %>
+        <li>
+          <span class="task-title"><%= task.name %></span>
+          <span class="task-description"><%= task.description %></span>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+
+  <div class="task-group">
+    <h3>A venir</h3>
+    <ul>
+      <% @upcoming_tasks.each do |task| %>
+        <li>
+          <span class="task-title"><%= task.name %></span>
+          <span class="task-description"><%= task.description %></span>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+</div>

@@ -48,4 +48,11 @@ Rails.application.routes.draw do
       end
     end
   end
+
+   # Route pour l'impression des tâches dans le dashboard
+   resources :dashboard, only: [] do
+    collection do
+      get 'print_tasks', to: 'dashboard#print_tasks'
+    end
+  end
 end
