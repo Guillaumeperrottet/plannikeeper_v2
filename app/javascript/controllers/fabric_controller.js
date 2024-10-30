@@ -3,6 +3,7 @@ import { Controller } from "@hotwired/stimulus";
 export default class extends Controller {
   static targets = ["canvas"]
 
+
   connect() {
     this.canvas = new fabric.Canvas(this.canvasTarget.id);
     window.canvas = this.canvas;
@@ -37,6 +38,46 @@ export default class extends Controller {
       this.adjustCanvasSize(document.querySelector('img[data-sector-select-target="sectorImage"]'));
     });
   }
+
+//   // Active l'impression en affichant tous les tooltips
+//   activatePrint() {
+//     this.showAllTooltips(); // Affiche tous les tooltips
+//     setTimeout(() => {
+//       window.print(); // Imprimer la page
+//       this.hideAllTooltips(); // Masquer les tooltips après l'impression
+//     }, 100); // Petite pause pour s'assurer que les tooltips sont affichés
+//   }
+//  // Affiche tous les tooltips pour les articles
+//  showAllTooltips() {
+//   console.log("showAllTooltips called");
+
+//   // Itérez sur tous les objets du canevas
+//   this.canvas.getObjects().forEach((circle) => {
+//     console.log("Processing circle:", circle); // Log de chaque cercle
+
+//     // Vérifiez si circle a un articleId et essayez de le récupérer ici
+//     if (circle.articleId !== undefined) {
+//       console.log("Showing tooltip for article ID:", circle.articleId); // Log de l'ID
+//       const article = { id: circle.articleId, title: "Titre par défaut", description: "Description par défaut" }; // Remplacez par les données réelles
+//       this.showTooltip(null, article, circle); // Appelle la méthode showTooltip avec un objet d'article simulé
+//     } else {
+//       console.log("Circle does not have an article ID.");
+//     }
+//   });
+// }
+
+
+//   // Masque tous les tooltips après l'impression
+//   hideAllTooltips() {
+//     const tooltips = document.querySelectorAll('#article-tooltip');
+//     tooltips.forEach(tooltip => tooltip.remove());
+//   }
+
+
+//   // Votre méthode prepareTooltipsForPrint peut rester ici si vous l'utilisez
+//   prepareTooltipsForPrint() {
+//     // Code pour préparer les tooltips si nécessaire
+//   }
 
   activateMoveMode() {
     console.log("Activate move called");
@@ -237,6 +278,7 @@ export default class extends Controller {
       this.tooltip = null;
     }
   }
+
 
   saveArticleChanges(article) {
     const newTitle = document.getElementById('article-title-input').value;
@@ -515,9 +557,11 @@ export default class extends Controller {
     fetch(url)
       .then(response => response.ok ? response.json() : Promise.reject(response))
       .then(data => {
+        console.log("Loaded articles data:", data); // Vérifiez le contenu ici
         this.canvas.clear();
 
         data.articles.forEach(article => {
+          console.log("Article ID:", article.id); // Log de l'ID pour chaque article
           const left = article.position_x * this.canvas.width;
           const top = article.position_y * this.canvas.height;
           const radius = article.radius * this.canvas.width;  // On récupère le rayon relatif
@@ -537,6 +581,7 @@ export default class extends Controller {
           });
 
           circle.articleId = article.id;
+          console.log("Circle created with ID:", circle.articleId); // Log de l'ID du cercle
 
           circle.on('mousedown', () => {
             if (!this.isMoving) {

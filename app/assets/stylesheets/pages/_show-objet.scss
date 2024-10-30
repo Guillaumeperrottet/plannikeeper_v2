@@ -111,3 +111,16 @@
   display: flex; /* Utilise flexbox pour aligner les boutons */
   gap: 10px; /* Espace entre les boutons */
 }
+
+@media print {
+  #article-tooltip {
+    display: block !important; /* S'assurer que les tooltips sont visibles */
+    background: rgba(0, 0, 0, 0.85); /* Légèrement plus opaque */
+    color: white;
+    padding: 10px;
+    border-radius: 4px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.5);
+  }
+
+
+}
