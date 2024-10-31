@@ -1,40 +1,66 @@
-<h2>Se connecter</h2>
-
-<%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
-  <% if resource.errors.any? %>
-    <div class="error-messages">
-      <h2><%= pluralize(resource.errors.count, "erreur") %> empêchent la connexion :</h2>
-      <ul>
-        <% resource.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
-        <% end %>
-      </ul>
+<div class="sign-in-container">
+  <div class="sign-in-box">
+    <div class="welcome-message">
+      <h2>Bienvenue sur Plannikeeper</h2>
     </div>
-  <% end %>
 
-  <div class="field">
-    <%= f.label :email %><br />
-    <%= f.email_field :email, autofocus: true %>
-  </div>
+    <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+      <% if resource.errors.any? %>
+        <div class="error-messages">
+          <h2><%= pluralize(resource.errors.count, "erreur") %> empêchent la connexion :</h2>
+          <ul>
+            <% resource.errors.full_messages.each do |message| %>
+              <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
 
-  <div class="field">
-    <%= f.label :password %><br />
-    <%= f.password_field :password, autocomplete: "off" %>
-  </div>
+      <div class="field">
+        <%= f.label :email, "Adresse Email" %>
+        <%= f.email_field :email, autofocus: true, class: "input-field" %>
+      </div>
 
-  <div class="actions">
-    <%= f.submit "Se connecter" %>
-  </div>
-<% end %>
+      <div class="field">
+        <%= f.label :password, "Mot de Passe" %>
+        <%= f.password_field :password, autocomplete: "off", class: "input-field", id: "password-field" %>
+      </div>
 
-<div>
-  <%= link_to 'Se connecter avec Google', user_google_oauth2_omniauth_authorize_path, method: :get %>
+      <div class="checkbox-field">
+        <%= check_box_tag 'show_password', '1', false, id: "show-password-checkbox" %>
+        <%= label_tag 'show_password', 'Afficher le mot de passe' %>
+      </div>
+
+      <div class="actions">
+        <%= f.submit "Se connecter", class: "btn-submit" %>
+      </div>
+        <% end %>
+
+      <div class="social-login">
+        <%= link_to user_google_oauth2_omniauth_authorize_path, method: :get, class: "google-login" do %>
+          <img src="<%= asset_path('google-logo.png') %>" alt="Google Logo" class="google-icon">
+          <span>Google Connect</span>
+        <% end %>
+      </div>
+
+      <div class="extra-links">
+        <%= link_to 'Créer un nouveau compte', new_user_registration_path, class: "signup-link" %>
+        <%= link_to "Mot de passe oublié ?", new_user_password_path, class: "forgot-password-link" %>
+      </div>
+    </div>
 </div>
 
-<div>
-  <%= link_to 'Créer un nouveau compte', new_user_registration_path %>
-</div>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  const passwordField = document.getElementById("password-field");
+  const showPasswordCheckbox = document.getElementById("show-password-checkbox");
 
-<div>
-  <%= link_to "Mot de passe oublié ?", new_user_password_path %>
-</div>
+  showPasswordCheckbox.addEventListener("change", function() {
+    if (showPasswordCheckbox.checked) {
+      passwordField.type = "text";
+    } else {
+      passwordField.type = "password";
+    }
+  });
+});
+</script>
