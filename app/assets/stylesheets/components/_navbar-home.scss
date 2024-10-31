@@ -1,0 +1,68 @@
+// Navbar initiale transparente
+.navbar-home {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+  background-color: transparent;
+  transition: background-color 0.3s ease, padding 0.3s ease;
+  padding: 1.5rem 2rem;
+
+  .navbar-brand .home-logo {
+    height: 40px;
+    transition: height 0.3s ease;
+  }
+
+  .nav-link {
+    color: #fff;
+    font-weight: 500;
+    transition: color 0.3s ease;
+
+    &:hover {
+      color: #ff6b6b; // Couleur de survol
+    }
+  }
+
+  .btn-primary {
+    background-color: #ff6b6b;
+    color: #fff;
+    border-radius: 20px;
+    padding: 0.5rem 1.2rem;
+    transition: background-color 0.3s ease, color 0.3s ease;
+
+    &:hover {
+      background-color: #ff4a4a;
+      color: #fff;
+    }
+  }
+
+  // Effet de défilement
+  &.scrolled {
+    background-color: #f9f9fb; // Fond opaque après le défilement
+    border-radius: 15px; // Coins arrondis
+    padding: 1rem 2rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); // Ombre légère pour effet de flottement
+    width: calc(100% - 40px); // Réduit la largeur pour laisser des espaces de chaque côté
+    margin: 0 auto; // Centrer la navbar avec largeur réduite
+
+    .navbar-brand .home-logo {
+      height: 30px; // Réduction du logo
+    }
+
+    .nav-link {
+      color: #333;
+
+      &:hover {
+        color: #4a154b;
+      }
+    }
+
+    .btn-primary {
+      background-color: #4a154b;
+
+      &:hover {
+        background-color: #333;
+      }
+    }
+  }
+}

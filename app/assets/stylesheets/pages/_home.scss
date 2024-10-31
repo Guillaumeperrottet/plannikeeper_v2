@@ -1,7 +1,7 @@
 .hero {
   background: asset-url('background.jpg') center/cover no-repeat;
   color: #010101;
-  padding: 4rem 2rem;
+  padding: 6rem 2rem;
   text-align: center;
 }
 
@@ -20,8 +20,28 @@
   margin-bottom: 2.5rem;
 }
 
+.demo-section {
+  padding: 9rem 2rem; // Augmente l'espacement vertical pour plus de présence
+  background-color: #f7f7f8; // Ajoute une couleur de fond légère pour la section
+}
+
+.demo-text {
+  h2 {
+    font-size: 3rem; // Augmente la taille du titre pour qu’il se démarque
+    color: #4a154b;
+    margin: 1.5rem 6.5rem;
+  }
+
+  p {
+    font-size: 1.5rem; // Agrandit le texte pour le rendre plus lisible
+    color: #333;
+    max-width: 600px; // Limite la largeur pour améliorer la lisibilité
+    margin: 0 auto; // Centrer le paragraphe
+  }
+}
+
 .features-section {
-  padding: 4rem 0;
+  padding: 5rem 0;
   background-color: #f7f7f8;
   text-align: center;
 }

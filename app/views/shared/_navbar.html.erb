@@ -1,56 +1,97 @@
-<div class="navbar navbar-expand-sm navbar-light navbar-lewagon" data-controller="navbar">
-  <div class="container-fluid d-flex">
+<% if controller_name == 'pages' && action_name == 'home' %>
+  <!-- Navbar spécifique à la page d'accueil -->
+<div class="navbar navbar-expand-sm navbar-home fixed-top" data-controller="navbar">
+  <div class="container-fluid d-flex justify-content-between">
     <a class="navbar-brand" href="<%= user_signed_in? ? authenticated_root_path : unauthenticated_root_path %>">
-      <%= image_tag "logo.png", alt: "Plannikeeper" %>
+      <%= image_tag "logo.png", alt: "Plannikeeper", class: "home-logo" %>
     </a>
 
-    <div class="collapse navbar-collapse" id="navbarSupportedContent" data-navbar-target="menu">
-      <ul class="navbar-nav me-auto">
-        <!-- Elements à gauche si nécessaire -->
-      </ul>
-
-      <div class="navbar-center">
-        <% if @page_title.present? %>
-          <span><%= @page_title %></span>
-        <% else %>
-          <span><%= @current_path %></span>
-        <% end %>
-
-        <% if controller_name == 'objets' && action_name == 'show' && @objet.present? %>
-          <select id="sector-select-navbar" data-sector-select-target="sectorSelect" data-action="change->sector-select#loadImage">
-            <option value="">Choisir un secteur</option>
-            <% @objet.secteurs.each do |secteur| %>
-              <option value="<%= secteur.id %>" <%= 'selected' if secteur.id == params[:selected_sector_id].to_i %>><%= secteur.nom %></option>
-            <% end %>
-          </select>
-        <% end %>
-      </div>
-
-      <ul class="navbar-nav ms-auto">
-        <% if current_user %>
-          <li class="nav-item dropdown" data-controller="dropdown" data-action="click->dropdown#toggle">
-            <% if current_user.avatar.attached? %>
-              <%= image_tag current_user.avatar.variant(resize_to_limit: [40, 40]), class: "avatar", alt: "User Avatar" %>
-            <% else %>
-              <%= image_tag "https://www.gravatar.com/avatar/#{Digest::MD5.hexdigest(current_user.email.strip.downcase)}?d=identicon&s=40", class: "avatar", alt: "Gravatar Avatar" %>
-            <% end %>
-            <ul class="dropdown-menu" data-dropdown-target="menu">
-              <li><a class="dropdown-item" href="<%= edit_user_registration_path %>">Mon profil</a></li>
-              <li><a class="dropdown-item" href="<%= edit_user_registration_path %>">Paramètres</a></li>
-              <li><hr class="dropdown-divider"></li>
-              <li>
-                <%= form_with url: destroy_user_session_path, method: :delete, class: "d-inline" do %>
-                  <button type="submit" class="dropdown-item">Déconnexion</button>
-                <% end %>
-              </li>
-            </ul>
-          </li>
-        <% else %>
-          <li class="nav-item">
-            <%= link_to "Connexion", new_user_session_path, class: "btn btn-primary" %>
-          </li>
-        <% end %>
-      </ul>
-    </div>
+    <ul class="navbar-nav ms-auto d-flex align-items-center">
+      <li class="nav-item">
+        <%= link_to "Fonctionnalités", "#features", class: "nav-link" %>
+      </li>
+      <li class="nav-item">
+        <%= link_to "Tarifs", "#pricing", class: "nav-link" %>
+      </li>
+      <li class="nav-item">
+        <%= link_to "Ressources", "#resources", class: "nav-link" %>
+      </li>
+      <li class="nav-item">
+        <%= link_to "Connexion", new_user_session_path, class: "btn btn-primary ms-3" %>
+      </li>
+    </ul>
   </div>
 </div>
+<% else %>
+  <!-- Navbar par défaut pour les autres pages -->
+  <div class="navbar navbar-expand-sm navbar-light navbar-lewagon" data-controller="navbar">
+    <div class="container-fluid d-flex">
+      <a class="navbar-brand" href="<%= user_signed_in? ? authenticated_root_path : unauthenticated_root_path %>">
+        <%= image_tag "logo.png", alt: "Plannikeeper" %>
+      </a>
+
+      <div class="collapse navbar-collapse" id="navbarSupportedContent" data-navbar-target="menu">
+        <ul class="navbar-nav me-auto">
+          <!-- Elements à gauche si nécessaire -->
+        </ul>
+
+        <div class="navbar-center">
+          <% if @page_title.present? %>
+            <span><%= @page_title %></span>
+          <% else %>
+            <span><%= @current_path %></span>
+          <% end %>
+
+          <% if controller_name == 'objets' && action_name == 'show' && @objet.present? %>
+            <select id="sector-select-navbar" data-sector-select-target="sectorSelect" data-action="change->sector-select#loadImage">
+              <option value="">Choisir un secteur</option>
+              <% @objet.secteurs.each do |secteur| %>
+                <option value="<%= secteur.id %>" <%= 'selected' if secteur.id == params[:selected_sector_id].to_i %>><%= secteur.nom %></option>
+              <% end %>
+            </select>
+          <% end %>
+        </div>
+
+        <ul class="navbar-nav ms-auto">
+          <% if current_user %>
+            <li class="nav-item dropdown" data-controller="dropdown" data-action="click->dropdown#toggle">
+              <% if current_user.avatar.attached? %>
+                <%= image_tag current_user.avatar.variant(resize_to_limit: [40, 40]), class: "avatar", alt: "User Avatar" %>
+              <% else %>
+                <%= image_tag "https://www.gravatar.com/avatar/#{Digest::MD5.hexdigest(current_user.email.strip.downcase)}?d=identicon&s=40", class: "avatar", alt: "Gravatar Avatar" %>
+              <% end %>
+              <ul class="dropdown-menu" data-dropdown-target="menu">
+                <li><a class="dropdown-item" href="<%= edit_user_registration_path %>">Mon profil</a></li>
+                <li><a class="dropdown-item" href="<%= edit_user_registration_path %>">Paramètres</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li>
+                  <%= form_with url: destroy_user_session_path, method: :delete, class: "d-inline" do %>
+                    <button type="submit" class="dropdown-item">Déconnexion</button>
+                  <% end %>
+                </li>
+              </ul>
+            </li>
+          <% else %>
+            <li class="nav-item">
+              <%= link_to "Connexion", new_user_session_path, class: "btn btn-primary" %>
+            </li>
+          <% end %>
+        </ul>
+      </div>
+    </div>
+  </div>
+<% end %>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const navbar = document.querySelector(".navbar-home");
+
+  window.addEventListener("scroll", () => {
+    if (window.scrollY > 50) {
+      navbar.classList.add("scrolled");
+    } else {
+      navbar.classList.remove("scrolled");
+    }
+  });
+});
+</script>
