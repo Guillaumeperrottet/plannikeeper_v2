@@ -1,0 +1,12 @@
+.brand-name {
+  font-family: 'Irish Grover', cursive; /* Ou la police de ton choix */
+  font-size: 24px; /* Ajuste la taille selon tes préférences */
+  font-weight: 700;
+  color: #333; /* Choisis la couleur que tu veux */
+  text-transform: capitalize;
+  letter-spacing: 1px;
+}
+
+.navbar.scrolled .brand-name {
+  color: #555; /* Couleur ajustée pour la version défilée */
+}

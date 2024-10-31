@@ -2,7 +2,6 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  // background: lightgray;
   border-bottom: 1px solid darkgray;
   position: relative;
 }
@@ -26,7 +25,7 @@
 }
 
 .navbar-center span {
-  margin-right: 1rem; /* Espace entre @current_path et le sélecteur */
+  margin-right: 6rem; /* Espace entre @current_path et le sélecteur */
 }
 
 .dropdown-menu {

@@ -3,9 +3,8 @@
 <div class="navbar navbar-expand-sm navbar-home fixed-top" data-controller="navbar">
   <div class="container-fluid d-flex justify-content-between">
     <a class="navbar-brand" href="<%= user_signed_in? ? authenticated_root_path : unauthenticated_root_path %>">
-      <%= image_tag "logo.png", alt: "Plannikeeper", class: "home-logo" %>
+      <span class="brand-name">PlanniKeeper</span>
     </a>
-
     <ul class="navbar-nav ms-auto d-flex align-items-center">
       <li class="nav-item">
         <%= link_to "Fonctionnalités", "#features", class: "nav-link" %>
@@ -27,7 +26,7 @@
   <div class="navbar navbar-expand-sm navbar-light navbar-lewagon" data-controller="navbar">
     <div class="container-fluid d-flex">
       <a class="navbar-brand" href="<%= user_signed_in? ? authenticated_root_path : unauthenticated_root_path %>">
-        <%= image_tag "logo.png", alt: "Plannikeeper" %>
+        <span class="brand-name">PlanniKeeper</span>
       </a>
 
       <div class="collapse navbar-collapse" id="navbarSupportedContent" data-navbar-target="menu">
