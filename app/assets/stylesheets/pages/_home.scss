@@ -1,68 +1,191 @@
 .hero {
-  text-align: center;
+  background: asset-url('background.jpg') center/cover no-repeat;
+  color: #010101;
   padding: 4rem 2rem;
+  text-align: center;
 }
 
 .hero h1 {
   font-size: 3rem;
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.hero h2 {
+  font-size: 1.8rem;
+  margin-bottom: 1.5rem;
 }
 
 .hero p {
   font-size: 1.5rem;
-  margin-bottom: 2rem;
+  margin-bottom: 2.5rem;
 }
 
-.demo-section {
-  padding: 3rem 0;
-  background-color: #f7f7f8; /* Couleur de fond légère */
+.features-section {
+  padding: 4rem 0;
+  background-color: #f7f7f8;
+  text-align: center;
 }
 
-.demo-container {
-  max-width: 1200px;
-  margin: auto;
-  padding: 0 1.5rem;
+.features-section .feature i {
+  font-size: 3rem;
+  color: #4a154b;
+  margin-bottom: 1rem;
 }
 
-.demo-row {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-}
-
-.demo-text {
-  padding: 2rem;
-}
-
-.demo-text h2 {
-  font-size: 2.5rem;
-  color: #4a154b; /* Couleur principale de Slack */
-}
-
-.demo-text p {
-  font-size: 1.2rem;
+.features-section .feature h3 {
+  font-size: 1.5rem;
   color: #333;
-  margin-top: 1rem;
+  margin-bottom: 0.5rem;
 }
 
-.demo-video {
-  display: flex;
-  justify-content: center;
+.features-section .feature p {
+  font-size: 1rem;
+  color: #666;
 }
 
-.demo-video-element {
-  width: 100%;
-  max-width: 500px; /* Vous pouvez ajuster cette valeur */
-  border-radius: 10px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-}
-.demo-text, .demo-video {
-  opacity: 0;
-  transform: translateY(50px);
-  transition: all 0.8s ease-in-out;
+.additional-videos-section {
+  padding: 4rem 0;
+  background-color: #f1f1f1;
+  text-align: center;
+
+  h2 {
+    font-size: 2.5rem;
+    color: #4a154b;
+    margin-bottom: 2rem;
+  }
+
+  .videos-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3rem; // Espace vertical entre chaque vidéo
+  }
+
+  .video-item {
+    width: 80%;
+    max-width: 600px;
+
+    h3 {
+      font-size: 1.5rem;
+      color: #4a154b;
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+
+    video {
+      width: 100%;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      transition: transform 0.3s ease;
+
+      &:hover {
+        transform: scale(1.02);
+      }
+    }
+  }
+
+  // Décalage pour les vidéos en mode serpent
+  .align-left {
+    align-self: flex-start; // Aligne fortement à gauche
+    margin-left: 5%; // Déplace légèrement depuis le bord gauche
+  }
+
+  .align-right {
+    align-self: flex-end; // Aligne fortement à droite
+    margin-right: 5%; // Déplace légèrement depuis le bord droit
+  }
 }
 
-.demo-section.in-view .demo-text, .demo-section.in-view .demo-video {
-  opacity: 1;
-  transform: translateY(0);
+.print-feature-section {
+  padding: 4rem 0;
+  background-color: #f9f9fb;
+
+  h2 {
+    font-size: 2.5rem;
+    color: #4a154b;
+    margin-bottom: 1rem;
+  }
+
+  .description {
+    font-size: 1.2rem;
+    color: #666;
+    margin-bottom: 2rem;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .screenshot-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    max-width: 800px;
+    margin: 0 auto;
+    transition: transform 0.3s ease;
+
+    &:hover {
+      transform: scale(1.02);
+    }
+
+    .screenshot {
+      border-radius: 4px;
+      width: 100%;
+    }
+  }
+}
+
+.cta-section {
+  padding: 4rem 0;
+  background-color: #4a154b;
+  color: #fff;
+  text-align: center;
+
+  h2 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .cta-description {
+    font-size: 1.2rem;
+    color: #ddd;
+    margin-bottom: 2rem;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .btn-primary {
+    background-color: #ff6b6b;
+    color: #fff;
+    padding: 0.8rem 2rem;
+    margin-right: 1rem;
+    border-radius: 5px;
+    text-transform: uppercase;
+    font-weight: bold;
+    transition: background 0.3s ease;
+
+    &:hover {
+      background-color: #ff4a4a;
+    }
+  }
+
+  .btn-outline {
+    background-color: transparent;
+    color: #ff6b6b;
+    padding: 0.8rem 2rem;
+    border: 2px solid #ff6b6b;
+    border-radius: 5px;
+    text-transform: uppercase;
+    font-weight: bold;
+    transition: color 0.3s ease, background 0.3s ease;
+
+    &:hover {
+      background-color: #ff6b6b;
+      color: #fff;
+    }
+  }
 }

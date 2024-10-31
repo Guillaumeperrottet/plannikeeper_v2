@@ -1,28 +1,95 @@
 <section class="hero">
   <div class="container-home-page">
     <h1>Plannikeeper</h1>
-    <h1>Plannifier l'entretien de vos bâtiments</h1>
+    <h2>Plannifiez l'entretien de vos bâtiments facilement</h2>
     <p>Organisez, prévoyez et réussissez avec notre outil intuitif.</p>
     <%= link_to 'Commencez maintenant gratuitement', new_user_session_path, class: 'btn btn--simple' %>
   </div>
 </section>
 
-<section class="demo-section">
-  <div class="container-fluid demo-container">
-    <div class="row demo-row align-items-center">
-      <!-- Texte de démonstration -->
-      <div class="col-md-6 demo-text">
-        <h2>Découvrez notre outil</h2>
-        <p>Organisez vos tâches, collaborez en temps réel, et gardez votre équipe alignée avec notre plateforme intuitive.</p>
+<div class="features-section">
+  <div class="container">
+    <h2>Fonctionnalités clés</h2>
+    <div class="row">
+      <div class="col-md-4 feature">
+        <i class="fas fa-tasks"></i>
+        <h3>Gestion des tâches</h3>
+        <p>Créez et suivez toutes les tâches d'entretien en un seul endroit.</p>
       </div>
+      <div class="col-md-4 feature">
+        <i class="fas fa-calendar-alt"></i>
+        <h3>Planification</h3>
+        <p>Organisez et planifiez efficacement les interventions et entretiens.</p>
+      </div>
+      <div class="col-md-4 feature">
+        <i class="fas fa-users"></i>
+        <h3>Collaboration en équipe</h3>
+        <p>Invitez votre équipe et travaillez ensemble en temps réel.</p>
+      </div>
+    </div>
+  </div>
+</div>
 
-      <!-- Vidéo de démonstration -->
-      <div class="col-md-6 demo-video">
-        <video autoplay muted loop class="demo-video-element">
-          <!--<source src="chemin/vers/votre_video.mp4" type="video/mp4">-->
-          Votre navigateur ne supporte pas la vidéo HTML5.
+<div class="container-fluid demo-section">
+  <div class="row demo-row align-items-center">
+    <div class="col-md-6 demo-text">
+      <h2>Découvrez notre outil</h2>
+      <p>Organisez vos tâches, collaborez en temps réel, et gardez votre équipe alignée avec notre plateforme intuitive.</p>
+    </div>
+    <div class="col-md-6 demo-visual">
+      <video autoplay loop muted playsinline class="img-fluid">
+        <source src="<%= asset_path 'demo-video.mp4' %>" type="video/mp4">
+        Votre navigateur ne prend pas en charge les vidéos HTML5.
+      </video>
+    </div>
+  </div>
+</div>
+
+<!-- Section supplémentaire pour les vidéos -->
+<div class="additional-videos-section">
+  <div class="container">
+    <h2>Découvrez en action</h2>
+    <div class="videos-wrapper">
+      <div class="video-item align-left">
+        <h3>Présentation de l'interface</h3>
+        <video autoplay loop muted playsinline class="img-fluid">
+          <source src="<%= asset_path 'demo-video2.mp4' %>" type="video/mp4">
+          Votre navigateur ne prend pas en charge les vidéos HTML5.
+        </video>
+      </div>
+      <div class="video-item align-right">
+        <h3>Gestion des tâches</h3>
+        <video autoplay loop muted playsinline class="img-fluid">
+          <source src="<%= asset_path 'demo-video3.mp4' %>" type="video/mp4">
+          Votre navigateur ne prend pas en charge les vidéos HTML5.
+        </video>
+      </div>
+      <div class="video-item align-left">
+        <h3>Planification et calendrier</h3>
+        <video autoplay loop muted playsinline class="img-fluid">
+          <source src="<%= asset_path 'demo-video4.mp4' %>" type="video/mp4">
+          Votre navigateur ne prend pas en charge les vidéos HTML5.
         </video>
       </div>
     </div>
   </div>
-</section>
+</div>
+
+<div class="print-feature-section">
+  <div class="container text-center">
+    <h2>Imprimez votre liste de tâches</h2>
+    <p class="description">Générez facilement une liste imprimable de vos tâches pour une gestion pratique sur le terrain.</p>
+    <div class="screenshot-wrapper">
+      <%= image_tag 'print-screenshot.png', alt: 'Capture d’écran de la liste des tâches imprimable', class: 'screenshot img-fluid' %>
+    </div>
+  </div>
+</div>
+
+<div class="cta-section">
+  <div class="container text-center">
+    <h2>Prêt à simplifier la gestion de vos bâtiments ?</h2>
+    <p class="cta-description">Plannikeeper est là pour vous aider à organiser, planifier et collaborer efficacement. Rejoignez-nous et découvrez une nouvelle façon de gérer vos tâches.</p>
+    <%= link_to 'Commencez maintenant gratuitement', new_user_registration_path, class: 'btn btn-primary' %>
+    <%= link_to 'Se connecter', new_user_session_path, class: 'btn btn-outline' %>
+  </div>
+</div>
