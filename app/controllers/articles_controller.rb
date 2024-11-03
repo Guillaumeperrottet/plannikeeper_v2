@@ -46,7 +46,8 @@ class ArticlesController < ApplicationController
 
     if @article.update(article_params)
       # Renvoyer la réponse JSON pour éviter une redirection
-      render json: { article: @article, message: flash[:notice] }, status: :ok
+      # render json: { article: @article, message: flash[:notice] }, status: :ok
+      redirect_to objet_secteur_article_path(@objet, @secteur, @article), alert: 'Modification effectuée avec succès.'
     else
       # En cas d'erreur, renvoyer les erreurs en JSON sans redirection
       render json: { errors: @article.errors.full_messages }, status: :unprocessable_entity

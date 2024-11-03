@@ -46,9 +46,12 @@ export default class extends Controller {
         const articleList = document.getElementById('article-list');
         articleList.innerHTML = '';  // Vide la liste des articles précédents
 
+        // Trier les articles en utilisant un tri naturel
+        data.articles.sort((a, b) => a.title.localeCompare(b.title, undefined, { numeric: true, sensitivity: 'base' }));
+
         data.articles.forEach(article => {
           const articleItem = document.createElement('div');
-          articleItem.className = 'dropdown-item';  // Utilise la classe dropdown-item pour le style
+          articleItem.className = 'dropdown-item';
           articleItem.textContent = article.title;
           articleItem.dataset.articleId = article.id;
 
@@ -69,7 +72,7 @@ export default class extends Controller {
           articleList.appendChild(articleItem);
         });
 
-        console.log("Articles chargés :", data.articles);
+        console.log("Articles chargés et triés :", data.articles);
       })
       .catch(error => {
         console.error("Erreur lors du chargement des articles :", error);

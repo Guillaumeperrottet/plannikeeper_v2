@@ -16,8 +16,9 @@ class ObjetsController < ApplicationController
     @secteur = @secteurs.find_by(id: params[:secteur_id]) if params[:secteur_id].present?
     @article = Article.find_by(id: params[:article_id]) if params[:article_id].present?
 
-    # Si un secteur est sélectionné, récupérer ses articles
-    @articles = @secteur ? @secteur.articles : []
+    # Si un secteur est sélectionné, récupérer ses articles et les tris par nom
+    @articles = @secteur ? @secteur.articles.order(:title) : []
+
 
     set_article_and_tasks
 
@@ -75,7 +76,7 @@ class ObjetsController < ApplicationController
   end
 
   def objet_params
-    params.require(:objet).permit(:nom, :adresse, secteurs_attributes: [:id, :nom, :image, :_destroy])
+    params.require(:objet).permit(:nom, :adresse, secteurs_attributes: [:id, :nom, :title, :image, :_destroy])
   end
 
   def set_page_title
