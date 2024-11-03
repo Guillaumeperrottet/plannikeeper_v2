@@ -36,6 +36,11 @@ export default class extends Controller {
       document.body.dataset.selectedSectorId = sectorId;
       localStorage.setItem('selectedSectorId', sectorId);
       console.log("Updated body dataset with selected-sector-id:", sectorId);
+
+    // Redirection de la page avec le secteur sélectionné en paramètre
+    const objetId = this.data.get('objetId');
+    window.location.href = `/objets/${objetId}?selected_sector_id=${sectorId}`;
+
     } else {
       this.hideImage();
       document.body.dataset.selectedSectorId = '';
