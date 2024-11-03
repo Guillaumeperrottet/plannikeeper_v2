@@ -542,6 +542,16 @@ export default class extends Controller {
     .then(data => {
       console.log("Article créé avec succès :", data);
       this.loadAndDisplayArticles();
+
+      // Afficher le message de succès
+      const notification = document.getElementById('article-created-notification');
+      notification.style.display = 'block';
+
+      // Masquer le message de succès et rafraîchir la page après 3 secondes
+      setTimeout(() => {
+        notification.style.display = 'none';
+        window.location.reload();
+      }, 3000);
     })
     .catch(error => {
       console.error("Erreur lors de la création de l'article :", error);

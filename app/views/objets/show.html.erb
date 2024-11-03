@@ -1,4 +1,6 @@
 <div id="notification" style="display: none; color: green;"></div>
+<div id="article-created-notification" style="display: none; color: green;">Article créé avec succès !</div>
+
 <div class="object-show" data-controller="fabric sector-select panel" data-objet-id="<%= @objet.id %>" data-sector-select-objet-id="<%= @objet.id %>" data-selected-sector-id="<%= params[:selected_sector_id] || @selected_sector&.id %>">
   <div id="sector-image-container" data-panel-target="sectorImageContainer" style="position: relative;">
       <% if @selected_sector && @selected_sector.image.attached? %>
