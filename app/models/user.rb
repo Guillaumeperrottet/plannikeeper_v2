@@ -3,6 +3,7 @@ class User < ApplicationRecord
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   validates :password, length: { minimum: 6 }, if: -> { password.present? }
 
+  belongs_to :company, optional: true
   has_one_attached :avatar
   has_many :objets, dependent: :destroy
   devise :database_authenticatable, :registerable,
