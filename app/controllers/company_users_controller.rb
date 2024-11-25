@@ -17,9 +17,9 @@ class CompanyUsersController < ApplicationController
   def update
     @user = current_user.company.users.find(params[:id])
     if @user.update(user_params)
-      redirect_to company_users_path, notice: "L'utilisateur a été mis à jour."
+      redirect_to company_users_path, notice: "Utilisateur mis à jour avec succès."
     else
-      render :edit
+      render :edit, alert: "Erreur lors de la mise à jour de l'utilisateur."
     end
   end
 

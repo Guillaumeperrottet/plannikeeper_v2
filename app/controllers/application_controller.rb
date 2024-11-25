@@ -4,6 +4,14 @@ class ApplicationController < ActionController::Base
 
   include Rails.application.routes.url_helpers # Ajout pour inclure les helpers de routes
 
+  rescue_from CanCan::AccessDenied do |exception|
+    respond_to do |format|
+      format.html { redirect_to request.referer || root_path, alert: "Vous n'êtes pas autorisé à effectuer cette action." }
+      format.json { render json: { error: "Vous n'êtes pas autorisé à effectuer cette action." }, status: :forbidden }
+      format.js { render 'shared/access_denied', status: :forbidden }
+    end
+  end
+
   private
 
   def devise_or_public?
