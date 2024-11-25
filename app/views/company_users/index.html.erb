@@ -3,7 +3,7 @@
   <h2 class="page-title">Gestion des Utilisateurs</h2>
 
   <div class="actions">
-    <%= link_to "Créer un nouvel utilisateur", new_company_user_path, class: "btn btn-primary" %>
+    <%= link_to "Créer un nouvel utilisateur", new_company_user_path, class: "btn btn-secondary" %>
   </div>
 
   <div class="table-responsive">
@@ -22,7 +22,7 @@
             <td><%= user.role.humanize %></td>
             <td class="text-center">
               <!-- Modifier l'utilisateur -->
-              <%= link_to edit_company_user_path(user), class: "btn btn-sm btn-warning", title: "Modifier l'utilisateur" do %>
+              <%= link_to edit_company_user_path(user), class: "btn btn-simple", title: "Modifier l'utilisateur" do %>
                 <i class="fas fa-edit"></i> Modifier
               <% end %>
 
@@ -34,7 +34,7 @@
                             data: { controller: "delete-confirm",
                                     action: "submit->delete-confirm#confirm",
                                     "delete-confirm-message-value": "Êtes-vous sûr de vouloir supprimer cet utilisateur ?" } do |f| %>
-                <%= f.submit "Supprimer", class: "btn btn-sm btn-danger" %>
+                <%= f.submit "Supprimer", class: "btn btn-simple" %>
               <% end %>
             </td>
           </tr>
