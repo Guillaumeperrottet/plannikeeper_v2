@@ -1,0 +1,18 @@
+<div class="spacer"></div>
+<h2>Gérer les Permissions pour <%= @user.email %></h2>
+
+<%= form_with(url: update_permissions_company_user_path(@user), method: :post) do |f| %>
+  <div>
+    <%= f.label :can_manage_tasks, "Peut gérer les tâches" %>
+    <%= f.check_box :can_manage_tasks, {}, true, false %>
+  </div>
+
+  <div>
+    <%= f.label :can_view_reports, "Peut voir les rapports" %>
+    <%= f.check_box :can_view_reports, {}, true, false %>
+  </div>
+
+  <div>
+    <%= f.submit "Enregistrer", class: "btn btn-primary" %>
+  </div>
+<% end %>

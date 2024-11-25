@@ -49,10 +49,18 @@ Rails.application.routes.draw do
     end
   end
 
-   # Route pour l'impression des tâches dans le dashboard
-   resources :dashboard, only: [] do
-    collection do
-      get 'print_tasks', to: 'dashboard#print_tasks'
+  # Route pour l'impression des tâches dans le dashboard
+  resources :dashboard, only: [] do
+  collection do
+    get 'print_tasks', to: 'dashboard#print_tasks'
+  end
+end
+
+  # Routes pour la gestion des utilisateurs par l'admin entreprise
+  resources :company_users, only: [:index, :new, :create, :edit, :update, :destroy] do
+    member do
+      get 'permissions', to: 'company_users#permissions'
+      post 'update_permissions', to: 'company_users#update_permissions'
     end
   end
 end

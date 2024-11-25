@@ -27,6 +27,7 @@ gem 'image_processing', '~> 1.2'
 gem 'browser'
 gem 'cloudinary'
 gem 'activestorage-cloudinary-service'
+gem 'cancancan', '~> 3.0'
 
 # Use PostgreSQL as the database for Active Record in production
 group :production do

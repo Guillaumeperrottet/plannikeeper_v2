@@ -47,6 +47,12 @@
   <div class="form-actions">
     <%= f.button :submit, "Mettre à Jour", class: "profile-submit" %>
   </div>
+
+    <% if resource.enterprise_admin? %>
+    <div class="manage-permissions">
+      <%= link_to "Gérer les Utilisateurs et Permissions", company_users_path, class: "btn btn-secondary" %>
+    </div>
+  <% end %>
 <% end %>
 
 <div class="cancel-account">

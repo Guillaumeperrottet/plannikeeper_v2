@@ -1,4 +1,5 @@
 class TasksController < ApplicationController
+  load_and_authorize_resource through: :article
   before_action :set_article_and_sector, only: [:new, :create, :edit, :update, :index, :archive, :destroy]
   before_action :set_page_title, only: [:new, :edit, :show] # Ajuste les actions où tu veux afficher ce titre
   before_action :set_breadcrumbs, only: [:new, :edit, :show]
@@ -151,7 +152,8 @@ class TasksController < ApplicationController
 
 
   def index
-    @tasks = @article.tasks
+      # Charger les tâches liées à l'article tout en respectant les permissions
+    @tasks = @article.tasks.accessible_by(current_ability)
     @executants = @tasks.pluck(:executant).uniq
     @cfcs = @tasks.pluck(:cfc).uniq
 
