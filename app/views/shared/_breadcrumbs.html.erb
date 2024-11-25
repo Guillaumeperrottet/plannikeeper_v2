@@ -1,7 +1,7 @@
 <nav aria-label="breadcrumb" class="breadcrumb-container">
   <ol class="breadcrumb">
     <li class="breadcrumb-item">
-      <%= link_to 'Vos objets', objets_path %>
+      <%= link_to 'Vos objets', authenticated_root_path %>
     </li>
     <% if @objet && @objet.id.present? %>
       <% if action_name == 'edit' && controller_name == 'objets' %>

@@ -12,8 +12,8 @@ class ObjetsController < ApplicationController
       # Charge uniquement les objets de l'utilisateur privé
       @objets = current_user.objets.accessible_by(current_ability)
     end
-    Rails.logger.debug "Objets visibles : #{@objets.map { |o| "ID: #{o.id}, Nom: #{o.nom}" }}"
-    render :index # Si une vue spécifique est nécessaire
+    # Rails.logger.debug "Objets visibles : #{@objets.map { |o| "ID: #{o.id}, Nom: #{o.nom}" }}"
+    render :dashboard # Si une vue spécifique est nécessaire
   end
 
   def show
