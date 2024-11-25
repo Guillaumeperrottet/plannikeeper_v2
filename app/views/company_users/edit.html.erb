@@ -1,0 +1,17 @@
+<h2>Modifier l'Utilisateur</h2>
+
+<%= form_with(model: @user, url: company_user_path(@user), method: :patch) do |f| %>
+  <div>
+    <%= f.label :email, "Email" %>
+    <%= f.text_field :email, disabled: true %>
+  </div>
+
+  <div>
+    <%= f.label :role, "Rôle" %>
+    <%= f.select :role, User.roles.keys.map { |r| [r.humanize, r] } %>
+  </div>
+
+  <div>
+    <%= f.submit "Mettre à jour", class: "btn btn-primary" %>
+  </div>
+<% end %>

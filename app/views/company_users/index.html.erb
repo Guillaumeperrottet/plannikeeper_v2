@@ -1,0 +1,30 @@
+<div class="spacer"></div>
+<h2>Gestion des Utilisateurs</h2>
+
+<%= link_to "Créer un nouvel utilisateur", new_company_user_path, class: "btn btn-primary" %>
+
+<table>
+  <thead>
+    <tr>
+      <th>Email</th>
+      <th>Rôle</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @users.each do |user| %>
+      <tr>
+        <td><%= user.email %></td>
+        <td><%= user.role %></td>
+        <td>
+          <%= link_to 'Modifier', edit_company_user_path(user) %>
+          <%= link_to 'Supprimer', company_user_path(user), method: :delete, data: { confirm: 'Êtes-vous sûr ?' } %>
+          <%= link_to 'Gérer les permissions', permissions_company_user_path(user) %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<div class="alert alert-info">
+  Les nouveaux utilisateurs sont créés avec le mot de passe par défaut <strong>123456789</strong>. Veuillez leur demander de le changer dès leur première connexion.
+</div>

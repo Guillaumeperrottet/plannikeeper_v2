@@ -1,15 +1,18 @@
 <div class="dashboard-page" data-controller="task">
   <div class="header">
-    <%# <h1 class="main-title">Vos objets</h1> %>
     <ul class="object-list">
-      <% @objets.each do |objet| %>
-        <li>
-          <span class="object-bullet"></span>
-          <%= link_to "#{objet.nom} - #{objet.adresse}", objet_path(objet), class: "object-link" %>
-          <%= link_to edit_objet_path(objet), class: "edit-link", title: "Éditer #{objet.nom}" do %>
-            <i class="fas fa-edit"></i>
-          <% end %>
-        </li>
+      <% if @objets.any? %>
+        <% @objets.each do |objet| %>
+          <li>
+            <span class="object-bullet"></span>
+            <%= link_to "#{objet.nom} - #{objet.adresse}", objet_path(objet), class: "object-link" %>
+            <%= link_to edit_objet_path(objet), class: "edit-link", title: "Éditer #{objet.nom}" do %>
+              <i class="fas fa-edit"></i>
+            <% end %>
+          </li>
+        <% end %>
+      <% else %>
+        <li>Aucun objet disponible pour le moment.</li>
       <% end %>
     </ul>
 
