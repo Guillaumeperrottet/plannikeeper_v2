@@ -16,7 +16,9 @@ class Ability
       can :manage, User, company_id: user.company_id
 
       # Permet de gérer les tâches liées à un article appartenant à la même entreprise
-      can :manage, Task, article: { secteur: { objet: { company_id: user.company_id } } }
+      can :create, Task do |task|
+        task.article&.secteur&.objet&.company_id == user.company_id
+      end
     elsif user.enterprise_user?
       # Utilisateur entreprise : accès limité
       can :read, Task, article: { secteur: { objet: { company_id: user.company_id } } }
