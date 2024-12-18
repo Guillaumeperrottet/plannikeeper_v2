@@ -1,5 +1,4 @@
 class TasksController < ApplicationController
-  load_and_authorize_resource through: :article
   before_action :set_article_and_sector, only: [:new, :create, :edit, :update, :index, :archive, :destroy]
   before_action :set_page_title, only: [:new, :edit, :show] # Ajuste les actions où tu veux afficher ce titre
   before_action :set_breadcrumbs, only: [:new, :edit, :show]
@@ -14,6 +13,16 @@ class TasksController < ApplicationController
     add_breadcrumb "Création de tâche", new_objet_secteur_article_task_path(@objet, @secteur, @article)
     @task = @article.tasks.new
 
+
+  # Vérifiez que l'utilisateur a les permissions nécessaires avant d'appeler `authorize!`
+  unless @objet.company_id == current_user.company_id
+    redirect_to objet_secteur_article_path(@objet, @secteur, @article), alert: "Vous n'êtes pas autorisé à créer une tâche pour cet article."
+    return
+  end
+
+  # Appel explicite à `authorize!` après validation contextuelle
+  authorize! :create, @task
+
     if browser.device.mobile?
       render 'tasks/mobile/mobile_new'
     else
@@ -26,6 +35,7 @@ class TasksController < ApplicationController
     logger.debug "Appel de la méthode 'create'"
 
     @task = @article.tasks.new(task_params)
+
 
     # Définir la couleur en fonction du type de tâche
     case @task.task_type
@@ -47,6 +57,8 @@ class TasksController < ApplicationController
       next_recurrence = calculate_next_recurrence(current_date, @task.period)
       @task.end_date = next_recurrence
     end
+
+    authorize! :create, @task
 
     if @task.save
       logger.debug("Tâche sauvegardée avec succès")
