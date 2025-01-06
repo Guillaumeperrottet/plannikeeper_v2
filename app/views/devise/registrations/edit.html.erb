@@ -1,6 +1,5 @@
 <h2 class="profile-title">Modifier le profil</h2>
 
-
 <%= simple_form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put, class: 'profile-form' }) do |f| %>
   <div class="back-icon">
     <%= link_to "&#10005;".html_safe, :back, class: "close-button", title: "Retour" %>
@@ -28,27 +27,35 @@
       <p class="confirmation-info">En attente de confirmation pour : <%= resource.unconfirmed_email %></p>
     <% end %>
 
-    <%= f.input :password,
-                label: "Nouveau Mot de Passe",
-                hint: "Laissez vide si vous ne souhaitez pas le changer",
-                required: false,
-                input_html: { autocomplete: "new-password", class: "profile-input" } %>
-    <%= f.input :password_confirmation,
-                label: "Confirmer le Nouveau Mot de Passe",
-                required: false,
-                input_html: { autocomplete: "new-password", class: "profile-input" } %>
-    <%= f.input :current_password,
-                label: "Mot de Passe Actuel",
-                hint: "Votre mot de passe actuel est nécessaire pour confirmer les changements",
-                required: true,
-                input_html: { autocomplete: "current-password", class: "profile-input" } %>
+    <!-- Bouton pour afficher les champs de changement de mot de passe -->
+    <div class="change-password-container">
+      <button type="button" id="toggle-password-fields" class="btn btn-secondary">Changer le mot de passe</button>
+    </div>
+
+    <!-- Champs de changement de mot de passe masqués par défaut -->
+    <div id="password-fields" style="display: none; margin-top: 1rem;">
+      <%= f.input :password,
+                  label: "Nouveau Mot de Passe",
+                  hint: "Laissez vide si vous ne souhaitez pas le changer",
+                  required: false,
+                  input_html: { autocomplete: "new-password", class: "profile-input" } %>
+      <%= f.input :password_confirmation,
+                  label: "Confirmer le Nouveau Mot de Passe",
+                  required: false,
+                  input_html: { autocomplete: "new-password", class: "profile-input" } %>
+      <%= f.input :current_password,
+                  label: "Mot de Passe Actuel",
+                  hint: "Votre mot de passe actuel est nécessaire pour confirmer les changements",
+                  required: true,
+                  input_html: { autocomplete: "current-password", class: "profile-input" } %>
+    </div>
   </div>
 
   <div class="form-actions">
     <%= f.button :submit, "Mettre à Jour", class: "profile-submit" %>
   </div>
 
-    <% if resource.enterprise_admin? %>
+  <% if resource.enterprise_admin? %>
     <div class="manage-permissions">
       <%= link_to "Gestion des utilisateurs", company_users_path, class: "btn btn-success" %>
     </div>
@@ -59,8 +66,14 @@
   Pas satisfait ? <%= button_to "Supprimer mon compte", registration_path(resource_name), data: { confirm: "Êtes-vous sûr ?", turbo_confirm: "Êtes-vous sûr ?" }, method: :delete, class: "cancel-button" %>
 </div>
 
-
 <script>
+  // Script pour afficher/masquer les champs de changement de mot de passe
+  document.getElementById('toggle-password-fields').addEventListener('click', function() {
+    const passwordFields = document.getElementById('password-fields');
+    const isHidden = passwordFields.style.display === 'none';
+    passwordFields.style.display = isHidden ? 'block' : 'none';
+  });
+
   function previewImage(event) {
     const imagePreview = document.getElementById('profile-image-preview');
     const file = event.target.files[0];
