@@ -1,18 +1,30 @@
 <div class="spacer"></div>
 <h2>Créer un Nouvel Utilisateur</h2>
 
-<%= form_with(model: @user, url: company_users_path, local: true) do |f| %>
-  <div class="form-group">
-    <%= f.label :name, "Nom" %>
-    <%= f.text_field :name, class: "form-control", required: true %>
+<%= form_with model: @user, url: @user.new_record? ? company_users_path : company_user_path(@user), method: @user.new_record? ? :post : :patch do |f| %>
+  <div>
+    <%= f.label :email, "Email" %>
+    <%= f.email_field :email, disabled: !@user.new_record? %>
   </div>
 
-  <div class="form-group">
-    <%= f.label :email, "Adresse Email" %>
-    <%= f.email_field :email, class: "form-control", required: true %>
+  <div>
+    <%= f.label :role, "Rôle" %>
+    <%= f.select :role, User.roles.keys.map { |role| [role.humanize, role] }, selected: @user.role || 'enterprise_user', class: 'form-control' %>
   </div>
 
-  <div class="form-actions">
-    <%= f.submit "Créer l'utilisateur", class: "btn btn-success" %>
+<div>
+  <%= f.label :objets, "Objets accessibles" %>
+  <div class="checkbox-group">
+    <% Objet.where(company_id: current_user.company_id).each do |objet| %>
+      <div class="form-check">
+        <%= check_box_tag 'user[objet_ids][]', objet.id, @user.objets.include?(objet), id: "user_objet_#{objet.id}", class: 'form-check-input' %>
+        <%= label_tag "user_objet_#{objet.id}", objet.nom, class: 'form-check-label' %>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+  <div>
+    <%= f.submit "Enregistrer", class: "btn btn-primary" %>
   </div>
 <% end %>

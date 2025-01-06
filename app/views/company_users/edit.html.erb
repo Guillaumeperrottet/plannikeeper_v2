@@ -12,6 +12,18 @@
     <%= f.select :role, User.roles.keys.map { |r| [r.humanize, r] }, {}, class: "form-control" %>
   </div>
 
+
+  <fieldset class="form-group">
+    <legend>Objets accessibles</legend>
+    <% Objet.where(company_id: current_user.company_id).each do |objet| %>
+      <div class="form-check">
+        <%= check_box_tag 'user[objet_ids][]', objet.id, @user.objets.include?(objet), id: "user_objet_#{objet.id}", class: 'form-check-input' %>
+        <%= label_tag "user_objet_#{objet.id}", objet.nom, class: "form-check-label" %>
+      </div>
+    <% end %>
+  </fieldset>
+
+<!-- A VOIR SI BESOIN
   <fieldset class="form-group">
     <legend>Permissions</legend>
 
@@ -25,6 +37,7 @@
       <%= f.label :can_view_reports, "Peut voir les rapports", class: "form-check-label" %>
     </div>
   </fieldset>
+-->
 
   <div class="form-actions">
     <%= f.submit "Mettre à jour", class: "btn btn-primary" %>
