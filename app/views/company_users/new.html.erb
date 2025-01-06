@@ -14,12 +14,12 @@
 <%= form_with model: @user, url: @user.new_record? ? company_users_path : company_user_path(@user), method: @user.new_record? ? :post : :patch do |f| %>
   <div>
     <%= f.label :email, "Email" %>
-    <%= f.email_field :email, disabled: !@user.new_record? %>
+    <%= f.email_field :email, class: "form-control-lg", style: "width: 90%;" , disabled: !@user.new_record? %>
   </div>
 
   <div>
     <%= f.label :role, "Rôle" %>
-    <%= f.select :role, User.roles.keys.map { |role| [role.humanize, role] }, selected: @user.role || 'enterprise_user', class: 'form-control' %>
+    <%= f.select :role, User.roles.slice('enterprise_user', 'enterprise_admin').keys.map { |role| [role.humanize, role] }, selected: @user.role || 'enterprise_user' %>
   </div>
 
 <div>
