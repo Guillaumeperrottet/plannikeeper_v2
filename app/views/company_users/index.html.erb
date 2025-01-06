@@ -2,46 +2,47 @@
 <div class="user-management">
   <h2 class="page-title">Gestion des Utilisateurs</h2>
 
-  <div class="actions">
-    <%= link_to "Créer un nouvel utilisateur", new_company_user_path, class: "btn btn-secondary" %>
+  <div class="actions mb-4">
+    <%= link_to "Créer un nouvel utilisateur", new_company_user_path, class: "btn--success" %>
   </div>
 
-  <div class="table-responsive">
-    <table class="table table-striped">
-      <thead>
-        <tr>
-          <th>Email</th>
-          <th>Rôle</th>
-          <th class="text-center">Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% @users.each do |user| %>
+  <% if @users.any? %>
+    <div class="table-responsive">
+      <table class="table table-striped">
+        <thead>
           <tr>
-            <td><%= user.email %></td>
-            <td><%= user.role.humanize %></td>
-            <td class="text-center">
-              <!-- Modifier l'utilisateur -->
-              <%= link_to edit_company_user_path(user), class: "btn btn-simple", title: "Modifier l'utilisateur" do %>
-                <i class="fas fa-edit"></i> Modifier
-              <% end %>
-
-              <!-- Formulaire pour supprimer l'utilisateur -->
-              <%= form_with model: user,
-                            url: company_user_path(user),
-                            method: :delete,
-                            local: true,
-                            data: { controller: "delete-confirm",
-                                    action: "submit->delete-confirm#confirm",
-                                    "delete-confirm-message-value": "Êtes-vous sûr de vouloir supprimer cet utilisateur ?" } do |f| %>
-                <%= f.submit "Supprimer", class: "btn btn-simple" %>
-              <% end %>
-            </td>
+            <th>Email</th>
+            <th>Rôle</th>
+            <th class="text-center">Actions</th>
           </tr>
-        <% end %>
-      </tbody>
-    </table>
-  </div>
+        </thead>
+        <tbody>
+          <% @users.each do |user| %>
+            <tr>
+              <td><%= user.email %></td>
+              <td><%= user.role.humanize %></td>
+              <td class="text-center action-buttons">
+                <%= link_to edit_company_user_path(user), class: "action-button", title: "Modifier l'utilisateur" do %>
+                  <i class="fas fa-edit"></i> Modifier
+                <% end %>
+                <%= form_with model: user,
+                              url: company_user_path(user),
+                              method: :delete,
+                              local: true,
+                              data: { controller: "delete-confirm",
+                                      action: "submit->delete-confirm#confirm",
+                                      "delete-confirm-message-value": "Êtes-vous sûr de vouloir supprimer cet utilisateur ?" } do |f| %>
+                  <%= f.submit "Supprimer", class: "btn btn-danger" %>
+                <% end %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  <% else %>
+    <p class="text-center text-muted">Aucun utilisateur trouvé.</p>
+  <% end %>
 
   <div class="alert alert-info">
     Les nouveaux utilisateurs sont créés avec le mot de passe par défaut <strong>123456789</strong>. Veuillez leur demander de le changer dès leur première connexion.

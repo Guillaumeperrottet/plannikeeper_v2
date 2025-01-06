@@ -1,5 +1,6 @@
 class Objet < ApplicationRecord
   belongs_to :user, optional: true # Si l'objet peut être sans utilisateur (entreprise)
+  has_and_belongs_to_many :users
   belongs_to :company, optional: true # Si l'objet peut être sans entreprise (utilisateur privé)
 
   has_one_attached :image

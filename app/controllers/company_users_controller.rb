@@ -45,13 +45,13 @@ class CompanyUsersController < ApplicationController
   def create
     @user = current_user.company.users.new(user_params)
     @user.password = "123456789" # Génère un mot de passe temporaire
-    @user.role = 'enterprise_user' # Définit le rôle automatiquement
+    @user.role ||= params[:user][:role] || 'enterprise_user'
 
     if @user.save
       # Optionnel : Envoyer un email au nouvel utilisateur avec ses identifiants
       # UserMailer.welcome_email(@user).deliver_later
 
-      redirect_to company_users_path, notice: "Utilisateur créé avec succès. Un mot de passe temporaire lui a été envoyé."
+      redirect_to company_users_path, notice: "Utilisateur créé avec succès. Un mot de passe temporaire a été créer."
     else
       render :new, alert: "Erreur lors de la création de l'utilisateur."
     end
@@ -66,7 +66,7 @@ class CompanyUsersController < ApplicationController
   end
 
   def user_params
-    params.require(:user).permit(:role, :name, :email)
+    params.require(:user).permit(:role, :name, :email, objet_ids: [])
   end
 
   def permission_params

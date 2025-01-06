@@ -8,6 +8,7 @@ class User < ApplicationRecord
   belongs_to :company, optional: true
   has_one_attached :avatar
   has_many :objets, dependent: :destroy
+  has_and_belongs_to_many :objets
 
   # Enums
   enum role: { private_user: 'private_user', enterprise_user: 'enterprise_user', enterprise_admin: 'enterprise_admin' }
