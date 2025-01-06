@@ -61,7 +61,6 @@
               <% end %>
               <ul class="dropdown-menu" data-dropdown-target="menu">
                 <li><a class="dropdown-item" href="<%= edit_user_registration_path %>">Mon profil</a></li>
-                <li><a class="dropdown-item" href="<%= edit_user_registration_path %>">Paramètres</a></li>
                 <li><hr class="dropdown-divider"></li>
                 <li>
                   <%= form_with url: destroy_user_session_path, method: :delete, class: "d-inline" do %>
