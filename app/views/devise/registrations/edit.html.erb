@@ -7,30 +7,41 @@
 
   <%= f.error_notification %>
 
-  <div class="profile-picture-container">
-    <% if resource.avatar.attached? %>
-      <%= image_tag resource.avatar.variant(resize_to_limit: [150, 150]), alt: "Photo de Profil", class: "profile-picture", id: "profile-image-preview" %>
-    <% else %>
-      <img src="/path/to/default-image.png" alt="Photo de Profil" class="profile-picture" id="profile-image-preview">
-    <% end %>
+<div class="profile-picture-container">
+  <% if resource.avatar.attached? %>
+    <%= image_tag resource.avatar.variant(resize_to_limit: [150, 150]), alt: "Photo de Profil", class: "profile-picture", id: "profile-image-preview" %>
+  <% end %>
 
-    <label for="user_avatar" class="profile-picture-icon">
-      <%= f.file_field :avatar, id: "user_avatar", class: "profile-file-input", style: "display: none;", onchange: "previewImage(event)" %>
-      <i class="fa fa-camera"></i>
-    </label>
-  </div>
+  <label for="user_avatar" class="profile-picture-icon">
+    <%= f.file_field :avatar, id: "user_avatar", class: "profile-file-input", style: "display: none;", onchange: "previewImage(event)" %>
+    <i class="fa fa-camera"></i>
+  </label>
+</div>
 
   <div class="form-inputs">
-    <%= f.input :email, required: true, autofocus: true, label: "Adresse Email", input_html: { class: "profile-input" } %>
+
+    <% if resource.enterprise_admin? %>
+      <%= link_to "Gestion des utilisateurs", company_users_path, class: "btn--action" %>
+    <% end %>
+
+    <!-- Bouton pour modifier l'adresse email -->
+    <button type="button" id="toggle-email-field" class="btn--action">Modifier l'adresse email</button>
+
+    <!-- Champ de modification de l'adresse email masqué par défaut -->
+    <div id="email-field" style="display: none; margin-top: 1rem;">
+      <%= f.input :email,
+                  required: true,
+                  autofocus: true,
+                  label: "Nouvelle Adresse Email",
+                  input_html: { class: "profile-input" } %>
+    </div>
 
     <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
       <p class="confirmation-info">En attente de confirmation pour : <%= resource.unconfirmed_email %></p>
     <% end %>
 
     <!-- Bouton pour afficher les champs de changement de mot de passe -->
-    <div class="change-password-container">
-      <button type="button" id="toggle-password-fields" class="btn btn-secondary">Changer le mot de passe</button>
-    </div>
+    <button type="button" id="toggle-password-fields" class="btn--action">Changer le mot de passe</button>
 
     <!-- Champs de changement de mot de passe masqués par défaut -->
     <div id="password-fields" style="display: none; margin-top: 1rem;">
@@ -52,14 +63,8 @@
   </div>
 
   <div class="form-actions">
-    <%= f.button :submit, "Mettre à Jour", class: "profile-submit" %>
+    <%= f.button :submit, "Mettre à Jour", class: "btn--simple" %>
   </div>
-
-  <% if resource.enterprise_admin? %>
-    <div class="manage-permissions">
-      <%= link_to "Gestion des utilisateurs", company_users_path, class: "btn btn-success" %>
-    </div>
-  <% end %>
 <% end %>
 
 <div class="cancel-account">
@@ -72,6 +77,13 @@
     const passwordFields = document.getElementById('password-fields');
     const isHidden = passwordFields.style.display === 'none';
     passwordFields.style.display = isHidden ? 'block' : 'none';
+  });
+
+  // Script pour afficher/masquer le champ de modification d'email
+  document.getElementById('toggle-email-field').addEventListener('click', function() {
+    const emailField = document.getElementById('email-field');
+    const isHidden = emailField.style.display === 'none';
+    emailField.style.display = isHidden ? 'block' : 'none';
   });
 
   function previewImage(event) {
