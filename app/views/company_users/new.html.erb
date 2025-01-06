@@ -1,7 +1,15 @@
 <div class="spacer"></div>
 <h2>Créer un Nouvel Utilisateur</h2>
 
-<%= f.error_notification %>
+<% if flash[:notice] %>
+  <div class="alert alert-success">
+    <%= flash[:notice] %>
+  </div>
+<% elsif flash[:alert] %>
+  <div class="alert alert-danger">
+    <%= flash[:alert] %>
+  </div>
+<% end %>
 
 <%= form_with model: @user, url: @user.new_record? ? company_users_path : company_user_path(@user), method: @user.new_record? ? :post : :patch do |f| %>
   <div>
