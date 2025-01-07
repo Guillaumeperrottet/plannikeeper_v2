@@ -35,7 +35,7 @@
         <select id="object-selector" class="form-select" data-action="change->task#loadTasks">
           <option value="">Sélectionner un objet</option>
           <% @objets.each do |objet| %>
-            <option value="<%= objet.id %>"><%= objet.nom %></option>
+            <option value="<%= objet.id %>" <%= 'selected' if @selected_objet == objet %>><%= objet.nom %></option>
           <% end %>
         </select>
       </div>
