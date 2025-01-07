@@ -3,6 +3,14 @@
     <li class="breadcrumb-item">
       <%= link_to 'Vos objets', authenticated_root_path %>
     </li>
+    <% if action_name == 'index' && controller_name == 'company_users' %>
+      <li class="breadcrumb-item active">Gestion des utilisateurs</li>
+    <% elsif action_name == 'edit' && controller_name == 'company_users' %>
+      <li class="breadcrumb-item">
+        <%= link_to 'Utilisateurs de l\'entreprise', company_users_path %>
+      </li>
+      <li class="breadcrumb-item active">Modifier un utilisateur</li>
+    <% end %>
     <% if @objet && @objet.id.present? %>
       <% if action_name == 'edit' && controller_name == 'objets' %>
         <li class="breadcrumb-item">
