@@ -3,8 +3,9 @@ import PinchZoom from "pinch-zoom";
 
 export default class extends Controller {
   connect() {
-    console.log('sector select Controller connected');
+    console.log('Sector Select Controller connected');
 
+    // Récupère les éléments nécessaires
     this.sectorSelectTarget = document.querySelector('[data-sector-select-target="sectorSelect"]');
     this.sectorImageTarget = document.querySelector('[data-sector-select-target="sectorImage"]');
 
@@ -12,11 +13,14 @@ export default class extends Controller {
     console.log('Sector Image Target:', this.sectorImageTarget);
 
     if (this.sectorSelectTarget) {
-      this.sectorSelectTarget.addEventListener('change', (event) => this.handleSectorChange(event));
+      // Restaure la sélection ou sélectionne automatiquement le premier secteur
       this.restoreSelection();
+
+      // Ajoute un écouteur d'événement pour les changements dans le sélecteur
+      this.sectorSelectTarget.addEventListener('change', (event) => this.handleSectorChange(event));
     }
 
-    // Écouter l'événement pour savoir quand le canevas est prêt
+    // Ajoute un écouteur d'événement pour savoir quand le canvas est prêt
     window.addEventListener('canvasReady', (event) => {
       console.log("Canvas is ready, loading articles if needed.");
       const sectorId = document.body.dataset.selectedSectorId;
@@ -26,6 +30,7 @@ export default class extends Controller {
       }
     });
   }
+
 
   handleSectorChange(event) {
     const sectorId = event.target.value;
@@ -52,13 +57,13 @@ export default class extends Controller {
     let selectedSectorId = localStorage.getItem('selectedSectorId');
 
     if (selectedSectorId) {
-      // Restaure la sélection si elle existe dans le localStorage
+      // Restaure la sélection depuis le localStorage
       console.log('Restoring selection for Sector ID:', selectedSectorId);
       this.sectorSelectTarget.value = selectedSectorId;
       this.loadImage(selectedSectorId);
     } else {
-      // Sélection automatique du premier secteur si aucune sélection précédente
-      const firstSectorOption = this.sectorSelectTarget.options[1]; // options[0] est généralement "Sélectionner un secteur", donc on prend options[1]
+      // Sélection automatique du premier secteur si aucune sélection existante
+      const firstSectorOption = this.sectorSelectTarget.options[1]; // options[0] est "Choisir un secteur", donc on prend options[1]
 
       if (firstSectorOption) {
         selectedSectorId = firstSectorOption.value;
@@ -69,7 +74,7 @@ export default class extends Controller {
         // Stocker la sélection automatique dans le localStorage pour la prochaine fois
         localStorage.setItem('selectedSectorId', selectedSectorId);
       } else {
-        this.hideImage(); // S'il n'y a pas de secteurs disponibles
+        this.hideImage(); // Aucun secteur disponible
       }
     }
   }
