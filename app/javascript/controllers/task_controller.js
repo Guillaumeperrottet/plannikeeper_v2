@@ -7,6 +7,20 @@ export default class extends Controller {
     console.log("Task controller connected");
     console.log("Element connected:", this.element);
     console.log("Targets:", this.hasThisWeekTasksTarget, this.hasUpcomingTasksTarget);
+
+        // Récupère le sélecteur d'objet
+    const selector = this.element.querySelector("#object-selector");
+
+    if (selector) {
+      // Vérifie si un objet est déjà sélectionné
+      const selectedObjectId = selector.value;
+      console.log(`Objet pré-sélectionné : ${selectedObjectId}`);
+
+      if (selectedObjectId) {
+        // Charge les tâches pour l'objet pré-sélectionné
+        this.loadTasks({ target: selector });
+      }
+    }
   }
 
   loadTasks(event) {
