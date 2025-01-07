@@ -23,8 +23,8 @@ class Ability
 
     elsif user.enterprise_user?
       # Utilisateur entreprise : accès limité
-      # can :read, Task, article: { secteur: { objet: { company_id: user.company_id } } }
-      can :read, Task, article: { secteur: { objet: { id: user.objet_ids } } }
+      can :manage, Task, article: { secteur: { objet: { id: user.objet_ids } } }
+      can :read, Article, secteur: { objet: { company_id: user.company_id } }
       # can :manage, Task, user_id: user.id # Peut gérer uniquement les tâches qui lui sont assignées
       # can :read, Objet, company_id: user.company_id # Accès en lecture aux objets de l'entreprise
       can :read, Objet, id: user.objet_ids
