@@ -1,22 +1,24 @@
 <div class="dashboard-page" data-controller="task">
   <div class="header">
-    <ul class="object-list">
-      <% if @objets.any? %>
-        <% @objets.each do |objet| %>
-          <li>
-            <span class="object-bullet"></span>
-            <%= link_to "#{objet.nom} - #{objet.adresse}", objet_path(objet), class: "object-link" %>
-            <% if can?(:edit, objet) %>
-              <%= link_to edit_objet_path(objet), class: "edit-link", title: "Éditer #{objet.nom}" do %>
-                <i class="fas fa-edit"></i>
+    <div class="object-list-container">
+      <ul class="object-list">
+        <% if @objets.any? %>
+          <% @objets.each do |objet| %>
+            <li>
+              <span class="object-bullet"></span>
+              <%= link_to "#{objet.nom} - #{objet.adresse}", objet_path(objet), class: "object-link" %>
+              <% if can?(:edit, objet) %>
+                <%= link_to edit_objet_path(objet), class: "edit-link", title: "Éditer #{objet.nom}" do %>
+                  <i class="fas fa-edit"></i>
+                <% end %>
               <% end %>
-            <% end %>
-          </li>
+            </li>
+          <% end %>
+        <% else %>
+          <li>Aucun objet disponible pour le moment.</li>
         <% end %>
-      <% else %>
-        <li>Aucun objet disponible pour le moment.</li>
-      <% end %>
-    </ul>
+      </ul>
+    </div>
 
     <% if current_user.private_user? || current_user.enterprise_admin? %>
       <a href="<%= new_objet_path %>" class="create-object">
