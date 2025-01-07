@@ -44,12 +44,15 @@ class ArticlesController < ApplicationController
     @secteur = Secteur.find(params[:secteur_id])
     @article = @secteur.articles.find(params[:id])
 
+    logger.debug "Received PATCH request for article ##{params[:id]}"
+    # Vérifiez les paramètres reçus
+    logger.debug "Params: #{params.inspect}"
+
     if @article.update(article_params)
-      # Renvoyer la réponse JSON pour éviter une redirection
-      # render json: { article: @article, message: flash[:notice] }, status: :ok
-      redirect_to objet_secteur_article_path(@objet, @secteur, @article), alert: 'Modification effectuée avec succès.'
+      # Retourne une réponse JSON en cas de succès
+      render json: { article: @article, message: "Modification effectuée avec succès." }, status: :ok
     else
-      # En cas d'erreur, renvoyer les erreurs en JSON sans redirection
+      # Retourne une réponse JSON avec les erreurs en cas d'échec
       render json: { errors: @article.errors.full_messages }, status: :unprocessable_entity
     end
   end
