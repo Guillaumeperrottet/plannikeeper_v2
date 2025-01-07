@@ -3,14 +3,14 @@ import PinchZoom from "pinch-zoom";
 
 export default class extends Controller {
   connect() {
-    console.log('Sector Select Controller connected');
+    // console.log('Sector Select Controller connected');
 
     // Récupère les éléments nécessaires
     this.sectorSelectTarget = document.querySelector('[data-sector-select-target="sectorSelect"]');
     this.sectorImageTarget = document.querySelector('[data-sector-select-target="sectorImage"]');
 
-    console.log('Sector Select Target:', this.sectorSelectTarget);
-    console.log('Sector Image Target:', this.sectorImageTarget);
+    // console.log('Sector Select Target:', this.sectorSelectTarget);
+    // console.log('Sector Image Target:', this.sectorImageTarget);
 
     if (this.sectorSelectTarget) {
       // Restaure la sélection ou sélectionne automatiquement le premier secteur
@@ -34,13 +34,13 @@ export default class extends Controller {
 
   handleSectorChange(event) {
     const sectorId = event.target.value;
-    console.log("Selected Sector ID from navbar:", sectorId);
+    // console.log("Selected Sector ID from navbar:", sectorId);
 
     if (sectorId) {
       this.loadImage(sectorId);
       document.body.dataset.selectedSectorId = sectorId;
       localStorage.setItem('selectedSectorId', sectorId);
-      console.log("Updated body dataset with selected-sector-id:", sectorId);
+      // console.log("Updated body dataset with selected-sector-id:", sectorId);
 
     // Redirection de la page avec le secteur sélectionné en paramètre
     const objetId = this.data.get('objetId');
@@ -58,7 +58,7 @@ export default class extends Controller {
 
     if (selectedSectorId) {
       // Restaure la sélection depuis le localStorage
-      console.log('Restoring selection for Sector ID:', selectedSectorId);
+      // console.log('Restoring selection for Sector ID:', selectedSectorId);
       this.sectorSelectTarget.value = selectedSectorId;
       this.loadImage(selectedSectorId);
     } else {
@@ -67,7 +67,7 @@ export default class extends Controller {
 
       if (firstSectorOption) {
         selectedSectorId = firstSectorOption.value;
-        console.log('Automatically selecting the first sector:', selectedSectorId);
+        // console.log('Automatically selecting the first sector:', selectedSectorId);
         this.sectorSelectTarget.value = selectedSectorId;
         this.loadImage(selectedSectorId);
 
@@ -82,12 +82,12 @@ export default class extends Controller {
   loadImage(sectorId) {
     const objetId = this.data.get('objetId');
 
-    console.log('Loading image for Sector ID:', sectorId);
-    console.log('Objet ID:', objetId);
+    // console.log('Loading image for Sector ID:', sectorId);
+    // console.log('Objet ID:', objetId);
 
     if (sectorId && objetId) {
       const url = `/objets/${objetId}/secteurs/${sectorId}/image`;
-      console.log("Fetching image from URL:", url);
+      // console.log("Fetching image from URL:", url);
       fetch(url)
         .then(response => {
           if (!response.ok) {
@@ -96,7 +96,7 @@ export default class extends Controller {
           return response.json();
         })
         .then(data => {
-          console.log('Data received:', data);
+          // console.log('Data received:', data);
           if (data.image_url) {
             this.showImage(data.image_url);
             this.loadArticles(sectorId);
@@ -120,7 +120,7 @@ export default class extends Controller {
       image.style.display = 'block';
 
       setTimeout(() => {
-        console.log("Image loaded and displayed after delay");
+        // console.log("Image loaded and displayed after delay");
 
         // Initialisation du canevas après le zoom
         const event = new CustomEvent('imageLoaded', { detail: { imageElement: image } });
@@ -141,7 +141,7 @@ export default class extends Controller {
 
   loadArticles(sectorId) {
     const objetId = this.element.dataset.sectorSelectObjetId;
-    console.log("Loading articles for sector:", sectorId, "and object:", objetId);
+    // console.log("Loading articles for sector:", sectorId, "and object:", objetId);
 
     if (!objetId || !sectorId) {
       console.error("Objet ID or Sector ID is missing.");
@@ -154,7 +154,7 @@ export default class extends Controller {
     }
 
     const url = `/objets/${objetId}/secteurs/${sectorId}/articles`;
-    console.log("Fetching articles from URL:", url);
+    // console.log("Fetching articles from URL:", url);
     fetch(url)
       .then(response => {
         if (!response.ok) {
@@ -163,20 +163,20 @@ export default class extends Controller {
         return response.json();
       })
       .then(data => {
-        console.log("Articles loaded from server:", data.articles);
+        // console.log("Articles loaded from server:", data.articles);
 
         const canvasWidth = window.canvas.width;
         const canvasHeight = window.canvas.height;
 
         data.articles.forEach(article => {
-          console.log("Adding article to canvas:", article);
+          // console.log("Adding article to canvas:", article);
 
           const left = parseFloat(article.position_x) * canvasWidth;
           const top = parseFloat(article.position_y) * canvasHeight;
           const radius = parseFloat(article.radius) * canvasWidth;  // Calcul du rayon relatif au canevas
 
           if (radius > 0) {
-            console.log(`Calculated dimensions: left=${left}, top=${top}, radius=${radius}`);
+            // console.log(`Calculated dimensions: left=${left}, top=${top}, radius=${radius}`);
 
             // Créer un cercle au lieu d'un rectangle
             const circle = new fabric.Circle({

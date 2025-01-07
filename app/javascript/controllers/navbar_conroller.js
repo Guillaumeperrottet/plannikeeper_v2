@@ -4,7 +4,7 @@ export default class extends Controller {
   static targets = ["menu"];
 
   connect() {
-    console.log("Navbar controller connected");
+    // console.log("Navbar controller connected");
     document.addEventListener("click", this.close.bind(this));
   }
 

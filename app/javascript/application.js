@@ -13,5 +13,5 @@ window.Stimulus = application
 function refreshStimulusForElement(element) {
   // Recharge Stimulus pour cet élément
   window.Stimulus.load(element);
-  console.log("Stimulus reloaded for new element:", element);
+  // console.log("Stimulus reloaded for new element:", element);
 }

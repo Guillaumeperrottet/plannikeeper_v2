@@ -4,7 +4,7 @@ export default class extends Controller {
   static targets = ["fields", "template"];
 
   connect() {
-    console.log("Le contrôleur Sector est chargé");
+    // console.log("Le contrôleur Sector est chargé");
   }
 
   addSector(event) {

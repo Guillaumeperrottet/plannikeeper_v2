@@ -8,7 +8,7 @@ export default class extends Controller {
     this.canvas = new fabric.Canvas(this.canvasTarget.id);
     window.canvas = this.canvas;
     window.canvas.initialized = true;
-    console.log("Fabric.js initialized");
+    // console.log("Fabric.js initialized");
 
     this.isDrawing = false;
     this.currentRect = null;
@@ -21,7 +21,7 @@ export default class extends Controller {
     this.canvas.isDrawingMode = false;
     this.tooltip = null;
 
-    console.log("Initial canvas dimensions:", this.canvas.width, this.canvas.height);
+    // console.log("Initial canvas dimensions:", this.canvas.width, this.canvas.height);
 
     this.canvas.on('mouse:down', this.startDrawing.bind(this));
     this.canvas.on('mouse:move', this.drawCircle.bind(this));
@@ -29,35 +29,35 @@ export default class extends Controller {
 
 
     window.addEventListener('imageLoaded', (event) => {
-      console.log("Event 'imageLoaded' captured");
+      // console.log("Event 'imageLoaded' captured");
       this.adjustCanvasSize(event.detail.imageElement);
     });
 
     window.addEventListener('resize', () => {
-      console.log("Window resized, adjusting canvas and articles.");
+      // console.log("Window resized, adjusting canvas and articles.");
       this.adjustCanvasSize(document.querySelector('img[data-sector-select-target="sectorImage"]'));
     });
   }
 
   activateMoveMode() {
-    console.log("Activate move called");
+    // console.log("Activate move called");
     this.isDrawing = false;
     this.isMoving = true;
 
     const objects = this.canvas.getObjects();
-    console.log(`Total objects on canvas: ${objects.length}`);
+    // console.log(`Total objects on canvas: ${objects.length}`);
 
     objects.forEach((article) => {
       article.selectable = true;
       article.evented = true;
       article.hasControls = true;
-      console.log("Article ready to move:", article);
+      // console.log("Article ready to move:", article);
     });
 
     this.canvas.on('object:moving', (event) => {
       if (this.isMoving) {
         this.selectedArticle = event.target;
-        console.log("Moving article:", this.selectedArticle);
+        // console.log("Moving article:", this.selectedArticle);
       }
     });
 
@@ -69,7 +69,7 @@ export default class extends Controller {
 
     this.canvas.on('mouse:up', () => {
       if (this.isMoving && this.selectedArticle) {
-        console.log("Mouse up, deactivating move mode");
+        // console.log("Mouse up, deactivating move mode");
         this.deactivateMoveMode();
       }
     });
@@ -79,7 +79,7 @@ export default class extends Controller {
 
   deactivateMoveMode() {
     if (this.selectedArticle) {
-      console.log("Deactivating move mode and saving new position");
+      // console.log("Deactivating move mode and saving new position");
 
       // Récupère l'ID de l'article, la largeur et la hauteur du canevas
       const articleId = this.selectedArticle.articleId;
@@ -113,7 +113,7 @@ export default class extends Controller {
       })
       .then(response => response.ok ? response.json() : Promise.reject(response))
       .then(data => {
-        console.log("Article position updated successfully:", data);
+        // console.log("Article position updated successfully:", data);
 
         // Désactiver le déplacement
         this.selectedArticle = null;
@@ -156,7 +156,7 @@ export default class extends Controller {
   }
 
   deleteArticle(articleId) {
-    console.log("Deleting article with ID:", articleId);
+    // console.log("Deleting article with ID:", articleId);
 
     const objetId = this.element.dataset.sectorSelectObjetId;
     const sectorId = document.body.dataset.selectedSectorId || localStorage.getItem('selectedSectorId');
@@ -169,7 +169,7 @@ export default class extends Controller {
     })
     .then(response => response.ok ? response.json() : Promise.reject(response))
     .then(() => {
-      console.log("Article deleted successfully.");
+      // console.log("Article deleted successfully.");
       this.loadAndDisplayArticles();
     })
     .catch(error => {
@@ -265,7 +265,7 @@ export default class extends Controller {
       })
       .then(response => response.ok ? response.json() : Promise.reject(response))
       .then(data => {
-        console.log("Article modifié avec succès :", data);
+        // console.log("Article modifié avec succès :", data);
         this.hideTooltip();
         this.loadAndDisplayArticles();
       })
@@ -285,7 +285,7 @@ export default class extends Controller {
       const imgHeight = imgElement.clientHeight;
 
       if (imgWidth === 0 || imgHeight === 0) {
-        console.log("Image dimensions are not set correctly yet.");
+        // console.log("Image dimensions are not set correctly yet.");
         return;
       }
 
@@ -331,10 +331,14 @@ export default class extends Controller {
   activateDrawing() {
     this.isDrawing = true;
 
-    this.canvas.upperCanvasEl.classList.add("cursor-plus");
-    document.body.classList.add("cursor-plus");
+    if (this.canvas.upperCanvasEl) {
+      this.canvas.upperCanvasEl.classList.add("cursor-plus");
+    } else {
+      console.error("Canvas upperCanvasEl not found.");
+    }
 
-    console.log("Drawing mode activated");
+    document.body.classList.add("cursor-plus");
+    // console.log("Drawing mode activated");
   }
 
   startDrawing(options) {
@@ -383,7 +387,7 @@ export default class extends Controller {
 
     // Vérification pour s'assurer que le cercle a bien été créé
     if (this.currentCircle) {
-      console.log("Circle drawn successfully, showing the form.");
+      // console.log("Circle drawn successfully, showing the form.");
       this.showArticleForm();  // Appelle le formulaire uniquement si le cercle existe
     } else {
       console.error("No circle found to show the form.");
@@ -500,7 +504,7 @@ export default class extends Controller {
     })
     .then(response => response.ok ? response.json() : Promise.reject(response))
     .then(data => {
-      console.log("Article créé avec succès :", data);
+      // console.log("Article créé avec succès :", data);
       this.loadAndDisplayArticles();
 
       // Afficher le message de succès
@@ -527,11 +531,11 @@ export default class extends Controller {
     fetch(url)
       .then(response => response.ok ? response.json() : Promise.reject(response))
       .then(data => {
-        console.log("Loaded articles data:", data); // Vérifiez le contenu ici
+        // console.log("Loaded articles data:", data); // Vérifiez le contenu ici
         this.canvas.clear();
 
         data.articles.forEach(article => {
-          console.log("Article ID:", article.id); // Log de l'ID pour chaque article
+          // console.log("Article ID:", article.id); // Log de l'ID pour chaque article
           const left = article.position_x * this.canvas.width;
           const top = article.position_y * this.canvas.height;
           const radius = article.radius * this.canvas.width;  // On récupère le rayon relatif
@@ -551,7 +555,7 @@ export default class extends Controller {
           });
 
           circle.articleId = article.id;
-          console.log("Circle created with ID:", circle.articleId); // Log de l'ID du cercle
+          // console.log("Circle created with ID:", circle.articleId); // Log de l'ID du cercle
 
           circle.on('mousedown', () => {
             if (!this.isMoving) {

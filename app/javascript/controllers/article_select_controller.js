@@ -7,7 +7,7 @@ export default class extends Controller {
   }
 
   connect() {
-    console.log("ArticleSelectController connecté");
+    // console.log("ArticleSelectController connecté");
 
     // Charge les articles dans la liste dès que le contrôleur est connecté
     this.loadArticlesForList();
@@ -34,7 +34,7 @@ export default class extends Controller {
     const sectorId = this.secteurIdValue || localStorage.getItem('selectedSectorId');
 
     if (!objetId || !sectorId) {
-      console.error("Objet ID ou Secteur ID manquant.");
+      // console.error("Objet ID ou Secteur ID manquant.");
       return;
     }
 
@@ -57,11 +57,11 @@ export default class extends Controller {
 
           // Ajoute des événements de survol pour chaque article
           articleItem.addEventListener('mouseenter', () => {
-            console.log(`Mouse entered on article ID ${article.id}`);
+            // console.log(`Mouse entered on article ID ${article.id}`);
             this.highlightArticle(article.id, true);
           });
           articleItem.addEventListener('mouseleave', () => {
-            console.log(`Mouse left article ID ${article.id}`);
+            // console.log(`Mouse left article ID ${article.id}`);
             this.highlightArticle(article.id, false);
           });
 
@@ -72,10 +72,10 @@ export default class extends Controller {
           articleList.appendChild(articleItem);
         });
 
-        console.log("Articles chargés et triés :", data.articles);
+        // console.log("Articles chargés et triés :", data.articles);
       })
       .catch(error => {
-        console.error("Erreur lors du chargement des articles :", error);
+        // console.error("Erreur lors du chargement des articles :", error);
         alert("Une erreur s'est produite lors du chargement des articles. Veuillez réessayer.");
       });
   }
@@ -103,9 +103,8 @@ export default class extends Controller {
     }
   }
 
-
   highlightArticle(articleId, isHovered) {
-    console.log(`highlightArticle appelé pour article ID ${articleId}, isHovered: ${isHovered}`);
+    // console.log(`highlightArticle appelé pour article ID ${articleId}, isHovered: ${isHovered}`);
     if (!articleId) return; // Ignorer si l'articleId est vide ou nul
     const articleCircle = window.canvas.getObjects().find(obj => obj.articleId === articleId);
     // Trouver l'élément de l'article dans la liste
@@ -125,7 +124,7 @@ export default class extends Controller {
     }
 
     if (articleCircle) {
-      console.log("Article trouvé sur le canevas :", articleCircle);
+      // console.log("Article trouvé sur le canevas :", articleCircle);
       if (isHovered) {
         // Agrandit le cercle sur le survol
         articleCircle.set({
@@ -148,7 +147,7 @@ export default class extends Controller {
 
       window.canvas.renderAll();  // Met à jour le canevas
     } else {
-      console.warn(`Article avec ID ${articleId} non trouvé sur le canevas.`);
+      // console.warn(`Article avec ID ${articleId} non trouvé sur le canevas.`);
     }
   }
 
@@ -156,14 +155,14 @@ export default class extends Controller {
     const objetId = this.objetIdValue || this.data.get('objetId');
     const secteurId = this.secteurIdValue || localStorage.getItem('selectedSectorId');
 
-    console.log("Article ID:", articleId);
-    console.log("Objet ID:", objetId);
-    console.log("Secteur ID:", secteurId);
+    // console.log("Article ID:", articleId);
+    // console.log("Objet ID:", objetId);
+    // console.log("Secteur ID:", secteurId);
 
     if (articleId && objetId && secteurId) {
       window.location.href = `/objets/${objetId}/secteurs/${secteurId}/articles/${articleId}`;
     } else {
-      console.error("Impossible de rediriger, Article ID, Objet ID ou Secteur ID manquant !");
+      // console.error("Impossible de rediriger, Article ID, Objet ID ou Secteur ID manquant !");
     }
   }
 }

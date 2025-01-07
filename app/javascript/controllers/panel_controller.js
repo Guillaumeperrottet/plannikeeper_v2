@@ -4,7 +4,7 @@ export default class extends Controller {
   static targets = ["title", "todoList", "taskForm", "panel", "sectorImageContainer"]
 
   connect() {
-    console.log("Panel controller connected.");
+    // console.log("Panel controller connected.");
     window.addEventListener("resize", this.resizeImageContainerNew.bind(this));
   }
 
@@ -13,7 +13,7 @@ export default class extends Controller {
   }
 
   openPanel(article) {
-    console.log("Opening panel with article:", article);
+    // console.log("Opening panel with article:", article);
 
     // Vérifier si le panneau est déjà ouvert avec cet article
     const selectedArticleId = localStorage.getItem('selectedArticleId');
@@ -21,7 +21,7 @@ export default class extends Controller {
       // Si c'est le même article, fermer le panneau
       this.closePanel();
       localStorage.removeItem('selectedArticleId'); // Supprime l'article sélectionné
-      console.log("Closing panel because the same article was clicked.");
+      // console.log("Closing panel because the same article was clicked.");
       return; // Ne pas continuer à ouvrir le panneau
     }
 
@@ -32,7 +32,7 @@ export default class extends Controller {
     if (this.titleTarget) {
       this.titleTarget.innerHTML = `<a href="#" data-action="click->panel#redirectToArticle">${article.title}</a>`;
       this.titleTarget.dataset.articleId = article.id;
-      console.log("Title set to:", article.title);
+      // console.log("Title set to:", article.title);
     } else {
       console.error("Title target is missing!");
     }
@@ -45,7 +45,7 @@ export default class extends Controller {
     const objetId = this.element.dataset.panelObjetId;
     const secteurId = localStorage.getItem('selectedSectorId') || this.element.dataset.panelSelectedSectorId;
 
-    console.log("Chargement des tâches pour l'article ID:", articleId);
+    // console.log("Chargement des tâches pour l'article ID:", articleId);
 
     if (!objetId || !secteurId) {
       console.error("Objet ID ou Secteur ID manquant !");
@@ -53,7 +53,7 @@ export default class extends Controller {
     }
 
     const url = `/objets/${objetId}/secteurs/${secteurId}/articles/${articleId}/tasks`;
-    console.log("Fetching tasks from URL:", url);
+    // console.log("Fetching tasks from URL:", url);
 
     fetch(url)
       .then(response => {
@@ -63,7 +63,7 @@ export default class extends Controller {
         return response.json();
       })
       .then(tasks => {
-        console.log("Received tasks data:", tasks); // Ajout du log ici
+        // console.log("Received tasks data:", tasks); // Ajout du log ici
         this.displayTasks(tasks);
       })
       .catch(error => {
@@ -86,11 +86,11 @@ export default class extends Controller {
 
     if (allTasks.length === 0) {
       taskList.innerHTML = '<li>Aucune tâche disponible.</li>';
-      console.log("No tasks found, displaying default message.");
+      // console.log("No tasks found, displaying default message.");
       return;
     }
 
-    console.log("All tasks received:", allTasks);
+    // console.log("All tasks received:", allTasks);
 
     // Parcourir les tâches et accéder aux propriétés directement depuis l'objet taskData
     allTasks.forEach(taskData => {
@@ -99,13 +99,13 @@ export default class extends Controller {
         const taskItem = document.createElement('li');
         taskItem.textContent = `${taskData.realisation_date} - ${taskData.description}`;
         taskList.appendChild(taskItem);
-        console.log("Task added to list:", taskData);
+        // console.log("Task added to list:", taskData);
       } else {
         console.error("Task data is missing realisation_date or description:", taskData);
       }
     });
 
-    console.log("All tasks displayed.");
+    // console.log("All tasks displayed.");
   }
 
   showPanel() {
@@ -116,7 +116,7 @@ export default class extends Controller {
       imageContainer.classList.add("with-panel");
 
       this.resizeImageContainerNew();
-      console.log("Panel opened");
+      // console.log("Panel opened");
 
     } else {
       console.error("Panel element not found.");
@@ -137,7 +137,7 @@ export default class extends Controller {
   }
 
   resizeImageContainerNew(reset = false) {
-    console.log("resizeImageContainerNew called, reset:", reset);
+    // console.log("resizeImageContainerNew called, reset:", reset);
     const sectorImageContainer = this.sectorImageContainerTarget;
     const panel = document.getElementById("article-panel");
 
