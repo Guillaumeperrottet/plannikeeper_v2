@@ -39,46 +39,6 @@ export default class extends Controller {
     });
   }
 
-//   // Active l'impression en affichant tous les tooltips
-//   activatePrint() {
-//     this.showAllTooltips(); // Affiche tous les tooltips
-//     setTimeout(() => {
-//       window.print(); // Imprimer la page
-//       this.hideAllTooltips(); // Masquer les tooltips après l'impression
-//     }, 100); // Petite pause pour s'assurer que les tooltips sont affichés
-//   }
-//  // Affiche tous les tooltips pour les articles
-//  showAllTooltips() {
-//   console.log("showAllTooltips called");
-
-//   // Itérez sur tous les objets du canevas
-//   this.canvas.getObjects().forEach((circle) => {
-//     console.log("Processing circle:", circle); // Log de chaque cercle
-
-//     // Vérifiez si circle a un articleId et essayez de le récupérer ici
-//     if (circle.articleId !== undefined) {
-//       console.log("Showing tooltip for article ID:", circle.articleId); // Log de l'ID
-//       const article = { id: circle.articleId, title: "Titre par défaut", description: "Description par défaut" }; // Remplacez par les données réelles
-//       this.showTooltip(null, article, circle); // Appelle la méthode showTooltip avec un objet d'article simulé
-//     } else {
-//       console.log("Circle does not have an article ID.");
-//     }
-//   });
-// }
-
-
-//   // Masque tous les tooltips après l'impression
-//   hideAllTooltips() {
-//     const tooltips = document.querySelectorAll('#article-tooltip');
-//     tooltips.forEach(tooltip => tooltip.remove());
-//   }
-
-
-//   // Votre méthode prepareTooltipsForPrint peut rester ici si vous l'utilisez
-//   prepareTooltipsForPrint() {
-//     // Code pour préparer les tooltips si nécessaire
-//   }
-
   activateMoveMode() {
     console.log("Activate move called");
     this.isDrawing = false;
@@ -437,8 +397,8 @@ export default class extends Controller {
         <input type="text" id="article-title-input" name="title" required><br>
         <label for="article-description">Description :</label>
         <textarea id="article-description" name="description" required></textarea><br>
-        <button id="save-article">Save</button>
-        <button id="cancel-article">Cancel</button>
+        <button id="save-article">Sauvegarder</button>
+        <button id="cancel-article">Annuler</button>
       </div>
     `;
     document.body.insertAdjacentHTML('beforeend', formHtml);
