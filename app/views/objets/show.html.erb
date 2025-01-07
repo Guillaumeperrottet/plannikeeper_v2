@@ -51,20 +51,29 @@
   </div>
 
   <!-- Menu des onglets -->
-  <div class="tab-menu">
+  <!-- <div class="tab-menu">
     <button class="tablinks active" data-action="panel-tab#openTab" data-tab="todo" data-panel-tab-target="tabLinks">TODO</button>
     <button class="tablinks" data-action="panel-tab#openTab" data-tab="create-task" data-panel-tab-target="tabLinks">Créer tâche</button>
-  </div>
+  </div> -->
 
-  <!-- Contenu du tab "TODO" -->
-  <div id="todo" class="tabcontent" data-panel-tab-target="tabContent" data-tab-content="todo" style="display: block;">
-    <h4>Liste des tâches</h4>
-    <div id="task-list" class="task-list">
-      <!-- Tâches dynamiques ici -->
-    </div>
+<div id="todo" class="tabcontent" data-panel-tab-target="tabContent" data-tab-content="todo" style="display: block;">
+  <h4>Liste des tâches</h4>
+  <div id="task-list" class="task-list">
+    <% if @tasks.present? %>
+      <% @tasks.each do |task| %>
+        <div class="task-item">
+          <p><%= task.name %></p>
+          <p><%= task.description %></p>
+        </div>
+      <% end %>
+    <% else %>
+      <p class="no-tasks-message">Aucune tâche pour le moment</p>
+    <% end %>
   </div>
+</div>
 
-  <div id="create-task" class="tabcontent" data-panel-tab-target="tabContent" data-tab-content="create-task" style="display: none;">
+
+  <!-- <div id="create-task" class="tabcontent" data-panel-tab-target="tabContent" data-tab-content="create-task" style="display: none;">
     <h4>Créer une tâche</h4>
     <div class="task-container">
       ...work in progress les bg...
@@ -72,7 +81,7 @@
       ...Pour l'instant clique sur le nom de l'article en dessus ^...
     </div>
   </div>
-</div>
+</div> -->
 
   <!-- Contenu du tab "Créer tâche" -->
   <!-- <div id="create-task" class="tabcontent" data-panel-tab-target="tabContent" data-tab-content="create-task" style="display: none;">
