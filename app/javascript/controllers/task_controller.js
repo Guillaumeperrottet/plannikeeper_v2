@@ -4,9 +4,9 @@ export default class extends Controller {
   static targets = ["thisWeekTasks", "upcomingTasks"]
 
   connect() {
-    console.log("Task controller connected");
-    console.log("Element connected:", this.element);
-    console.log("Targets:", this.hasThisWeekTasksTarget, this.hasUpcomingTasksTarget);
+    // console.log("Task controller connected");
+    // console.log("Element connected:", this.element);
+    // console.log("Targets:", this.hasThisWeekTasksTarget, this.hasUpcomingTasksTarget);
 
         // Récupère le sélecteur d'objet
     const selector = this.element.querySelector("#object-selector");
@@ -14,7 +14,7 @@ export default class extends Controller {
     if (selector) {
       // Vérifie si un objet est déjà sélectionné
       const selectedObjectId = selector.value;
-      console.log(`Objet pré-sélectionné : ${selectedObjectId}`);
+      // console.log(`Objet pré-sélectionné : ${selectedObjectId}`);
 
       if (selectedObjectId) {
         // Charge les tâches pour l'objet pré-sélectionné
@@ -25,7 +25,7 @@ export default class extends Controller {
 
   loadTasks(event) {
     const selectedObjectId = event.target.value;
-    console.log(`Loading tasks for selected object ID: ${selectedObjectId}`);
+    // console.log(`Loading tasks for selected object ID: ${selectedObjectId}`);
 
     if (selectedObjectId) {
       // Effectue une requête AJAX pour charger les tâches associées à l'objet
@@ -37,7 +37,7 @@ export default class extends Controller {
           return response.json();
         })
         .then(data => {
-          console.log("Tâches chargées:", data);
+          // console.log("Tâches chargées:", data);
           this.updateTasks(data);
         })
         .catch(error => console.error('Erreur lors du chargement des tâches:', error));
@@ -45,11 +45,11 @@ export default class extends Controller {
   }
 
   updateTasks(data) {
-    console.log("Mise à jour des tâches avec les données reçues:", data);
+    // console.log("Mise à jour des tâches avec les données reçues:", data);
 
     // Ajoute des logs supplémentaires pour voir la structure des données
-    console.log("Tâches 'Cette semaine':", data.this_week_tasks);
-    console.log("Tâches 'À venir':", data.upcoming_tasks);
+    // console.log("Tâches 'Cette semaine':", data.this_week_tasks);
+    // console.log("Tâches 'À venir':", data.upcoming_tasks);
 
     // Met à jour la liste des tâches pour cette semaine avec la bonne redirection vers l'article
   this.thisWeekTasksTarget.innerHTML = data.this_week_tasks.length > 0
@@ -71,36 +71,36 @@ this.upcomingTasksTarget.innerHTML = data.upcoming_tasks.length > 0
     `).join('')
   : '<li>Aucune tâche à venir.</li>';
 
-      console.log("Tâches 'Cette semaine':", data.this_week_tasks);
-      console.log("Tâches 'À venir':", data.upcoming_tasks);
-      console.log("This Week Target:", this.thisWeekTasksTarget);
-      console.log("Upcoming Target:", this.upcomingTasksTarget);
+      // console.log("Tâches 'Cette semaine':", data.this_week_tasks);
+      // console.log("Tâches 'À venir':", data.upcoming_tasks);
+      // console.log("This Week Target:", this.thisWeekTasksTarget);
+      // console.log("Upcoming Target:", this.upcomingTasksTarget);
 
     // Ajoute un écouteur d'événement sur chaque tâche pour rediriger lors du clic
     document.querySelectorAll('[data-task-url]').forEach(taskElement => {
       taskElement.addEventListener('click', (event) => {
         const taskUrl = event.currentTarget.getAttribute('data-task-url');
-        console.log("Redirection vers l'URL :", taskUrl); // Vérification de l'URL générée
+        // console.log("Redirection vers l'URL :", taskUrl); // Vérification de l'URL générée
         window.location.href = taskUrl; // Redirige vers l'URL de l'article
       });
     });
 
-    console.log("Tâches mises à jour dans le DOM avec redirection");
+    // console.log("Tâches mises à jour dans le DOM avec redirection");
   }
 
 
   submit(event) {
     event.preventDefault();
-    console.log("Form submission intercepted");
+    // console.log("Form submission intercepted");
 
     const formData = new FormData(event.target);
-    console.log("Form data:", formData);
+    // console.log("Form data:", formData);
 
     const objetId = localStorage.getItem('selectedObjetId') || this.element.dataset.objetId;
     const secteurId = localStorage.getItem('selectedSectorId') || this.element.dataset.selectedSectorId;
     const articleId = localStorage.getItem('selectedArticleId');
 
-    console.log(`Submitting task for Objet ID: ${objetId}, Secteur ID: ${secteurId}, Article ID: ${articleId}`);
+    // console.log(`Submitting task for Objet ID: ${objetId}, Secteur ID: ${secteurId}, Article ID: ${articleId}`);
 
     const url = `/objets/${objetId}/secteurs/${secteurId}/articles/${articleId}/tasks`;
 
@@ -118,7 +118,7 @@ this.upcomingTasksTarget.innerHTML = data.upcoming_tasks.length > 0
       return response.json();
     })
     .then(data => {
-      console.log('Tâche créée avec succès:', data);
+      // console.log('Tâche créée avec succès:', data);
       this.openTodoTab();
     })
     .catch(error => {
@@ -131,7 +131,7 @@ this.upcomingTasksTarget.innerHTML = data.upcoming_tasks.length > 0
     const panelTabController = this.application.getControllerForElementAndIdentifier(panelElement, 'panel-tab');
 
     if (panelTabController) {
-      console.log("Panel Tab Controller found, opening TODO tab.");
+      // console.log("Panel Tab Controller found, opening TODO tab.");
       panelTabController.showTab('todo');
     } else {
       console.error("Panel Tab Controller not found.");
