@@ -201,6 +201,6 @@
   overflow-y: auto; /* Active le défilement vertical si nécessaire */
   margin-left: 50px; /* Décale légèrement vers la droite pour correspondre à l'alignement */
   border-bottom: 2px solid #ccc; /* Ajoute une bordure uniquement en bas */
-  width: 50%; /* Ajuste la largeur pour qu'elle ne prenne pas tout l'espace */
-  padding-right: 10px; /* Espace pour éviter que la scrollbar ne chevauche le contenu */
+  display: inline-block; /* Adapte la largeur au contenu le plus long */
+  padding-right: 30px; /* Espace pour éviter que la scrollbar ne chevauche le contenu */
 }
