@@ -20,7 +20,7 @@
           <% @users.each do |user| %>
             <tr>
               <td><%= user.email %></td>
-              <td><%= user.role.humanize %></td>
+              <td><%= user.display_role %></td>
               <td class="text-center action-buttons">
                 <%= link_to edit_company_user_path(user), class: "action-button", title: "Modifier l'utilisateur" do %>
                   <i class="fas fa-edit"></i> Modifier

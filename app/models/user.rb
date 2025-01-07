@@ -20,6 +20,17 @@ class User < ApplicationRecord
   validates :role, presence: true, inclusion: { in: roles.keys }
   validates :company, presence: true, if: -> { enterprise_user? || enterprise_admin? }
 
+  def display_role
+    case role
+    when "enterprise_admin"
+      "Admin"
+    when "enterprise_user"
+      "User"
+    else
+      "Inconnu"
+    end
+  end
+
   # Méthode pour l'authentification via Omniauth
   def self.from_omniauth(access_token)
     return unless access_token
