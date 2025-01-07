@@ -11,6 +11,7 @@ class Ability
     elsif user.enterprise_admin?
       # Admin entreprise peut tout gérer dans son entreprise
       can :manage, [Objet, Task, Article, User], company_id: user.company_id
+      can :manage, Objet, company_id: user.company_id
 
       # Gestion des utilisateurs de l'entreprise
       can :manage, User, company_id: user.company_id
