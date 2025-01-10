@@ -204,3 +204,37 @@
   display: inline-block; /* Adapte la largeur au contenu le plus long */
   padding-right: 30px; /* Espace pour éviter que la scrollbar ne chevauche le contenu */
 }
+
+/* Styles pour les écrans plus petits */
+@media (max-width: 768px) {
+  .dashboard-page {
+    flex-direction: column; /* Passe la mise en page en colonne */
+    min-height: auto; /* Permet de s'adapter à des contenus plus longs */
+  }
+
+  .object-list-container {
+    max-width: 100%; /* La liste d'objets prend toute la largeur */
+    margin-left: 0; /* Enlève le décalage gauche sur les petits écrans */
+  }
+
+  .agenda-section {
+    height: auto; /* Permet à la section Agenda de s'adapter au contenu */
+    margin-top: 20px; /* Ajoute un espace entre les sections */
+    padding: 10px; /* Réduit le padding pour éviter de perdre de la place */
+  }
+
+  .tasks-container {
+    flex-direction: column; /* Aligne les tâches en colonne sur petits écrans */
+    gap: 20px; /* Ajoute de l'espace entre les groupes de tâches */
+  }
+
+  .task-group {
+    width: 100%; /* Chaque groupe de tâches prend toute la largeur */
+    height: auto; /* Ajuste la hauteur automatiquement */
+  }
+
+  .dashboard-page {
+    overflow-y: auto; /* Active un défilement vertical si nécessaire */
+  }
+
+}
