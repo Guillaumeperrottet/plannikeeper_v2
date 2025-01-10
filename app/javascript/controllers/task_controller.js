@@ -59,7 +59,7 @@ export default class extends Controller {
       <li data-task-url="/objets/${task.objet_id}/secteurs/${task.secteur_id}/articles/${task.article_id}">
         ${task.end_date} - ${task.name} - ${task.article_title}
         <span class="task-description">${task.description || ""}</span> <!-- Enlever style display: none -->
-        <span class="task-executant">${task.executant || ""}</span> <!-- Enlever style display: none -->
+        <span class="task-executant">${task.executant_comment || ""}</span> <!-- Enlever style display: none -->
       </li>
     `).join('')
   : '<li>Aucune tâche cette semaine.</li>';
@@ -70,7 +70,7 @@ this.upcomingTasksTarget.innerHTML = data.upcoming_tasks.length > 0
       <li data-task-url="/objets/${task.objet_id}/secteurs/${task.secteur_id}/articles/${task.article_id}">
         ${task.end_date} - ${task.name} - ${task.article_title}
         <span class="task-description">${task.description || ""}</span> <!-- Enlever style display: none -->
-        <span class="task-executant">${task.executant || ""}</span> <!-- Enlever style display: none -->
+        <span class="task-executant">${task.executant_comment || ""}</span> <!-- Enlever style display: none -->
       </li>
     `).join('')
   : '<li>Aucune tâche à venir.</li>';

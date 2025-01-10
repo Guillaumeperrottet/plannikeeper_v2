@@ -295,7 +295,7 @@ end
         objet_id: task.article.objet.id, # Inclut l'ID de l'objet
         task_id: task.id,
         description: task.description,
-        executant: task.executant
+        executant_comment: task.executant_comment
       }
     end
   end
