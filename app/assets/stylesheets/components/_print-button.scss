@@ -18,6 +18,10 @@
   display: none;
 }
 
+.task-executant {
+  display: none;
+}
+
 @media print {
   /* Cache tous les éléments sauf l'agenda */
   .dashboard-page > *:not(.agenda-section) {
@@ -43,5 +47,12 @@
     font-size: 0.9rem; /* Ajustez la taille si nécessaire */
     color: #333; /* Couleur adaptée pour l'impression */
     margin-left: 5px; /* Espace entre le titre et la description */
+  }
+
+  .task-executant {
+    display: block; /* Rend l'exécutant visible uniquement lors de l'impression */
+    font-size: 0.9rem; /* Ajustez la taille si nécessaire */
+    color: #333; /* Couleur adaptée pour l'impression */
+    margin-left: 5px; /* Ajoutez un léger espace pour la lisibilité */
   }
 }

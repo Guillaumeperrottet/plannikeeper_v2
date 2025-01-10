@@ -50,6 +50,8 @@ export default class extends Controller {
     // Ajoute des logs supplémentaires pour voir la structure des données
     // console.log("Tâches 'Cette semaine':", data.this_week_tasks);
     // console.log("Tâches 'À venir':", data.upcoming_tasks);
+    console.log("Données des tâches :", data);
+
 
     // Met à jour la liste des tâches pour cette semaine avec la bonne redirection vers l'article
   this.thisWeekTasksTarget.innerHTML = data.this_week_tasks.length > 0
@@ -57,6 +59,7 @@ export default class extends Controller {
       <li data-task-url="/objets/${task.objet_id}/secteurs/${task.secteur_id}/articles/${task.article_id}">
         ${task.end_date} - ${task.name} - ${task.article_title}
         <span class="task-description">${task.description || ""}</span> <!-- Enlever style display: none -->
+        <span class="task-executant">${task.executant || ""}</span> <!-- Enlever style display: none -->
       </li>
     `).join('')
   : '<li>Aucune tâche cette semaine.</li>';
@@ -67,6 +70,7 @@ this.upcomingTasksTarget.innerHTML = data.upcoming_tasks.length > 0
       <li data-task-url="/objets/${task.objet_id}/secteurs/${task.secteur_id}/articles/${task.article_id}">
         ${task.end_date} - ${task.name} - ${task.article_title}
         <span class="task-description">${task.description || ""}</span> <!-- Enlever style display: none -->
+        <span class="task-executant">${task.executant || ""}</span> <!-- Enlever style display: none -->
       </li>
     `).join('')
   : '<li>Aucune tâche à venir.</li>';

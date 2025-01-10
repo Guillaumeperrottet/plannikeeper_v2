@@ -201,7 +201,7 @@ class TasksController < ApplicationController
     # Renvoyer les tâches filtrées en JSON
     render json: {
       this_week_tasks: this_week_tasks_with_images,
-      upcoming_tasks: upcoming_tasks # Vous pouvez également le construire ici si nécessaire
+      upcoming_tasks: upcoming_tasks
     }
   end
 
@@ -294,7 +294,8 @@ end
         secteur_id: task.article.secteur.id, # Inclut l'ID du secteur
         objet_id: task.article.objet.id, # Inclut l'ID de l'objet
         task_id: task.id,
-        description: task.description
+        description: task.description,
+        executant: task.executant
       }
     end
   end

@@ -13,10 +13,10 @@ class DashboardController < ApplicationController
 
     # Sélectionner un objet par défaut
     selected_objet = if params[:objet_id].present?
-                       @objets.find_by(id: params[:objet_id])
-                     else
-                       @objets.first
-                     end
+                      @objets.find_by(id: params[:objet_id])
+                    else
+                      @objets.first
+                    end
 
     # Récupérer les tâches si l'objet sélectionné a une méthode `tasks`
     @this_week_tasks = selected_objet&.respond_to?(:tasks) ? selected_objet.tasks.this_week : []
@@ -32,9 +32,9 @@ class DashboardController < ApplicationController
   def print_tasks
     selected_objet = Objet.find(params[:objet_id]) if params[:objet_id].present?
 
-    # Préparer les tâches pour l'impression
-    @this_week_tasks = selected_objet&.tasks&.this_week || []
-    @upcoming_tasks = selected_objet&.tasks&.upcoming || []
+  # Préparer les tâches pour l'impression, triées par date
+  @this_week_tasks = selected_objet&.tasks&.this_week&.order(:date) || []
+  @upcoming_tasks = selected_objet&.tasks&.upcoming&.order(:date) || []
 
     render 'dashboard/print_tasks'
   end
