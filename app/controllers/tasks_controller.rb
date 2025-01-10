@@ -72,7 +72,7 @@ class TasksController < ApplicationController
       redirect_to objet_secteur_article_path(@objet, @secteur, @article), notice: 'La tâche a été créée avec succès.'
     else
       logger.debug("Task saving failed: #{@task.errors.full_messages}")
-      render json: { errors: @task.errors.full_messages }, status: :unprocessable_entity
+      render :new
     end
   end
 
