@@ -122,19 +122,28 @@
   left: 49%; /* Place le trait au milieu */
 }
 
+.object-list-container {
+  max-height: 300px; /* Hauteur fixe pour permettre le défilement */
+  overflow-y: auto; /* Active le défilement vertical si nécessaire */
+  overflow-x: hidden; /* Empêche le débordement horizontal */
+  margin-left: 50px; /* Décale légèrement à droite */
+  border-bottom: 2px solid #ccc; /* Bordure uniquement en bas */
+  display: flex; /* Utilise Flexbox pour la disposition en colonnes */
+  flex-wrap: wrap; /* Permet le wrapping pour former des colonnes */
+  gap: 20px; /* Ajoute de l'espace entre les colonnes */
+}
+
 .object-list {
-  list-style: none;
+  display: flex; /* Utilise flex pour gérer les colonnes */
+  flex-wrap: wrap; /* Active le wrapping des éléments */
+  gap: 15px; /* Espace entre les colonnes et les éléments */
+  list-style: none; /* Supprime les puces */
   padding: 0;
-  margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start; /* Garder l'alignement à gauche */
-  gap: 10px;
-  max-width: 600px; /* Limiter la largeur totale pour centrer */
-  margin-left: 50px; /* Décale légèrement vers le centre */
+  margin: 0;
 }
 
 .object-list li {
+  width: calc(50% - 10px); /* Les objets occupent 50% de la largeur par défaut */
   font-size: 1.2rem;
   color: #333;
   display: flex;
@@ -210,6 +219,10 @@
   .dashboard-page {
     flex-direction: column; /* Passe la mise en page en colonne */
     min-height: auto; /* Permet de s'adapter à des contenus plus longs */
+  }
+
+  .object-list li {
+    width: calc(100% - 10px); /* Passe à une colonne unique sur petits écrans */
   }
 
   .object-list-container {
