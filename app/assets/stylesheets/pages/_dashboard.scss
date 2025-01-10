@@ -123,7 +123,7 @@
 }
 
 .object-list-container {
-  max-height: 300px; /* Hauteur fixe pour permettre le défilement */
+  max-height: 150px; /* Hauteur fixe pour permettre le défilement */
   overflow-y: auto; /* Active le défilement vertical si nécessaire */
   overflow-x: hidden; /* Empêche le débordement horizontal */
   margin-left: 50px; /* Décale légèrement à droite */
@@ -133,6 +133,14 @@
   gap: 20px; /* Ajoute de l'espace entre les colonnes */
 }
 
+// .object-list-container {
+//   max-height: 300px; /* Hauteur fixe pour permettre le défilement */
+//   overflow-y: auto; /* Active le défilement vertical si nécessaire */
+//   margin-left: 50px; /* Décale légèrement vers la droite pour correspondre à l'alignement */
+//   border-bottom: 2px solid #ccc; /* Ajoute une bordure uniquement en bas */
+//   display: inline-block; /* Adapte la largeur au contenu le plus long */
+//   padding-right: 30px; /* Espace pour éviter que la scrollbar ne chevauche le contenu */
+// }
 .object-list {
   display: flex; /* Utilise flex pour gérer les colonnes */
   flex-wrap: wrap; /* Active le wrapping des éléments */
@@ -205,14 +213,6 @@
   color: #000; /* Couleur plus foncée au survol */
 }
 
-.object-list-container {
-  max-height: 300px; /* Hauteur fixe pour permettre le défilement */
-  overflow-y: auto; /* Active le défilement vertical si nécessaire */
-  margin-left: 50px; /* Décale légèrement vers la droite pour correspondre à l'alignement */
-  border-bottom: 2px solid #ccc; /* Ajoute une bordure uniquement en bas */
-  display: inline-block; /* Adapte la largeur au contenu le plus long */
-  padding-right: 30px; /* Espace pour éviter que la scrollbar ne chevauche le contenu */
-}
 
 /* Styles pour les écrans plus petits */
 @media (max-width: 768px) {
