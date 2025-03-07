@@ -10,6 +10,16 @@ class Rack::Attack
     BLOCKED_PATHS.include?(req.path)
   end
 
+  # Bloque les requêtes POST non autorisées sur des chemins critiques
+  Rack::Attack.blocklist('block unauthorized POST requests') do |req|
+    req.post? && BLOCKED_PATHS.include?(req.path)
+  end
+
+  # Bloque les requêtes POST sur la racine "/" si non autorisées
+  Rack::Attack.blocklist('block POST to root') do |req|
+    req.path == "/" && req.post?
+  end
+
   # Bloque les IPs après trop de requêtes en peu de temps (anti-DDOS)
   throttle('req/ip', limit: 5, period: 5.seconds) do |req|
     req.ip
