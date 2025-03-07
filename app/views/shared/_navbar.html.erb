@@ -60,8 +60,9 @@
                 <%= image_tag "https://www.gravatar.com/avatar/#{Digest::MD5.hexdigest(current_user.email.strip.downcase)}?d=identicon&s=40", class: "avatar", alt: "Gravatar Avatar" %>
               <% end %>
               <ul class="dropdown-menu" data-dropdown-target="menu">
-                <li><a class="dropdown-item" href="<%= edit_user_registration_path %>">Mon profil</a></li>
+                <li><span class="dropdown-item"><%= current_user.name || current_user.email %></span></li>
                 <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="<%= edit_user_registration_path %>">Mon profil</a></li>
                 <li>
                   <%= form_with url: destroy_user_session_path, method: :delete, class: "d-inline" do %>
                     <button type="submit" class="dropdown-item">Déconnexion</button>

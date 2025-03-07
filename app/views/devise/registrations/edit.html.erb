@@ -36,6 +36,11 @@
                   input_html: { class: "profile-input" } %>
     </div>
 
+    <%= f.input :name,
+                required: true,
+                label: "Nom",
+                input_html: { class: "profile-input" } %>
+
     <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
       <p class="confirmation-info">En attente de confirmation pour : <%= resource.unconfirmed_email %></p>
     <% end %>

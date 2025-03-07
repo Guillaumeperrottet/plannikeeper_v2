@@ -18,6 +18,11 @@
                     autofocus: true,
                     input_html: { autocomplete: "email", class: "input-field" } %>
 
+        <%= f.input :name,
+                    label: "Nom",
+                    required: true,
+                    input_html: { class: "input-field" } %>
+
         <!-- Champs supplémentaires affichés uniquement pour le rôle "Entreprise" -->
         <div id="company-fields" style="display: none;">
           <%= f.input :company_name,
