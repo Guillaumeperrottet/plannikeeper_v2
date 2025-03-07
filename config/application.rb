@@ -16,5 +16,7 @@ module Plannikeeper
 
     # Configuration supplémentaire
     config.autoload_lib(ignore: %w(assets tasks))
+
+    config.middleware.use Rack::Attack
   end
 end
