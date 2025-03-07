@@ -1,4 +1,9 @@
 class Rack::Attack
+  # Répond avec une erreur 403 Forbidden au lieu d’un 404
+  self.blocklisted_response = lambda do |_env|
+    [403, { 'Content-Type' => 'text/plain' }, ["Access Forbidden\n"]]
+  end
+
   # Bloque les requêtes essayant d'accéder à des fichiers sensibles
   BLOCKED_PATHS = %w[
     /.env /api/.env /phpinfo.php /phpinfo /.env.save
