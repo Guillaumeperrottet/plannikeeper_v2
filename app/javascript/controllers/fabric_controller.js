@@ -502,23 +502,40 @@ export default class extends Controller {
       },
       body: JSON.stringify(data)
     })
-    .then(response => response.ok ? response.json() : Promise.reject(response))
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Erreur lors de la création de l\'article');
+      }
+      return response.json();
+    })
     .then(data => {
-      // console.log("Article créé avec succès :", data);
       this.loadAndDisplayArticles();
 
       // Afficher le message de succès
       const notification = document.getElementById('article-created-notification');
-      notification.style.display = 'block';
+      if (notification) {
+        notification.style.display = 'block';
+        notification.textContent = 'Article créé avec succès !';
 
-      // Masquer le message de succès et rafraîchir la page après 3 secondes
-      setTimeout(() => {
-        notification.style.display = 'none';
-        window.location.reload();
-      }, 3000);
+        // Masquer le message de succès et rafraîchir la page après 3 secondes
+        setTimeout(() => {
+          notification.style.display = 'none';
+          window.location.reload();
+        }, 3000);
+      }
     })
     .catch(error => {
       console.error("Erreur lors de la création de l'article :", error);
+      const notification = document.getElementById('article-created-notification');
+      if (notification) {
+        notification.style.display = 'block';
+        notification.style.backgroundColor = 'rgba(239, 136, 136, 0.8)';
+        notification.textContent = 'Erreur lors de la création de l\'article';
+
+        setTimeout(() => {
+          notification.style.display = 'none';
+        }, 3000);
+      }
     });
   }
 
