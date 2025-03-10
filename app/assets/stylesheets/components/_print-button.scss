@@ -33,26 +33,53 @@
     display: none;
   }
 
-
   /* Assure que l'agenda prend toute la page imprimée */
   .agenda-section {
     display: block;
     width: 100%;
     height: auto;
     background-color: white;
+    padding: 20px;
+  }
+
+  /* Ajuste la disposition des tâches pour l'impression */
+  .tasks-display {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    height: auto;
+  }
+
+  /* Supprime la limite de hauteur pour les listes de tâches */
+  .task-group ul {
+    max-height: none;
+    overflow-y: visible;
+  }
+
+  /* Style pour les tâches */
+  .task-group {
+    width: 48%;
+    page-break-inside: avoid;
   }
 
   .task-description {
-    display: block; /* Montre la description en ligne avec le titre */
-    font-size: 0.9rem; /* Ajustez la taille si nécessaire */
-    color: #333; /* Couleur adaptée pour l'impression */
-    margin-left: 5px; /* Espace entre le titre et la description */
+    display: block;
+    font-size: 0.9rem;
+    color: #333;
+    margin-left: 5px;
   }
 
   .task-executant {
-    display: block; /* Rend l'exécutant visible uniquement lors de l'impression */
-    font-size: 0.9rem; /* Ajustez la taille si nécessaire */
-    color: #333; /* Couleur adaptée pour l'impression */
-    margin-left: 5px; /* Ajoutez un léger espace pour la lisibilité */
+    display: block;
+    font-size: 0.9rem;
+    color: #333;
+    margin-left: 5px;
+  }
+
+  /* Améliore la lisibilité des tâches */
+  #this-week-tasks li, #upcoming-tasks li {
+    margin-bottom: 10px;
+    padding: 5px 0;
+    border-bottom: 1px solid #eee;
   }
 }
