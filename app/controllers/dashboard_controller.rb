@@ -30,13 +30,17 @@ class DashboardController < ApplicationController
 
 
   def print_tasks
-    selected_objet = Objet.find(params[:objet_id]) if params[:objet_id].present?
+    @selected_objet = Objet.find(params[:objet_id]) if params[:objet_id].present?
 
-  # Préparer les tâches pour l'impression, triées par date
-  @this_week_tasks = selected_objet&.tasks&.this_week&.order(:date) || []
-  @upcoming_tasks = selected_objet&.tasks&.upcoming&.order(:date) || []
+    if @selected_objet
+      @this_week_tasks = @selected_objet.this_week_tasks
+      @upcoming_tasks = @selected_objet.upcoming_tasks
+    else
+      @this_week_tasks = []
+      @upcoming_tasks = []
+    end
 
-    render 'dashboard/print_tasks'
+    render layout: false
   end
 
   private

@@ -41,9 +41,9 @@
           <% end %>
         </select>
       </div>
-      <a href="javascript:void(0)" onclick="window.print()" class="print-button">
+      <%= link_to print_tasks_dashboard_index_path(objet_id: @selected_objet&.id), class: "print-button", target: "_blank" do %>
         <i class="fas fa-print"></i>
-      </a>
+      <% end %>
     </div>
 
     <div class="tasks-display">
