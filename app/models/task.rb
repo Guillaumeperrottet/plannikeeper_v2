@@ -33,11 +33,13 @@ class Task < ApplicationRecord
   scope :this_week, -> {
     where("(recurring = ? OR recurring IS NULL OR recurring = ?) AND end_date BETWEEN ? AND ?",
           false, true, Date.today.beginning_of_day, (Date.today + 7.days).end_of_day)
+    .order(end_date: :desc)
   }
 
   scope :upcoming, -> {
     where("(recurring = ? OR recurring IS NULL OR recurring = ?) AND end_date >= ?",
           false, true, (Date.today + 8.days).beginning_of_day)
+    .order(end_date: :desc)
   }
 
   private

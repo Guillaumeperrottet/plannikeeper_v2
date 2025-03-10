@@ -46,7 +46,7 @@ end
 
 group :development do
   gem "web-console"
-  gem "error_highlight", ">= 0.4.0", platforms: [:ruby]
+  gem "error_highlight", ">= 0.7.0", platforms: [:ruby]
 end
 
 group :test do
