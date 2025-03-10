@@ -1,5 +1,5 @@
 class Rack::Attack
-  # Répond avec une erreur 403 Forbidden au lieu d’un 404
+  # Répond avec une erreur 403 Forbidden au lieu d'un 404
   self.blocklisted_responder = lambda do |_request|
     [403, { 'Content-Type' => 'text/plain' }, ["Access Forbidden\n"]]
   end
@@ -25,8 +25,25 @@ class Rack::Attack
     req.path == "/" && req.post?
   end
 
-  # Bloque les IPs après trop de requêtes en peu de temps (anti-DDOS)
-  throttle('req/ip', limit: 5, period: 5.seconds) do |req|
-    req.ip
+  # Augmenter la limite générale à 300 requêtes par 5 minutes
+  throttle('req/ip', limit: 300, period: 5.minutes) do |req|
+    req.ip unless req.path.start_with?('/assets')
   end
+
+  # Limitation des tentatives de connexion par IP
+  throttle('logins/ip', limit: 5, period: 20.seconds) do |req|
+    if req.path == '/login' && req.post?
+      req.ip
+    end
+  end
+
+  # Limitation des tentatives de connexion par email
+  throttle('logins/email', limit: 5, period: 20.seconds) do |req|
+    if req.path == '/login' && req.post?
+      req.params['email'].to_s.downcase.gsub(/\s+/, "").presence
+    end
+  end
+
+  # Ajout de la configuration du cache
+  Rack::Attack.cache.store = ActiveSupport::Cache::MemoryStore.new
 end
