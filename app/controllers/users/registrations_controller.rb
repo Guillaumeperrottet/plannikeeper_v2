@@ -67,8 +67,4 @@ class Users::RegistrationsController < Devise::RegistrationsController
   def sign_up_params
     params.require(:user).permit(:email, :password, :password_confirmation, :role, :company_name, :company_adress)
   end
-
-  def after_update_path_for(resource)
-    request.referrer || root_path
-  end
 end
