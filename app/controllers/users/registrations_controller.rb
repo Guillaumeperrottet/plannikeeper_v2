@@ -60,11 +60,15 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
   # Autorise la mise à jour de l'avatar
   def account_update_params
-    params.require(:user).permit(:email, :password, :password_confirmation, :current_password, :avatar)
+    params.require(:user).permit(:email, :password, :password_confirmation, :current_password, :avatar, :name)
   end
 
   # Autorise les champs pour l'inscription
   def sign_up_params
     params.require(:user).permit(:email, :password, :password_confirmation, :role, :company_name, :company_adress)
+  end
+
+  def after_update_path_for(resource)
+    request.referrer || root_path
   end
 end
