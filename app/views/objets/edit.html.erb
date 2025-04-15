@@ -79,9 +79,16 @@
         <%= form.submit "Sauvegarder", class: "btn btn--success modify-object-btn" %>
       </div>
     <% end %>
-      <div class="actions-center">
-      <%= form_with model: @objet, url: objet_path(@objet), method: :delete, local: true, data: { controller: "delete-confirm", action: "submit->delete-confirm#confirm", "delete-confirm-message-value": "Êtes-vous sûr de vouloir supprimer cet objet ?" } do |f| %>
-        <%= f.submit "Supprimer l'objet", class: "btn btn--danger delete-object-btn" %>
-      <% end %>
-  </div>
+    <div class="d-flex justify-content-between align-items-center">
+      <button
+        id="delete-objet-btn-<%= @objet.id %>"
+        class="btn btn-outline-danger --danger"
+        data-controller="delete-confirm"
+        data-action="click->delete-confirm#confirm"
+        data-delete-confirm-url-value="<%= objet_path(@objet) %>"
+        data-delete-confirm-message-value="Êtes-vous certain de vouloir supprimer cet objet ? Cette action est irréversible."
+      >
+        Supprimer cet objet
+      </button>
+    </div>
 </div>

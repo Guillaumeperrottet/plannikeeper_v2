@@ -1,24 +1,23 @@
 <div class="dashboard-page" data-controller="task">
   <div class="header">
-    <div class="object-list-container">
-      <ul class="object-list">
-        <% if @objets.any? %>
-          <% @objets.each do |objet| %>
-            <li>
-              <span class="object-bullet"></span>
-              <%= link_to "#{objet.nom} - #{objet.adresse}", objet_path(objet), class: "object-link" %>
-              <% if can?(:edit, objet) %>
-                <%= link_to edit_objet_path(objet), class: "edit-link", title: "Éditer #{objet.nom}" do %>
-                  <i class="fas fa-edit"></i>
-                <% end %>
-              <% end %>
-            </li>
+  <div class="container mt-5">
+    <ul class="list-group">
+      <% @objets.each do |objet| %>
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          <%= link_to "#{objet.nom} - #{objet.adresse}", objet_path(objet), class: "object-link" %>
+          <% if can?(:edit, objet) %>
+            <%= link_to edit_objet_path(objet), class: "btn btn-sm btn-secondary me-2", title: "Éditer #{objet.nom}" do %>
+              <i class="fas fa-edit"></i>
+            <% end %>
           <% end %>
-        <% else %>
-          <li>Aucun objet disponible pour le moment.</li>
-        <% end %>
-      </ul>
-    </div>
+        </li>
+      <% end %>
+    </ul>
+
+    <% if @objets.empty? %>
+      <p>Aucun objet disponible pour le moment.</p>
+    <% end %>
+  </div>
 
     <% if current_user.private_user? || current_user.enterprise_admin? %>
       <a href="<%= new_objet_path %>" class="create-object">

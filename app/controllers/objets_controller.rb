@@ -13,7 +13,7 @@ class ObjetsController < ApplicationController
       @objets = current_user.objets.accessible_by(current_ability)
     end
     # Rails.logger.debug "Objets visibles : #{@objets.map { |o| "ID: #{o.id}, Nom: #{o.nom}" }}"
-    render :dashboard # Si une vue spécifique est nécessaire
+    redirect_to authenticated_root_path # Si une vue spécifique est nécessaire
   end
 
   def show
@@ -56,7 +56,8 @@ class ObjetsController < ApplicationController
     @objet.user = current_user # Associe toujours l'utilisateur actuel à l'objet
 
     if @objet.save
-      redirect_to @objet, notice: 'Votre objet a bien été créé.'
+      flash[:notice] = 'Votre objet a été créé !'
+      redirect_to @objet
     else
       render :new
     end
@@ -75,7 +76,8 @@ class ObjetsController < ApplicationController
 
   def destroy
     @objet.destroy
-    redirect_to authenticated_root_path, notice: 'Objet supprimé avec succès.'
+    flash[:notice] = 'Votre objet a bien été supprimer !'
+    redirect_to authenticated_root_path
   end
 
   private

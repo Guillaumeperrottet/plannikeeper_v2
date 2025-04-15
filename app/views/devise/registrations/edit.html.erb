@@ -1,106 +1,108 @@
-<h2 class="profile-title">Modifier le profil</h2>
-
-<%= simple_form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put, class: 'profile-form' }) do |f| %>
-  <div class="back-icon">
-    <%= link_to "&#10005;".html_safe, :back, class: "close-button", title: "Retour" %>
-  </div>
-
-  <%= f.error_notification %>
-
-<div class="profile-picture-container">
-  <% if resource.avatar.attached? %>
-    <%= image_tag resource.avatar.variant(resize_to_limit: [150, 150]), alt: "Photo de Profil", class: "profile-picture", id: "profile-image-preview" %>
-  <% end %>
-
-  <label for="user_avatar" class="profile-picture-icon">
-    <%= f.file_field :avatar, id: "user_avatar", class: "profile-file-input", style: "display: none;", onchange: "previewImage(event)" %>
-    <i class="fa fa-camera"></i>
-  </label>
-</div>
-
-  <div class="form-inputs">
-
-    <% if resource.enterprise_admin? %>
-      <%= link_to "Gestion des utilisateurs", company_users_path, class: "btn--action" %>
-    <% end %>
-
-    <!-- Bouton pour modifier l'adresse email -->
-    <button type="button" id="toggle-email-field" class="btn--action">Modifier l'adresse email</button>
-
-    <!-- Champ de modification de l'adresse email masqué par défaut -->
-    <div id="email-field" style="display: none; margin-top: 1rem;">
-      <%= f.input :email,
-                  required: true,
-                  autofocus: true,
-                  label: "Nouvelle Adresse Email",
-                  input_html: { class: "profile-input" } %>
+<section class="vh-100" style="background-color: #f4f5f7;">
+  <div class="container py-5 h-100">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col col-lg-6 mb-4 mb-lg-0">
+        <div class="card mb-3" style="border-radius: .5rem;">
+          <div class="row g-0">
+            <div class="col-md-4 gradient-custom text-center text-white"
+              style="border-top-left-radius: .5rem; border-bottom-left-radius: .5rem;">
+              <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava1-bg.webp"
+                alt="Avatar" class="img-fluid my-5" style="width: 80px;" />
+                <div class="mb-3 px-3">
+                <label for="user_name" class="form-label text-white">Nom</label>
+                <input type="text" id="user_name" class="form-control text-center" value="<%= current_user.name %>"
+                  data-url="<%= registration_path(current_user) %>" />
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-center">
+                    <h6>Information</h6>
+                    <%= link_to request.referrer || root_path, class: "text-dark" do %>
+                      <i class="fa-solid fa-xmark"></i>
+                    <% end %>
+                    </div>
+                  <hr class="mt-0 mb-4">
+                  <div class="row pt-1">
+                    <div class="mb-3">
+                    <label for="user_mail" class="form-label text-black">Email</label>
+                    <input type="text" id="user_mail" class="form-control text-center" value="<%= current_user.email %>"
+                      data-url="<%= registration_path(current_user) %>"/>
+                    </div>
+                    <div class="col-6 mb-3">
+                    <h6>Rôle</h6>
+                    <p class="text-muted">
+                      <% if current_user.role == 'private' %>
+                      Privé
+                      <% elsif current_user.role == 'admin' %>
+                      Admin
+                      <% else %>
+                      User
+                      <% end %>
+                    </p>
+                    </div>
+                  </div>
+                  <h6>Projects</h6>
+                  <hr class="mt-0 mb-4">
+                  <div class="row pt-1">
+                    <% recent_projects = current_user.objets.order(created_at: :desc).limit(2) %>
+                    <% if recent_projects.any? %>
+                    <% recent_projects.each do |project| %>
+                      <div class="col-6 mb-3">
+                      <p class="text-muted"><%= project.id %></p>
+                      </div>
+                    <% end %>
+                    <% else %>
+                    <div class="col-12 mb-3">
+                      <p class="text-muted">Aucun projet récent.</p>
+                    </div>
+                    <% end %>
+                  </div>
+                      <div class="d-flex justify-content-between align-items-center">
+                        <button
+                          id="delete-account-btn"
+                          class="btn btn-outline-danger --danger"
+                          data-controller="delete-confirm"
+                          data-action="click->delete-confirm#confirm"
+                          data-delete-confirm-url-value="<%= registration_path(current_user) %>"
+                          data-delete-confirm-message-value="Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible."
+                        >
+                          Supprimer mon compte
+                        </button>
+                      </div>
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-
-    <%= f.input :name,
-                required: true,
-                label: "Nom",
-                input_html: { class: "profile-input" } %>
-
-    <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
-      <p class="confirmation-info">En attente de confirmation pour : <%= resource.unconfirmed_email %></p>
-    <% end %>
-
-    <!-- Bouton pour afficher les champs de changement de mot de passe -->
-    <button type="button" id="toggle-password-fields" class="btn--action">Changer le mot de passe</button>
-
-    <!-- Champs de changement de mot de passe masqués par défaut -->
-    <div id="password-fields" style="display: none; margin-top: 1rem;">
-      <%= f.input :password,
-                  label: "Nouveau Mot de Passe",
-                  hint: "Laissez vide si vous ne souhaitez pas le changer",
-                  required: false,
-                  input_html: { autocomplete: "new-password", class: "profile-input" } %>
-      <%= f.input :password_confirmation,
-                  label: "Confirmer le Nouveau Mot de Passe",
-                  required: false,
-                  input_html: { autocomplete: "new-password", class: "profile-input" } %>
-      <%= f.input :current_password,
-                  label: "Mot de Passe Actuel",
-                  hint: "Votre mot de passe actuel est nécessaire pour confirmer les changements",
-                  required: true,
-                  input_html: { autocomplete: "current-password", class: "profile-input" } %>
-    </div>
   </div>
-
-  <div class="form-actions">
-    <%= f.button :submit, "Mettre à Jour", class: "btn--simple" %>
-  </div>
-<% end %>
-
-<div class="cancel-account">
-  Pas satisfait ? <%= button_to "Supprimer mon compte", registration_path(resource_name), data: { confirm: "Êtes-vous sûr ?", turbo_confirm: "Êtes-vous sûr ?" }, method: :delete, class: "cancel-button" %>
-</div>
+</section>
 
 <script>
-  // Script pour afficher/masquer les champs de changement de mot de passe
-  document.getElementById('toggle-password-fields').addEventListener('click', function() {
-    const passwordFields = document.getElementById('password-fields');
-    const isHidden = passwordFields.style.display === 'none';
-    passwordFields.style.display = isHidden ? 'block' : 'none';
-  });
+  document.addEventListener("DOMContentLoaded", () => {
+    const nameField = document.getElementById("user_name");
 
-  // Script pour afficher/masquer le champ de modification d'email
-  document.getElementById('toggle-email-field').addEventListener('click', function() {
-    const emailField = document.getElementById('email-field');
-    const isHidden = emailField.style.display === 'none';
-    emailField.style.display = isHidden ? 'block' : 'none';
-  });
+    if (nameField) {
+      nameField.addEventListener("blur", () => {
+        const url = nameField.dataset.url;
+        const token = document.querySelector('meta[name="csrf-token"]').content;
 
-  function previewImage(event) {
-    const imagePreview = document.getElementById('profile-image-preview');
-    const file = event.target.files[0];
-
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        imagePreview.src = e.target.result;
-      };
-      reader.readAsDataURL(file);
+        fetch(url, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRF-Token": token
+          },
+          body: JSON.stringify({ user: { name: nameField.value } })
+        })
+        .then(response => {
+          if (!response.ok) {
+            console.error("Erreur lors de la mise à jour du nom.");
+          }
+        })
+        .catch(error => console.error("Erreur réseau :", error));
+      });
     }
-  }
+  });
 </script>
