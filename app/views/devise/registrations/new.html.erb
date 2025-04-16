@@ -1,23 +1,46 @@
-<div class="modal modal-sheet position-static d-block bg-body-secondary p-4 py-md-5" tabindex="-1" role="dialog" id="modalSignin">
+<div class="modal modal-sheet d-block bg-body-secondary p-4 py-md-5" tabindex="-1" role="dialog" id="modalSignin">
   <div class="modal-dialog">
     <div class="modal-content rounded-4 shadow">
-      <div class="modal-header p-5 pb-4 border-bottom-0">
+      <div class="d-flex modal-header p-5 pb-4 border-bottom-0 justify-content-between align-items-center">
         <h1 class="fw-bold mb-0 fs-2">Sign up for free</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <%= link_to request.referrer || root_path, class: "text-dark ms-auto" do %>
+          <i class="fa-solid fa-xmark"></i>
+        <% end %>
       </div>
 
-      <div class="modal-body p-5 pt-0">
-        <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :post }) do |f| %>
-            <div class="form-floating mb-3">
-              <%= f.email_field :email, class: "form-control rounded-3", id: "floatingInput", placeholder: "name@example.com" %>
-              <%= f.label :email, "Email address", for: "floatingInput" %>
-            </div>
-            <div class="form-floating mb-3">
-              <%= f.password_field :password, class: "form-control rounded-3", id: "floatingPassword", placeholder: "Password" %>
-              <%= f.label :password, "Password", for: "floatingPassword" %>
-            </div>
-            <%= f.submit "Sign up", class: "w-100 mb-2 btn btn-lg rounded-3 btn-primary" %>
-          <% end %>
+        <div class="modal-body p-5 pt-0">
+          <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :post }) do |f| %>
+              <div class="form-floating mb-3">
+                <select id="role-select" name="user[role]" class="form-select rounded-3" required>
+                  <option value="">Choisir le type de compte</option>
+                  <option value="enterprise_admin">Entreprise</option>
+                  <option value="private_user">Privé</option>
+                </select>
+                <label for="role-select">Type de compte</label>
+              </div>
+
+              <div class="form-floating mb-3" id="company-name-field" style="display: none;">
+                <%= f.text_field :company_name, class: "form-control rounded-3", id: "floatingCompanyName", placeholder: "Nom de l'entreprise" %>
+                <%= f.label :company_name, "Nom de l'entreprise", for: "floatingCompanyName" %>
+              </div>
+              <div class="form-floating mb-3" id="company-adress-field" style="display: none;">
+                <%= f.text_field :company_adress, class: "form-control rounded-3", id: "floatingCompanyAdress", placeholder: "Adresse de l'entreprise" %>
+                <%= f.label :company_adress, "Adresse de l'entreprise", for: "floatingCompanyAdress" %>
+              </div>
+              <div class="form-floating mb-3">
+                <%= f.text_field :name, class: "form-control rounded-3", id: "floatingName", placeholder: "Your name" %>
+                <%= f.label :name, "Name", for: "floatingName" %>
+              </div>
+              <div class="form-floating mb-3">
+                <%= f.email_field :email, class: "form-control rounded-3", id: "floatingInput", placeholder: "name@example.com" %>
+                <%= f.label :email, "Email address", for: "floatingInput" %>
+              </div>
+              <div class="form-floating mb-3">
+                <%= f.password_field :password, class: "form-control rounded-3", id: "floatingPassword", placeholder: "Password" %>
+                <%= f.label :password, "Password", for: "floatingPassword" %>
+              </div>
+              <%= f.submit "Sign up", class: "w-100 mb-2 btn btn-lg rounded-3 btn-primary" %>
+            <% end %>
           <small class="text-body-secondary">By clicking Sign up, you agree to the terms of use.</small>
           <hr class="my-4">
           <h2 class="fs-5 fw-bold mb-3">Or use a third-party</h2>
@@ -30,3 +53,40 @@
     </div>
   </div>
 </div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const roleSelect = document.getElementById("role-select");
+    const companyNameField = document.getElementById("company-name-field");
+    const companyAdressField = document.getElementById("company-adress-field");
+
+    roleSelect.addEventListener("change", function() {
+      if (roleSelect.value === "enterprise_admin") {
+        companyNameField.style.display = "block";
+        companyAdressField.style.display = "block";
+      } else {
+        companyNameField.style.display = "none";
+        companyAdressField.style.display = "none";
+      }
+    });
+  });
+
+  document.addEventListener("DOMContentLoaded", function() {
+    const form = document.querySelector("form");
+    const roleSelect = document.getElementById("role-select");
+    const companyNameInput = document.getElementById("floatingCompanyName");
+    const companyAdressInput = document.getElementById("floatingCompanyAdress");
+
+    form.addEventListener("submit", function(event) {
+      if (roleSelect.value === "enterprise_admin") {
+        if (companyNameInput.value.trim() === "") {
+          event.preventDefault();
+          alert("Veuillez renseigner le nom de l'entreprise.");
+        } else if (companyAdressInput.value.trim() === "") {
+          event.preventDefault();
+          alert("Veuillez renseigner l'adresse de l'entreprise.");
+        }
+      }
+    });
+  });
+</script>

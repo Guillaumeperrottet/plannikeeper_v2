@@ -20,6 +20,9 @@ class User < ApplicationRecord
   validates :role, presence: true, inclusion: { in: roles.keys }
   validates :company, presence: true, if: -> { enterprise_user? || enterprise_admin? }
 
+   # Callbacks
+   before_create :create_company_if_enterprise_admin
+
   def display_role
     case role
     when "enterprise_admin"
@@ -48,5 +51,16 @@ class User < ApplicationRecord
     end
 
     user
+  end
+
+  def create_company_if_enterprise_admin
+    if role == "enterprise_admin" && company_name.present?
+      begin
+        self.company = Company.create!(name: company_name)
+      rescue ActiveRecord::RecordInvalid => e
+        errors.add(:base, "Erreur lors de la création de l'entreprise : #{e.message}")
+        throw(:abort) # Annule la création de l'utilisateur
+      end
+    end
   end
 end
