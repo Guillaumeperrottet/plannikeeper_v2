@@ -18,9 +18,9 @@
                 style="background: rgba(255,255,255,0.2); color: #fff; border: none; font-weight: bold; max-width: 120px;"
                 autocomplete="off"
               />
-                                <% if current_user.enterprise_admin? %>
-                    <%= link_to "Gestion des utilisateurs", company_users_path, class: "btn btn-submit" %>
-                  <% end %>
+                    <% if current_user.enterprise_admin? %>
+                    <%= link_to "Gestion des utilisateurs", company_users_path, class: "btn btn-submit pt-3" %>
+                    <% end %>
             </div>
 
             <!-- Colonne droite : Informations utilisateur -->

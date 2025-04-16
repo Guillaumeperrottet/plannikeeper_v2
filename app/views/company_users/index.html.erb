@@ -4,9 +4,9 @@
             <div class="table-company-title">
                 <div class="row">
                     <div class="col-sm-5">
-                        <h2>Gestion des <b>Utilisateurs</b></h2>
+                        <h2>Gestion des Utilisateurs</h2>
                     </div>
-                    <div class="col-sm-7">
+                    <div class="col-sm-7 d-flex justify-content-end">
                       <%= link_to new_company_user_path, class: "button-add-user" do %>
                         <span class="button__text">Ajouter un utilisateur</span>
                         <span class="button__icon">
@@ -44,7 +44,7 @@
                                     </a>
                                 </td>
                                 <td><%= user.display_role %></td>
-                                  <td class="text-center">
+                                  <td class="actions">
                                     <!-- From Uiverse.io by aaronross1 -->
                                     <%= link_to edit_company_user_path(user), class: "edit-button" do %>
                                       <svg height="1em" viewBox="0 0 512 512">
