@@ -57,7 +57,7 @@ class ObjetsController < ApplicationController
 
     if @objet.save
       flash[:notice] = 'Votre objet a été créé !'
-      redirect_to @objet
+      redirect_to authenticated_root_path
     else
       render :new
     end

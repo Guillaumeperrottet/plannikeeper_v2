@@ -4,76 +4,78 @@
       <div class="col col-lg-6 mb-4 mb-lg-0">
         <div class="card mb-3" style="border-radius: .5rem;">
           <div class="row g-0">
+            <!-- Colonne gauche : Avatar -->
             <div class="col-md-4 gradient-custom text-center text-white"
               style="border-top-left-radius: .5rem; border-bottom-left-radius: .5rem;">
-              <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava1-bg.webp"
-                alt="Avatar" class="img-fluid my-5" style="width: 80px;" />
-                <div class="mb-3 px-3">
-                <label for="user_name" class="form-label text-white">Nom</label>
-                <input type="text" id="user_name" class="form-control text-center" value="<%= current_user.name %>"
-                  data-url="<%= registration_path(current_user) %>" />
-                </div>
+              <img id="profile-avatar" src="<%= current_user.avatar.attached? ? url_for(current_user.avatar) : 'https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava1-bg.webp' %>"
+                alt="Avatar" class="img-fluid my-5" style="width: 80px; cursor: pointer;" />
+              <div id="avatar-selection" style="display: none;">
+                <%# Liste des avatars disponibles %>
+                <% ['avatar1.png', 'avatar2.png', 'avatar3.png'].each do |avatar| %>
+                  <img src="<%= asset_path(avatar) %>" alt="Avatar option <%= avatar %>" class="img-thumbnail avatar-option"
+                    style="width: 50px; cursor: pointer;" data-avatar-url="<%= avatar %>">
+                <% end %>
+              </div>
             </div>
+
+            <!-- Colonne droite : Informations utilisateur -->
             <div class="col-md-8">
-                <div class="card-body p-4">
-                    <div class="d-flex justify-content-between align-items-center">
-                    <h6>Information</h6>
-                    <%= link_to request.referrer || root_path, class: "text-dark" do %>
-                      <i class="fa-solid fa-xmark"></i>
-                    <% end %>
-                    </div>
-                  <hr class="mt-0 mb-4">
-                  <div class="row pt-1">
-                    <div class="mb-3">
-                    <label for="user_mail" class="form-label text-black">Email</label>
-                    <input type="text" id="user_mail" class="form-control text-center" value="<%= current_user.email %>"
-                      data-url="<%= registration_path(current_user) %>"/>
-                    </div>
-                    <div class="col-6 mb-3">
+              <div class="card-body p-4">
+                <div class="d-flex justify-content-between align-items-center">
+                  <h6>Information</h6>
+                  <%= link_to request.referrer || root_path, class: "text-dark" do %>
+                    <i class="fa-solid fa-xmark"></i>
+                  <% end %>
+                </div>
+                <hr class="mt-0 mb-4">
+                <div class="row pt-1">
+                  <div class="mb-3">
+                    <p><%= current_user.email %></p>
+                  </div>
+                  <div class="col-6 mb-3">
                     <h6>Rôle</h6>
                     <p class="text-muted">
                       <% if current_user.role == 'private' %>
-                      Privé
+                        Privé
                       <% elsif current_user.role == 'admin' %>
-                      Admin
+                        Admin
                       <% else %>
-                      User
+                        User
                       <% end %>
                     </p>
-                    </div>
                   </div>
-                  <h6>Projects</h6>
-                  <hr class="mt-0 mb-4">
-                  <div class="row pt-1">
-                    <% recent_projects = current_user.objets.order(created_at: :desc).limit(2) %>
-                    <% if recent_projects.any? %>
+                </div>
+                <h6>Projects</h6>
+                <hr class="mt-0 mb-4">
+                <div class="row pt-1">
+                  <% recent_projects = current_user.objets.order(created_at: :desc).limit(2) %>
+                  <% if recent_projects.any? %>
                     <% recent_projects.each do |project| %>
                       <div class="col-6 mb-3">
-                      <p class="text-muted"><%= project.id %></p>
+                        <p class="text-muted"><%= project.id %></p>
                       </div>
                     <% end %>
-                    <% else %>
+                  <% else %>
                     <div class="col-12 mb-3">
                       <p class="text-muted">Aucun projet récent.</p>
                     </div>
-                    <% end %>
-                  </div>
-                      <div class="d-flex justify-content-between align-items-center">
-                        <button
-                          id="delete-account-btn"
-                          class="btn btn-outline-danger --danger"
-                          data-controller="delete-confirm"
-                          data-action="click->delete-confirm#confirm"
-                          data-delete-confirm-url-value="<%= registration_path(current_user) %>"
-                          data-delete-confirm-message-value="Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible."
-                        >
-                          Supprimer mon compte
-                        </button>
-                      </div>
+                  <% end %>
                 </div>
+                <div class="d-flex justify-content-between align-items-center">
+                  <button
+                    id="delete-account-btn"
+                    class="btn btn-outline-danger --danger"
+                    data-controller="delete-confirm"
+                    data-action="click->delete-confirm#confirm"
+                    data-delete-confirm-url-value="<%= registration_path(current_user) %>"
+                    data-delete-confirm-message-value="Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible."
+                  >
+                    Supprimer mon compte
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
       </div>
     </div>
   </div>
@@ -81,12 +83,75 @@
 
 <script>
   document.addEventListener("DOMContentLoaded", () => {
-    const nameField = document.getElementById("user_name");
+    const avatarImage = document.getElementById("profile-avatar");
+    const avatarSelection = document.getElementById("avatar-selection");
+
+    // Affiche ou masque la sélection d'avatars
+    avatarImage.addEventListener("click", () => {
+      avatarSelection.style.display = avatarSelection.style.display === "none" ? "block" : "none";
+    });
+
+    // Change l'avatar lorsqu'un avatar est sélectionné
+    document.querySelectorAll(".avatar-option").forEach(option => {
+      option.addEventListener("click", (event) => {
+        const newAvatarUrl = event.target.dataset.avatarUrl;
+
+        if (!newAvatarUrl) {
+          console.error("URL de l'avatar non définie.");
+          return;
+        }
+
+        // Met à jour l'avatar dans l'interface
+        avatarImage.src = newAvatarUrl;
+
+        // Envoie une requête pour mettre à jour l'avatar côté serveur
+        const token = document.querySelector('meta[name="csrf-token"]').content;
+        fetch("<%= registration_path(current_user) %>", {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRF-Token": token
+          },
+          body: JSON.stringify({ user: { avatar: newAvatarUrl } })
+        })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error("Erreur lors de la mise à jour de l'avatar.");
+          }
+          return response.json();
+        })
+        .then(data => {
+          Swal.fire({
+            position: "middle",
+            icon: "success",
+            title: "Avatar mis à jour avec succès",
+            showConfirmButton: false,
+            timer: 1500
+          });
+        })
+        .catch(error => {
+          console.error("Erreur réseau :", error);
+          Swal.fire({
+            position: "middle",
+            icon: "error",
+            title: "Erreur réseau",
+            showConfirmButton: false,
+            timer: 1500
+          });
+        });
+      });
+    });
 
     if (nameField) {
       nameField.addEventListener("blur", () => {
         const url = nameField.dataset.url;
         const token = document.querySelector('meta[name="csrf-token"]').content;
+        const newName = nameField.value; // Store the new name
+
+        // Optional: Check if the name actually changed
+        if (newName === nameField.defaultValue) {
+          return; // Don't send request if name hasn't changed
+        }
 
         fetch(url, {
           method: "PUT",
@@ -94,14 +159,47 @@
             "Content-Type": "application/json",
             "X-CSRF-Token": token
           },
-          body: JSON.stringify({ user: { name: nameField.value } })
+          body: JSON.stringify({ user: { name: newName } }) // Use the stored new name
         })
         .then(response => {
-          if (!response.ok) {
+          if (response.ok) {
+            // Update the default value to the new name after successful save
+            nameField.defaultValue = newName;
+            // Display the success message
+            Swal.fire({
+              position: "middle",
+              icon: "success",
+              title: "Votre nom a été enregistré", // Adjusted title
+              showConfirmButton: false,
+              timer: 1500
+            });
+          } else {
+            // Optional: Revert the input value if save failed
+            nameField.value = nameField.defaultValue;
             console.error("Erreur lors de la mise à jour du nom.");
+            // Optional: Show an error message
+            Swal.fire({
+              position: "middle",
+              icon: "error",
+              title: "Erreur lors de l'enregistrement",
+              showConfirmButton: false,
+              timer: 1500
+            });
           }
         })
-        .catch(error => console.error("Erreur réseau :", error));
+        .catch(error => {
+          // Optional: Revert the input value on network error
+          nameField.value = nameField.defaultValue;
+          console.error("Erreur réseau :", error);
+          // Optional: Show an error message
+          Swal.fire({
+            position: "middle",
+            icon: "error",
+            title: "Erreur réseau",
+            showConfirmButton: false,
+            timer: 1500
+          });
+        });
       });
     }
   });
