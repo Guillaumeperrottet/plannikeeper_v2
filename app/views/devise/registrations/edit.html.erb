@@ -145,5 +145,12 @@
         });
       });
     }
+          // Ajout pour valider avec "Entrée"
+      nameField.addEventListener("keydown", (event) => {
+        if (event.key === "Enter") {
+          event.preventDefault();
+          nameField.blur();
+        }
+      });
   });
 </script>
