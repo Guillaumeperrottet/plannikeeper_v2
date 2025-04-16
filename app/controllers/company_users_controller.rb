@@ -66,7 +66,7 @@ class CompanyUsersController < ApplicationController
   end
 
   def user_params
-    params.require(:user).permit(:role, :name, :email, objet_ids: [])
+    params.require(:user).permit(:role, :name, :can_manage_tasks, :can_view_reports, :email, objet_ids: [])
   end
 
   def permission_params
