@@ -11,6 +11,12 @@
       </li>
       <li class="breadcrumb-item active" aria-current="page">Modifier un utilisateur</li>
     <% end %>
+    <% if action_name == 'new' && controller_name == 'company_users' %>
+      <li class="breadcrumb-item">
+        <%= link_to "Utilisateurs de l'entreprise", company_users_path, class: 'breadcrumb-link' %>
+      </li>
+      <li class="breadcrumb-item active" aria-current="page">Créer un utilisateur</li>
+    <% end %>
     <% if @objet && @objet.id.present? %>
       <% if action_name == 'edit' && controller_name == 'objets' %>
         <li class="breadcrumb-item">
