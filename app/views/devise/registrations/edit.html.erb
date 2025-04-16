@@ -18,9 +18,21 @@
                 style="background: rgba(255,255,255,0.2); color: #fff; border: none; font-weight: bold; max-width: 120px;"
                 autocomplete="off"
               />
-                    <% if current_user.enterprise_admin? %>
-                    <%= link_to "Gestion des utilisateurs", company_users_path, class: "btn btn-submit pt-3" %>
-                    <% end %>
+                <div class="" style="padding-top: 200px;">
+                  <% if current_user.enterprise_admin? %>
+                  <%= link_to "Gestion des utilisateurs", company_users_path, class: "btn btn--submit pt-3" %>
+                  <% end %>
+                  <button
+                  id="delete-account-btn"
+                  class="btn btn-submit-delete"
+                  data-controller="delete-confirm"
+                  data-action="click->delete-confirm#confirm"
+                  data-delete-confirm-url-value="<%= registration_path(current_user) %>"
+                  data-delete-confirm-message-value="Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible."
+                  >
+                  Supprimer mon compte
+                  </button>
+                </div>
             </div>
 
             <!-- Colonne droite : Informations utilisateur -->
@@ -57,34 +69,30 @@
                     </div>
                   <% end %>
                 </div>
-                  <h6>2 derniers projects créer</h6>
-                  <hr class="mt-0 mb-4">
-                  <div class="row pt-1">
-                  <% recent_projects = current_user.objets.order(created_at: :desc).limit(2) %>
-                  <% if recent_projects.any? %>
-                    <% recent_projects.each do |project| %>
-                    <div class="col-6 mb-3">
-                    <p class="text-muted"><%= project.nom %></p>
-                    </div>
-                    <% end %>
-                  <% else %>
-                    <div class="col-12 mb-3">
-                    <p class="text-muted">Aucun projet récent.</p>
-                    </div>
+                <h6>Changer le mot de passe</h6>
+                <hr class="mt-0 mb-4">
+                <%# The form_with helper requires @resource, resource_name, and optionally @minimum_password_length to be set in the controller %>
+                <%# Ensure your Devise controller (e.g., registrations#edit) provides these variables %>
+                <%= form_with(model: resource, scope: resource_name, url: registration_path(resource_name), method: :put, id: "password-change-form", html: { class: "row pt-1" }) do |f| %>
+                  <div class="col-12 mb-3">
+                  <%= f.label :current_password, "Mot de passe actuel", class: "form-label small" %>
+                  <%= f.password_field :current_password, autocomplete: "current-password", class: "form-control form-control-sm" %>
+                  </div>
+                  <div class="col-12 mb-3">
+                  <%= f.label :password, "Nouveau mot de passe", class: "form-label small" %>
+                  <%= f.password_field :password, autocomplete: "new-password", class: "form-control form-control-sm" %>
+                  <% if @minimum_password_length %>
+                    <small class="form-text text-muted"><%= @minimum_password_length %> caractères minimum</small>
                   <% end %>
                   </div>
-                <div class="d-flex justify-content-between align-items-center">
-                  <button
-                    id="delete-account-btn"
-                    class="btn btn-outline-danger --danger"
-                    data-controller="delete-confirm"
-                    data-action="click->delete-confirm#confirm"
-                    data-delete-confirm-url-value="<%= registration_path(current_user) %>"
-                    data-delete-confirm-message-value="Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible."
-                  >
-                    Supprimer mon compte
-                  </button>
-                </div>
+                  <div class="col-12 mb-3">
+                  <%= f.label :password_confirmation, "Confirmer le nouveau mot de passe", class: "form-label small" %>
+                  <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "form-control form-control-sm" %>
+                  </div>
+                  <div class="col-12">
+                  <%= f.submit "Changer le mot de passe", class: "btn btn-submit-delete" %>
+                  </div>
+                <% end %>
               </div>
             </div>
           </div>
