@@ -1,36 +1,83 @@
 .table-responsive {
-    margin: 30px 0;
-    padding-top: 30px;
+  margin: 30px 0;
+  padding-top: 30px;
 }
 .table-wrapper {
-    min-width: 1000px;
-    background: #fff;
-    padding: 20px 25px;
-    border-radius: 3px;
-    box-shadow: 0 1px 1px rgba(0,0,0,.05);
+  background: #fff;
+  padding: 20px 25px;
+  border-radius: 3px;
+  box-shadow: 0 1px 1px rgba(0,0,0,.05);
 }
 .table-company-title {
-    padding-bottom: 15px;
-    background: #F4F4F4;
-    color: #fff;
-    padding: 16px 30px;
-    margin: -20px -25px 10px;
-    border-radius: 3px 3px 0 0;
+  padding-bottom: 15px;
+  background: #F4F4F4;
+  color: #fff;
+  padding: 16px 30px;
+  margin: -20px -25px 10px;
+  border-radius: 3px 3px 0 0;
 }
 .table-company-title h2 {
-    margin: 5px 0 0;
-    font-size: 24px;
-    color: black;
+  margin: 5px 0 0;
+  font-size: 24px;
+  color: black;
 }
 .table-company-title .btn {
-    color: #566787;
-    float: right;
-    font-size: 13px;
-    background: #fff;
-    border: none;
-    min-width: 50px;
-    border-radius: 2px;
-    border: none;
-    outline: none !important;
-    margin-left: 10px;
+  color: #566787;
+  float: right;
+  font-size: 13px;
+  background: #fff;
+  border: none;
+  min-width: 50px;
+  border-radius: 2px;
+  border: none;
+  outline: none !important;
+  margin-left: 10px;
 }
+
+  /* Style pour la table en grid */
+  .grid-table {
+    display: grid;
+    grid-template-columns: 50px 1fr 1fr 120px;
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 15px;
+  }
+
+  .grid-header {
+    display: contents;
+  }
+
+  .grid-header .grid-cell {
+    font-weight: bold;
+    background-color: #f5f5f5;
+    border-bottom: 2px solid #dee2e6;
+  }
+
+  .grid-row {
+    display: contents;
+  }
+
+  .grid-cell {
+    padding: 12px 15px;
+    border-bottom: 1px solid #dee2e6;
+    align-items: center;
+    display: flex;
+  }
+
+  .grid-row:nth-child(even) .grid-cell {
+    background-color: #f8f9fa;
+  }
+
+  .grid-row:hover .grid-cell {
+    background-color: #e9ecef;
+  }
+
+  /* Styles pour les boutons et autres éléments */
+  .mail-link {
+    text-decoration: none;
+    color: #0366d6;
+  }
+  .actions {
+    display: flex;
+    gap: 10px;
+  }
