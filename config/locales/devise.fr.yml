@@ -61,3 +61,7 @@ fr:
       not_saved:
         one: "1 erreur a empêché ce %{resource} d'être enregistré :"
         other: "%{count} erreurs ont empêché ce %{resource} d'être enregistré :"
+  activerecord:
+    errors:
+      messages:
+        record_invalid: "Validation échouée : %{errors}"

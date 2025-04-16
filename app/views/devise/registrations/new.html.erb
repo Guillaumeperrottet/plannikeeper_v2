@@ -1,88 +1,92 @@
-<div class="sign-up-container">
-  <div class="sign-up-box">
-    <h2>Créer un compte</h2>
-
-    <%= simple_form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
-      <%= f.error_notification %>
-
-      <div class="form-inputs">
-        <%= f.input :role,
-                    collection: [['Utilisateur Privé', 'private_user'], ['Entreprise', 'enterprise_admin']],
-                    label: "Type de Compte",
-                    required: true,
-                    input_html: { id: "user-role" } %>
-
-        <%= f.input :email,
-                    label: "Adresse Email",
-                    required: true,
-                    autofocus: true,
-                    input_html: { autocomplete: "email", class: "input-field" } %>
-
-        <%= f.input :name,
-                    label: "Nom",
-                    required: true,
-                    input_html: { class: "input-field" } %>
-
-        <!-- Champs supplémentaires affichés uniquement pour le rôle "Entreprise" -->
-        <div id="company-fields" style="display: none;">
-          <%= f.input :company_name,
-                      label: "Nom de l'Entreprise",
-                      required: true,
-                      input_html: { class: "input-field" } %>
-
-          <%= f.input :company_adress,
-                      label: "Adresse de l'Entreprise",
-                      required: true,
-                      input_html: { class: "input-field" } %>
-        </div>
-
-        <%= f.input :password,
-                    label: "Mot de Passe",
-                    required: true,
-                    hint: ("#{@minimum_password_length} caractères minimum" if @minimum_password_length),
-                    input_html: { autocomplete: "new-password", class: "input-field", id: "sign-up-password-field" } %>
-
-        <div class="checkbox-field">
-          <%= check_box_tag 'show_password', '1', false, id: "show-sign-up-password-checkbox" %>
-          <%= label_tag 'show_password', 'Afficher le mot de passe' %>
-        </div>
-
-        <%= f.input :password_confirmation,
-                    label: "Confirmer le Mot de Passe",
-                    required: true,
-                    input_html: { autocomplete: "new-password", class: "input-field" } %>
+<div class="modal modal-sheet d-block bg-body-secondary p-4 py-md-5" tabindex="-1" role="dialog" id="modalSignin">
+  <div class="modal-dialog">
+    <div class="modal-content rounded-4 shadow">
+      <div class="d-flex modal-header p-5 pb-4 border-bottom-0 justify-content-between align-items-center">
+        <h1 class="fw-bold mb-0 fs-2">Sign up for free</h1>
+        <%= link_to request.referrer || root_path, class: "text-dark ms-auto" do %>
+          <i class="fa-solid fa-xmark"></i>
+        <% end %>
       </div>
 
-      <div class="form-actions">
-        <%= f.button :submit, "Créer un compte", class: "btn--simple" %>
-      </div>
-    <% end %>
+        <div class="modal-body p-5 pt-0">
+          <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :post }) do |f| %>
+              <div class="form-floating mb-3">
+                <select id="role-select" name="user[role]" class="form-select rounded-3" required>
+                  <option value="">Choisir le type de compte</option>
+                  <option value="enterprise_admin">Entreprise</option>
+                  <option value="private_user">Privé</option>
+                </select>
+                <label for="role-select">Type de compte</label>
+              </div>
 
-    <%= render "devise/shared/links" %>
+              <div class="form-floating mb-3" id="company-name-field" style="display: none;">
+                <%= f.text_field :company_name, class: "form-control rounded-3", id: "floatingCompanyName", placeholder: "Nom de l'entreprise" %>
+                <%= f.label :company_name, "Nom de l'entreprise", for: "floatingCompanyName" %>
+              </div>
+              <div class="form-floating mb-3" id="company-adress-field" style="display: none;">
+                <%= f.text_field :company_adress, class: "form-control rounded-3", id: "floatingCompanyAdress", placeholder: "Adresse de l'entreprise" %>
+                <%= f.label :company_adress, "Adresse de l'entreprise", for: "floatingCompanyAdress" %>
+              </div>
+              <div class="form-floating mb-3">
+                <%= f.text_field :name, class: "form-control rounded-3", id: "floatingName", placeholder: "Your name" %>
+                <%= f.label :name, "Name", for: "floatingName" %>
+              </div>
+              <div class="form-floating mb-3">
+                <%= f.email_field :email, class: "form-control rounded-3", id: "floatingInput", placeholder: "name@example.com" %>
+                <%= f.label :email, "Email address", for: "floatingInput" %>
+              </div>
+              <div class="form-floating mb-3">
+                <%= f.password_field :password, class: "form-control rounded-3", id: "floatingPassword", placeholder: "Password" %>
+                <%= f.label :password, "Password", for: "floatingPassword" %>
+              </div>
+              <%= f.submit "Sign up", class: "w-100 mb-2 btn btn-lg rounded-3 btn-primary" %>
+            <% end %>
+          <small class="text-body-secondary">By clicking Sign up, you agree to the terms of use.</small>
+          <hr class="my-4">
+          <h2 class="fs-5 fw-bold mb-3">Or use a third-party</h2>
+          <button class="w-100 py-2 mb-2 btn btn-outline-secondary rounded-3" type="button" onclick="window.location.href='<%= user_google_oauth2_omniauth_authorize_path %>'">
+            <svg class="bi me-1" width="16" height="16" aria-hidden="true"><use xlink:href="#google"/></svg>
+            Sign up with Google
+          </button>
+        </form>
+      </div>
+    </div>
   </div>
 </div>
 
 <script>
   document.addEventListener("DOMContentLoaded", function() {
-    const roleField = document.getElementById("user-role");
-    const companyFields = document.getElementById("company-fields");
-    const signUpPasswordField = document.getElementById("sign-up-password-field");
-    const showSignUpPasswordCheckbox = document.getElementById("show-sign-up-password-checkbox");
+    const roleSelect = document.getElementById("role-select");
+    const companyNameField = document.getElementById("company-name-field");
+    const companyAdressField = document.getElementById("company-adress-field");
 
-    // Afficher ou masquer les champs en fonction du rôle sélectionné
-    roleField.addEventListener("change", function() {
-      if (roleField.value === "enterprise_admin") {
-        companyFields.style.display = "block";
+    roleSelect.addEventListener("change", function() {
+      if (roleSelect.value === "enterprise_admin") {
+        companyNameField.style.display = "block";
+        companyAdressField.style.display = "block";
       } else {
-        companyFields.style.display = "none";
+        companyNameField.style.display = "none";
+        companyAdressField.style.display = "none";
       }
     });
+  });
 
-    // Afficher ou masquer le mot de passe
-    if (showSignUpPasswordCheckbox) {
-      showSignUpPasswordCheckbox.addEventListener("change", function() {
-        signUpPasswordField.type = showSignUpPasswordCheckbox.checked ? "text" : "password";
-      });
-    }
+  document.addEventListener("DOMContentLoaded", function() {
+    const form = document.querySelector("form");
+    const roleSelect = document.getElementById("role-select");
+    const companyNameInput = document.getElementById("floatingCompanyName");
+    const companyAdressInput = document.getElementById("floatingCompanyAdress");
+
+    form.addEventListener("submit", function(event) {
+      if (roleSelect.value === "enterprise_admin") {
+        if (companyNameInput.value.trim() === "") {
+          event.preventDefault();
+          alert("Veuillez renseigner le nom de l'entreprise.");
+        } else if (companyAdressInput.value.trim() === "") {
+          event.preventDefault();
+          alert("Veuillez renseigner l'adresse de l'entreprise.");
+        }
+      }
+    });
   });
 </script>

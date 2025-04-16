@@ -28,6 +28,14 @@ class Users::RegistrationsController < Devise::RegistrationsController
     Rails.logger.info "Saving Resource: #{resource.inspect}"
 
     if resource.save
+      unless params[:user][:avatar].present?
+        default_avatar_path = Rails.root.join("app/assets/images/default_avatar.png")
+        resource.avatar.attach(
+          io: File.open(default_avatar_path),
+          filename: "default_avatar.png",
+          content_type: "image/png"
+        )
+      end
       Rails.logger.info "User saved successfully: #{resource.inspect}"
       yield resource if block_given?
       if resource.active_for_authentication?
@@ -65,6 +73,6 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
   # Autorise les champs pour l'inscription
   def sign_up_params
-    params.require(:user).permit(:email, :password, :password_confirmation, :role, :company_name, :company_adress)
+    params.require(:user).permit(:email, :password, :password_confirmation, :role, :company_id, :company_name, :company_adress, :name)
   end
 end
