@@ -50,17 +50,13 @@
                   <% if current_user.role == 'enterprise_admin' || current_user.role == 'enterprise_user' %>
                     <div class="col-6 mb-3">
                       <h6>Entreprise</h6>
-                      <p class="text-muted"><%= current_user.company %></p>
-                    </div>
-                    <div class="col-12 mb-3">
-                      <h6>Adresse</h6>
-                      <p class="text-muted"><%= current_user.company_adress %></p>
+                      <p class="text-muted"><%= current_user.company&.name %></p>
                     </div>
                   <% end %>
                 </div>
                   <h6>2 derniers projects créer</h6>
                   <hr class="mt-0 mb-4">
-                  <div class="row pt-1">xw
+                  <div class="row pt-1">
                   <% recent_projects = current_user.objets.order(created_at: :desc).limit(2) %>
                   <% if recent_projects.any? %>
                     <% recent_projects.each do |project| %>
@@ -117,7 +113,7 @@
           if (response.ok) {
             nameField.defaultValue = newName;
             Swal.fire({
-              position: "middle",
+              position: "top",
               icon: "success",
               title: "Votre nom a été enregistré",
               showConfirmButton: false,
@@ -126,7 +122,7 @@
           } else {
             nameField.value = nameField.defaultValue;
             Swal.fire({
-              position: "middle",
+              position: "top",
               icon: "error",
               title: "Erreur lors de l'enregistrement",
               showConfirmButton: false,
@@ -137,7 +133,7 @@
         .catch(() => {
           nameField.value = nameField.defaultValue;
           Swal.fire({
-            position: "middle",
+            position: "top",
             icon: "error",
             title: "Erreur réseau",
             showConfirmButton: false,

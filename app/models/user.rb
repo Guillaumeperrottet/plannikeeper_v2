@@ -13,7 +13,7 @@ class User < ApplicationRecord
   enum role: { private_user: 'private_user', enterprise_user: 'enterprise_user', enterprise_admin: 'enterprise_admin' }
 
   # Attributs virtuels pour le formulaire
-  attr_accessor :company_name, :company_adress
+  attr_accessor :company_name, :company_adress, :skip_company_creation
 
   # Validations
   validates :password, length: { minimum: 6 }, if: -> { password.present? }
@@ -54,9 +54,12 @@ class User < ApplicationRecord
   end
 
   def create_company_if_enterprise_admin
-    if role == "enterprise_admin" && company_name.present?
+    # Ne pas créer d'entreprise si le flag skip_company_creation est true
+    return if skip_company_creation
+
+    if role == "enterprise_admin" && company_name.present? && company_adress.present?
       begin
-        self.company = Company.create!(name: company_name)
+        self.company = Company.create!(name: company_name, adress: company_adress)
       rescue ActiveRecord::RecordInvalid => e
         errors.add(:base, "Erreur lors de la création de l'entreprise : #{e.message}")
         throw(:abort) # Annule la création de l'utilisateur

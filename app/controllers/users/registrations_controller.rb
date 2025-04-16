@@ -18,6 +18,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
         Rails.logger.info "Company created successfully: #{company.inspect}"
         resource.company = company
         Rails.logger.info "Company assigned to user: #{resource.company.inspect}"
+        resource.skip_company_creation = true # Empêche la création d'une entreprise par le callback
       else
         Rails.logger.error "Company Creation Errors: #{company.errors.full_messages.join(', ')}"
         resource.errors.add(:base, "Erreur lors de la création de l'entreprise : #{company.errors.full_messages.join(', ')}")
